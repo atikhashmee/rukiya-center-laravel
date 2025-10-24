@@ -2,11 +2,23 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
+    $product = Product::create([
+        'category_id' => $validated['category_id'] ?? '1',
+        'name' => $validated['name'] ?? 'billu',
+        'description' => $validated['description'] ?? 'tst desc',
+        'sku' => $validated['sku'] ?? 'b-2343',
+        'price' => $validated['price'] ?? 1230,
+        'stock_quantity' => $validated['stock_quantity'] ?? 120,
+        'is_active' => $validated['is_active'] ?? true,
+    ]);
+    dd($product);
+
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
     ]);

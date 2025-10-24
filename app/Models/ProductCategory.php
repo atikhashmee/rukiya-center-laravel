@@ -9,10 +9,12 @@ class ProductCategory extends Model
 {
     use HasFactory;
 
+    protected $table = 'product_categories';
+
     protected $fillable = ['name', 'slug'];
 
-    public function products()
-    {
-        return $this->hasMany(Product::class, 'category_id');
-    }
+    // public function products()
+    // {
+    //     return $this->hasMany(Product::class, 'category_id', 'id');
+    // }
 }

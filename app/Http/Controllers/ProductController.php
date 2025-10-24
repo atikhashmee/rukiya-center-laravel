@@ -17,8 +17,11 @@ class ProductController extends Controller
     {
         $products = Product::with(['category', 'images'])->orderBy('name')->paginate(10);
 
+        $categories = ProductCategory::orderBy('name')->get();
+
         return Inertia::render('products/index', [
             'products' => $products,
+            'categories' => $categories,
         ]);
     }
 
@@ -34,14 +37,13 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'category_id' => 'required|integer|exists:categories,id',
-            'name' => 'required|string|max:255',
+            // 'category_id' => 'required|integer|exists:product_categories,id',
+            // 'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'sku' => 'required|string|unique:products|max:50',
-            'price' => 'required|numeric|min:0.01',
-            'stock_quantity' => 'required|integer|min:0',
+            // 'sku' => 'required|string|unique:products|max:50',
+            // 'price' => 'required|numeric|min:0.01',
+            // 'stock_quantity' => 'required|integer|min:0',
             'is_active' => 'nullable|boolean',
-
             'images' => 'nullable|array|max:5', // Max 5 images per product
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5000',
         ]);
@@ -50,13 +52,14 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
             // 3. Create Product
+
             $product = Product::create([
-                'category_id' => $validated['category_id'],
-                'name' => $validated['name'],
+                'category_id' => $validated['category_id'] ?? '1',
+                'name' => $validated['name'] ?? 'billu',
                 'description' => $validated['description'],
-                'sku' => $validated['sku'],
-                'price' => $validated['price'],
-                'stock_quantity' => $validated['stock_quantity'],
+                'sku' => $validated['sku'] ?? 'b-2343',
+                'price' => $validated['price'] ?? 1230,
+                'stock_quantity' => $validated['stock_quantity'] ?? 120,
                 'is_active' => $validated['is_active'] ?? true,
             ]);
 
@@ -70,13 +73,15 @@ class ProductController extends Controller
                     // Create the ProductImage record
                     ProductImage::create([
                         'product_id' => $product->product_id,
-                        'path' => Storage::url($path), // Get the public URL
+                        'path' => Storage::url($path),
                         'sort_order' => $sortOrder++,
                     ]);
                 }
             }
 
-            DB::commit(); // Commit transaction
+            DB::commit();
+
+            return redirect()->route('products.index')->with('success', 'Product created successfully.');
 
             return response()->json([
                 'message' => 'Product created successfully, including images.',
@@ -84,9 +89,9 @@ class ProductController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            DB::rollBack(); // Rollback on error
+            DB::rollBack();
+            dd($e);
 
-            // In a real app, you might also want to delete any files uploaded before the exception
             return response()->json(['message' => 'Product creation failed.', 'error' => $e->getMessage()], 500);
         }
     }

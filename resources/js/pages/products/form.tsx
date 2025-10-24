@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { Head, useForm, router } from '@inertiajs/react';
-import AppLayout from "@/layouts/app-layout";
+import { useForm, router, Form } from '@inertiajs/react';
 import { ProductFormProps, ProductImage } from '@/types/product';
 import { index, store } from '@/routes/products';
 import { update } from '@/routes/profile';
+import {Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '@/components/ui/select'
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import InputError from "@/components/input-error";
 
 // Define the shape of the form data
 interface ProductFormData {
@@ -22,7 +26,7 @@ interface ProductFormData {
     _method: 'put' | 'post' | undefined; // For Inertia PUT/POST file handling
 }
 
-export default function ProductForm({ auth, product, categories, breadcrumbs }: ProductFormProps) {
+export default function ProductForm({ product, categories }: ProductFormProps) {
     const isEdit = !!product;
 
     const { data, setData, errors, processing } = useForm<ProductFormData>({
@@ -47,6 +51,7 @@ export default function ProductForm({ auth, product, categories, breadcrumbs }: 
 
         const routeName = isEdit ? 'products.update' : 'products.store';
         const routeParams = isEdit ? product.product_id : undefined;
+        
 
         // Use Inertia's router for file uploads
         router.post( isEdit ? update() : store(), {
@@ -82,95 +87,81 @@ export default function ProductForm({ auth, product, categories, breadcrumbs }: 
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={isEdit ? 'Edit Product' : 'Create Product'} />
-
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                        <form onSubmit={submit}>
-                            
-                            {/* Category Select */}
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">Category</label>
-                                <select 
-                                    value={data.category_id}
-                                    onChange={(e) => setData('category_id', Number(e.target.value))}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                >
-                                    <option value="">Select a Category</option>
-                                    {categories.map(cat => (
-                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                    ))}
-                                </select>
-                                {errors.category_id && <div className="text-red-500 text-sm mt-1">{errors.category_id}</div>}
-                            </div>
-                            
-                            {/* Basic Product Fields */}
-                            {[{ name: 'name', type: 'text' }, { name: 'sku', type: 'text' }, { name: 'price', type: 'number' }, { name: 'stock_quantity', type: 'number' }]
-                                .map(({ name, type }) => (
-                                <div className="mb-4" key={name}>
-                                    <label className="block text-sm font-medium text-gray-700 capitalize">{name.replace('_', ' ')}</label>
-                                    <input
-                                        type={type}
-                                        step={name === 'price' ? '0.01' : '1'}
-                                        value={data[name as keyof ProductFormData] as string | number}
-                                        onChange={(e) => setData(name as keyof ProductFormData, type === 'number' ? Number(e.target.value) : e.target.value)}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                    />
-                                    {errors[name as keyof ProductFormData] && <div className="text-red-500 text-sm mt-1">{errors[name as keyof ProductFormData]}</div>}
+             <form onSubmit={submit}>
+                <div className="mb-4">
+                    <Label htmlFor="category">Category</Label>
+                        <Select onValueChange={(value) => setData("category_id", Number(value))}>
+                        <SelectTrigger className="w-full bg-[var(--color-input)] ">
+                            <SelectValue placeholder="Select a Category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                            {categories.map((cat) => (
+                                <SelectItem key={cat.id} value={cat.id.toString()}>{cat.name}</SelectItem>
+                            ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                        {errors.category_id && <InputError message={errors.category_id} />}
+                </div>
+                
+                {/* Basic Product Fields */}
+                {[{ name: 'name', type: 'text' }, { name: 'sku', type: 'text' }, { name: 'price', type: 'number' }, { name: 'stock_quantity', type: 'number' }]
+                    .map(({ name, type }) => (
+                    <div className="mb-4" key={name}>
+                            <Label htmlFor="{name}">{name.replace('_', ' ')}</Label>
+                        <Input
+                            type={type}
+                            step={name === 'price' ? '0.01' : '1'}
+                            value={data[name as keyof ProductFormData] as string | number}
+                            onChange={(e) => setData(name as keyof ProductFormData, type === 'number' ? Number(e.target.value) : e.target.value)}
+                            className='bg-[var(--color-input)]'
+                        />
+                        {errors[name as keyof ProductFormData] && <InputError message={errors[name as keyof ProductFormData]} />}
+                    </div>
+                ))}
+                
+                {/* Image Upload Field */}
+                <div className="mb-4">
+                    <Label htmlFor="title">Product Images (New)</Label>
+                    <Input
+                        type="file"
+                        // multiple
+                        onChange={handleImageChange}
+                        className='bg-[var(--color-input)]'
+                    />
+                    {errors.images && <div className="text-red-500 text-sm mt-1">{errors.images}</div>}
+                </div>
+                
+                {/* Existing Images (Edit only) */}
+                {isEdit && currentImages.length > 0 && (
+                    <div className="mb-4">
+                        <h3 className="text-lg font-semibold mb-2">Existing Images</h3>
+                        <div className="flex flex-wrap gap-4">
+                            {currentImages.map((image) => (
+                                <div key={image.id} className="relative w-32 h-32 border rounded shadow">
+                                    <img src={image.path} alt="Product" className="w-full h-full object-cover rounded" />
+                                    <button 
+                                        type="button"
+                                        onClick={() => handleDeleteImage(image.id)} 
+                                        className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-800"
+                                        title="Delete Image"
+                                    >
+                                        &times;
+                                    </button>
                                 </div>
                             ))}
-                            
-                            {/* Image Upload Field */}
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">Product Images (New)</label>
-                                <input
-                                    type="file"
-                                    multiple
-                                    onChange={handleImageChange}
-                                    className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                                />
-                                {errors.images && <div className="text-red-500 text-sm mt-1">{errors.images}</div>}
-                            </div>
-                            
-                            {/* Existing Images (Edit only) */}
-                            {isEdit && currentImages.length > 0 && (
-                                <div className="mb-4">
-                                    <h3 className="text-lg font-semibold mb-2">Existing Images</h3>
-                                    <div className="flex flex-wrap gap-4">
-                                        {currentImages.map((image) => (
-                                            <div key={image.id} className="relative w-32 h-32 border rounded shadow">
-                                                <img src={image.path} alt="Product" className="w-full h-full object-cover rounded" />
-                                                <button 
-                                                    type="button"
-                                                    onClick={() => handleDeleteImage(image.id)} 
-                                                    className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-800"
-                                                    title="Delete Image"
-                                                >
-                                                    &times;
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    {errors.delete_image_ids && <div className="text-red-500 text-sm mt-1">{errors.delete_image_ids}</div>}
-                                </div>
-                            )}
-
-                            {/* Submit Button */}
-                            <div className="flex items-center justify-end mt-4">
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-                                >
-                                    {isEdit ? 'Update Product' : 'Create Product'}
-                                </button>
-                            </div>
-                        </form>
+                        </div>
+                        {errors.delete_image_ids && <div className="text-red-500 text-sm mt-1">{errors.delete_image_ids}</div>}
                     </div>
+                )}
+
+                {/* Submit Button */}
+                <div className="flex items-center justify-end mt-4">
+                    <Button>
+                        {isEdit ? 'Update Product' : 'Create Product'}
+                    </Button>
                 </div>
-            </div>
-        </AppLayout>
+            </form>
     );
 }
