@@ -41,3 +41,12 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Post {
+    title: string;
+    title: string;
+    slug : string;
+    content: string;
+    featured_image: string;
+    status: string;
+}
