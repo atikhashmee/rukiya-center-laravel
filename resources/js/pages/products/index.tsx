@@ -38,7 +38,7 @@ export default function Index({ auth, products }: ProductsIndexProps) {
                     <Button onClick={() => window.location.href = create().url}> Add New Product</Button>
                         </div>
                         
-                        <div className="p-3 border rounded-lg bg-gray-100 md:col-span-12">
+                        <div className="p-3 border rounded-lg bg-[var(--background)] md:col-span-12">
                             <Table className="min-w-full divide-y divide-gray-200">
                                  <TableCaption>A list of your recent Products.</TableCaption>
                                  <TableHeader>

@@ -27,10 +27,10 @@ export default function Create(props: ProductFormProps) {
             <Head title='Create Product' />
             <div className="container p-4">
                 <div className='grid grid-cols-1 md:grid-cols-12 gap-4'>
-                    <div className='p-3 border rounded-lg bg-gray-100 md:col-span-8'>
+                    <div className='p-3 border rounded-lg bg-[var(--background)] md:col-span-8'>
                         <ProductForm {...props} breadcrumbs={breadcrumbs} />
                     </div>
-                    <div className='p-3 border rounded-lg bg-white md:col-span-4'></div>
+                    <div className='p-3 border rounded-lg bg-[var(--background)] md:col-span-4'></div>
                 </div>
             </div>
     </AppLayout>;

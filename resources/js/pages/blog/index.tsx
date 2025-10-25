@@ -29,9 +29,11 @@ export default function BlogIndex() {
     return <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Blog Index" />
             <div className="container p-4">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                    <Button className="md:col-span-12 mb-4" onClick={() => window.location.href = create().url}>Create New Post</Button>
-                    <div className="p-3 border rounded-lg bg-gray-100 md:col-span-12">
+                <div className="flex flex-col justify-between gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                        <Button className="md:col-start-11 md:col-span-2" onClick={() => window.location.href = create().url}>Create New Blog</Button>
+                    </div>
+                    <div className="p-3 border rounded-lg bg-[var(--background)] md:col-span-12">
                         <Table>
                             <TableCaption>A list of your recent Blogs.</TableCaption>
                             <TableHeader>
