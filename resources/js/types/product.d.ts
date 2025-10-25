@@ -16,7 +16,7 @@ interface ProductImage {
 }
 
 interface Product {
-    product_id: number;
+    id: number;
     category_id: number;
     name: string;
     description: string | null;
@@ -46,11 +46,7 @@ interface InertiaProps extends PageProps {
 
 // For use in the Index component
 interface ProductsIndexProps extends InertiaProps {
-    products: {
-        data: Product[];
-        links: any[]; // Pagination links
-        // ... other pagination meta data
-    };
+    products: Product[]
 }
 
 // For use in the Form components

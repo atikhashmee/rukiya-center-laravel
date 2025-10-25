@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from "@/layouts/app-layout";
 import { InertiaProps, Product } from '@/types/product';
+import { edit, index } from '@/routes/products';
 
 // Define specific props for the Show page
 interface ProductShowProps extends InertiaProps {
@@ -38,10 +39,10 @@ export default function Show({ product }: ProductShowProps) {
                         </div>
 
                         <div className="mt-6 flex gap-4">
-                            <Link href={route('products.edit', product.product_id)} className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+                            <Link href={ edit(product.id)} className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
                                 Edit Product
                             </Link>
-                            <Link href={route('products.index')} className="text-gray-600 hover:text-gray-800 py-2 px-4 rounded border">
+                            <Link href={index()} className="text-gray-600 hover:text-gray-800 py-2 px-4 rounded border">
                                 Back to List
                             </Link>
                         </div>

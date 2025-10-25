@@ -1,7 +1,7 @@
-import React from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import React, { use } from 'react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import AppLayout from "@/layouts/app-layout";
-import { ProductsIndexProps } from '@/types/product'; 
+import { Product, ProductsIndexProps } from '@/types/product'; 
 import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
 import { index, create, show, destroy, edit } from '@/routes/products';
@@ -19,7 +19,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ auth, products }: ProductsIndexProps) {
+
+export default function Index({ products} : ProductsIndexProps) {
     const handleDelete = (productId: number) => {
         if (confirm("Are you sure you want to delete this product? This action is irreversible.")) {
             router.delete(destroy(productId), {
@@ -52,7 +53,7 @@ export default function Index({ auth, products }: ProductsIndexProps) {
                                 </TableRow>
                             </TableHeader>
                               <TableBody>
-                                    {products.data.map((product) => (
+                                    {products.map((product: Product) => (
                                         <TableRow key={product.name}>
                                         <TableCell className="font-medium">1</TableCell>
                                         <TableCell>{product.name}</TableCell>
@@ -60,8 +61,8 @@ export default function Index({ auth, products }: ProductsIndexProps) {
                                         <TableCell>{product.price.toFixed(2)}</TableCell>
                                         <TableCell>{product.stock_quantity}</TableCell>
                                         <TableCell className="text-right flex flex-row gap-3">
-                                            <Button onClick={() => show(product.id)}> show</Button>
-                                            <Button onClick={() => edit(product.id)}> Edit</Button>
+                                            <Button onClick={() => window.location.href = show(product.id).url}> show</Button>
+                                            <Button onClick={() => window.location.href = edit(product.id).url}> Edit</Button>
                                             <Button className="bg-red-900" onClick={() => handleDelete(product.id)}> Delete</Button>
                                         </TableCell>
                                     </TableRow>

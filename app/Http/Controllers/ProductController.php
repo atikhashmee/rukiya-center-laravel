@@ -15,10 +15,8 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with(['category', 'images'])->orderBy('name')->paginate(10);
-
+        $products = Product::with(['category', 'images'])->orderBy('name')->get();
         $categories = ProductCategory::orderBy('name')->get();
-
         return Inertia::render('products/index', [
             'products' => $products,
             'categories' => $categories,
@@ -102,8 +100,9 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::with(['category', 'images'])->findOrFail($id);
-
-        return response()->json($product);
+        return Inertia::render("products/show", [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -111,8 +110,12 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        // For a full web application, this returns the edit form view.
-        return response()->json(['message' => 'Not implemented for API endpoint.'], 405);
+        $categories = ProductCategory::orderBy('name')->get();
+        $product = Product::with(['category', 'images'])->findOrFail($id);
+        return Inertia::render("products/edit", [
+            'product' => $product,
+            'categories' => $categories,
+        ]);
     }
 
     /**

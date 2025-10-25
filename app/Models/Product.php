@@ -19,13 +19,13 @@ class Product extends Model
         'images',
     ];
 
-    // public function category()
-    // {
-    //     return $this->belongsTo(ProductCategory::class, 'id', 'category_id');
-    // }
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+    }
 
-    // public function images()
-    // {
-    //     return $this->hasMany(ProductImage::class, 'product_id', 'id')->orderBy('sort_order');
-    // }
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'product_id', 'id')->orderBy('sort_order');
+    }
 }
