@@ -11,7 +11,9 @@
     <header>
         <nav class="container">
             <div class="logo">
+                <a href="{{ route('home') }}">
                 🕊️ DK Healing Centre
+                </a>
             </div>
             <ul class="nav-links">
                 <li><a href="{{route("home")}}" class="active">Home</a></li>
@@ -22,9 +24,15 @@
                 <li><a href="{{route("contact")}}" >Contact</a></li>
             </ul>
             <div class="auth-buttons">
-                <a href="{{url("customer/login")}}" class="btn btn-outline"  id="loginBtn">Login</a>
-                <a href="{{url("customer/register")}}" class="btn btn-primary"  id="registerBtn">Join Us</a>
-                <a href="#" class="btn btn-outline hidden" onclick="logout()" id="logoutBtn">Logout</a>
+                @auth("customer")
+                <form action="{{route("customer.logout")}}" method="POST" id="logout-form">
+                    @csrf
+                </form>
+                <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit()" class="btn btn-outline" onclick="logout()" id="logoutBtn">Logout</a>
+                @else
+                    <a href="{{route("customer.login")}}" class="btn btn-outline"  id="loginBtn">Login</a>
+                    <a href="{{route("customer.register")}}" class="btn btn-primary"  id="registerBtn">Join Us</a>
+                @endauth
             </div>
         </nav>
     </header>

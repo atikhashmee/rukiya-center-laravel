@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\CustomerVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User;
@@ -49,5 +50,15 @@ class Customer extends User implements MustVerifyEmail
             'two_factor_confirmed_at' => 'datetime',
             'interests' => 'array',
         ];
+    }
+
+    /**
+     * Send the email verification notification.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomerVerifyEmail);
     }
 }

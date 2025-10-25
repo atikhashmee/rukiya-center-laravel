@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,6 +36,7 @@ class AuthController extends Controller
             $validated['about'] = 'ss';
             $customer = Customer::create($validated);
             event(new Registered($customer));
+
             return redirect(route('customer.profile'));
         } catch (\Throwable $th) {
             dd($th);
@@ -61,5 +63,33 @@ class AuthController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors($th->getMessage());
         }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('customer')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect(route('home'));
+    }
+
+    public function emailVerify()
+    {
+        return view('Themes.auth.verify-email');
+    }
+
+    public function emailVerified(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+
+        return redirect(route('customer.profile'));
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('message', 'Verification link sent!');
     }
 }

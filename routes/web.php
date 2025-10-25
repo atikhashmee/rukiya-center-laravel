@@ -19,16 +19,19 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::post('/login-auth', [AuthController::class, 'login'])->name('login.auth');
     Route::get('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/register-store', [AuthController::class, 'registerStore'])->name('store');
-    Route::middleware(['auth', 'verified'])->group(function () {
+    Route::middleware(['auth:customer', 'verified.customer'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    });
+
+    Route::middleware(['auth:customer'])->group(function () {
+        Route::get('/email/verify', [AuthController::class, 'emailVerify'])->name('verification.notice');
+        Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'emailVerified'])->middleware(['signed'])->name('verification.verify');
+        Route::post('/email/verification-notification', [AuthController::class, 'resendVerificationEmail'])->middleware(['throttle:6,1'])->name('verification.send');
     });
 });
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
