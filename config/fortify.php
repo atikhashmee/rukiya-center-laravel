@@ -143,6 +143,10 @@ return [
     |
     */
 
+    'redirects' => [
+        'logout' => '/admin/login',
+    ],
+
     'features' => [
         Features::registration(),
         Features::resetPasswords(),

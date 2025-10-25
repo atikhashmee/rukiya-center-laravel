@@ -32,6 +32,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function () {
+    Route::redirect('/', 'admin/dashboard', 301);
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
