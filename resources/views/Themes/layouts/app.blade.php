@@ -21,6 +21,8 @@
                         'theme-accent': '#C7D2FE', // Indigo-200
                         'theme-gold': '#FBBF24', // Amber/Gold for highlights
                         'theme-dark-blue': '#1a202c', // Darker blue for background texture
+                        'theme-success': '#10B981', // Emerald
+                        'theme-fail': '#EF4444', // Red
                     }
                 }
             }

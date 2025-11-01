@@ -70,7 +70,7 @@ class BookController extends Controller
             if ($paymentStatus === 'pending') {
                 // Redirect to a payment gateway (e.g., Stripe Checkout)
                 // You would typically generate a payment link here using the $booking object.
-                return redirect()->route('payment.checkout', ['booking' => $booking->id])
+                return redirect()->route('customer.checkout', ['booking' => $booking->id])
                     ->with('success', 'Booking created. Please complete your payment.');
 
             } elseif ($paymentStatus === 'assessment_required') {

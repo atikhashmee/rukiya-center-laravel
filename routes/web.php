@@ -5,6 +5,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\Customer\AuthController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ServiceController as CustomerController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,15 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/booking-confirm', [BookController::class, 'bookConfirm'])->name('book.confirm');
         Route::get('/booking-pending', [BookController::class, 'bookPending'])->name('book.pending');
         Route::get('/booking-failed', [BookController::class, 'bookFailed'])->name('book.failed');
+
+        // start payment section
+        Route::get('/payment', [PaymentController::class, 'checkout'])->name('checkout');
+        Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('payment.process');
+        Route::post('/stripe/webhook', [PaymentController::class, 'handleWebhook'])->name('stripe.webhook');
+
+        Route::get('/payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+        Route::get('/payment-failed', [PaymentController::class, 'paymentFailed'])->name('payment.failed');
+        // end of payment section
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });

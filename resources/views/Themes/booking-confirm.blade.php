@@ -42,11 +42,11 @@
             </div>
             
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="profile.html?tab=services" class="w-full sm:w-auto px-8 py-3 bg-theme-primary text-white font-bold rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md transform hover:scale-105">
+                <a href="{{ route("customer.mybooking") }}" class="w-full sm:w-auto px-8 py-3 bg-theme-primary text-white font-bold rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md transform hover:scale-105">
                     <i class="fas fa-clipboard-list mr-2"></i>
                     Go to My Bookings
                 </a>
-                <a href="services.html" class="w-full sm:w-auto px-8 py-3 bg-white text-theme-primary border-2 border-theme-primary font-bold rounded-lg hover:bg-theme-accent transition duration-300 shadow-md transform hover:scale-105">
+                <a href="{{ route("services") }}" class="w-full sm:w-auto px-8 py-3 bg-white text-theme-primary border-2 border-theme-primary font-bold rounded-lg hover:bg-theme-accent transition duration-300 shadow-md transform hover:scale-105">
                     <i class="fas fa-home mr-2"></i>
                     Explore More Services
                 </a>
