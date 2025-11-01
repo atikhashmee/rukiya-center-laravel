@@ -53,6 +53,7 @@ class BookController extends Controller
 
             // 3. Create the Booking Record
             $booking = Booking::create([
+                'booking_id' => sprintf('BKG-%s', now()->timestamp),
                 'customer_id' => $request->customer_id, // Nullable, populated if authenticated
                 'full_name' => $request->full_name,
                 'email' => $request->email,

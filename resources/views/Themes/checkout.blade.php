@@ -41,7 +41,7 @@
                     <!-- Customer Email (for PaymentMethod creation) -->
                     <div class="input-group">
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" id="email" value="john.doe@example.com" required placeholder="Enter your email" class="pr-10">
+                        <input type="email" id="email" value="{{ auth()->user()->email }}" required placeholder="Enter your email" class="pr-10">
                     </div>
 
                     <!-- CARD ELEMENT: Stripe takes care of Card Number, Expiry, and CVC -->
@@ -100,7 +100,7 @@
                     <div class="flex justify-between items-start pb-4 border-b">
                         <div>
                             <p class="font-bold text-lg text-gray-900">{{ $booking->service->title }}</p>
-                            <p class="text-sm text-gray-500">Booking ID: <span class="font-medium text-gray-800">#BKG-5901</span></p>
+                            <p class="text-sm text-gray-500">Booking ID: <span class="font-medium text-gray-800">#{{ $booking->booking_id }}</span></p>
                         </div>
                         <span class="font-semibold text-lg text-gray-900">£{{ $booking->service_price }}</span>
                     </div>
@@ -148,7 +148,7 @@
          <script>
         // --- 1. STRIPE INITIALIZATION ---
         // REPLACE WITH YOUR ACTUAL STRIPE PUBLIC KEY
-        const stripe = Stripe('pk_test_51SMf2aFQ8CFaLhpflHYSaGtVj8sWK5KMaHpaUcIAYerqSShmDIUXolROuzpBcvZx71y21fEKADA2WnnUVePbAIGN00qikT5RPv'); 
+        const stripe = Stripe('{{env("STRIPE_KEY") }}'); 
         
         const elements = stripe.elements({
             fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap' }]
@@ -221,10 +221,11 @@
                     },
                     body: JSON.stringify({
                         payment_method_id: paymentMethod.id,
-                        amount: 15000, // 15000 pence = £150.00 (for GBP)
-                        currency: 'gbp',
-                        description: 'Example Order #'+Math.random().toString(36).substring(7),
-                        metadata: { custom: 'meta' }
+                        booking_id: {{ $booking->id }}
+                        // amount: 15000, // 15000 pence = £150.00 (for GBP)
+                        // currency: 'gbp',
+                        // description: 'Example Order #'+Math.random().toString(36).substring(7),
+                        // metadata: { custom: 'meta' }
                     }),
                 });
 

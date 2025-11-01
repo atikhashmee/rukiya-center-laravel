@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Payment;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Stripe\PaymentIntent;
@@ -29,17 +30,24 @@ class PaymentController extends Controller
     // Main payment processing endpoint: receives payment_method_id from frontend
     public function processPayment(Request $request)
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
-        $paymentMethodId = $request->input('payment_method_id');
-        $amount = $request->input('amount', 15000); // default to £150.00 (in pence) -> 15000 pence? careful: Stripe in GBP uses pence
-        // NOTE: If using GBP, use pence (15000 == £150.00). If USD, use cents.
-
         try {
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            $paymentMethodId = $request->input('payment_method_id');
+            $bookingId = $request->input('booking_id');
+
+            $booking = Booking::where('id', $bookingId)->first();
+            if (! $booking) {
+                throw new Exception('Something went wrong , ref = booking not found', 1);
+            }
+            $amount = round(($booking->service_price * 100));
+            $currency = 'gbp'; // for now, later we will make it dynamic
+            $description = sprintf('Payment for Order #%s', $booking->booking_id);
+
             // Create PaymentIntent and try to confirm with provided payment method
             $intent = PaymentIntent::create([
                 'amount' => (int) $amount,
-                'currency' => $request->input('currency', 'gbp'),
+                'currency' => $currency,
                 'payment_method' => $paymentMethodId,
                 // 'confirmation_method' => 'manual',
                 'confirm' => true, // attempt to confirm immediately
@@ -47,7 +55,7 @@ class PaymentController extends Controller
                     'enabled' => true,
                     'allow_redirects' => 'never',
                 ],
-                'description' => $request->input('description', 'Order Payment'),
+                'description' => $description,
                 'metadata' => $request->input('metadata', []),
             ]);
 
@@ -62,6 +70,8 @@ class PaymentController extends Controller
                 'currency' => $intent->currency ?? 'gbp',
                 'status' => $intent->status,
                 'description' => $intent->description ?? null,
+                'order_id' => $booking->id,
+                'order_type' => get_class($booking),
                 'metadata' => $intent->metadata ?? null,
                 'response_payload' => $intent->toArray(),
             ]);

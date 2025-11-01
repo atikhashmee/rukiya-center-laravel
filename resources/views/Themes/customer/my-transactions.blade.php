@@ -41,7 +41,7 @@
 
                         <!-- Amount (Mobile & Desktop) -->
                         <div class="col-span-2 md:col-span-1 flex flex-col justify-center text-right md:text-center">
-                            <span class="font-extrabold text-lg text-theme-primary">+£{{ $transaction->amount }}</span>
+                            <span class="font-extrabold text-lg text-theme-primary">+£{{ $transaction->formatted_amount }}</span>
                             <span class="md:hidden text-xs text-gray-500"> {{ $transaction->created_at->format("d M Y") }}</span>
                         </div>
 

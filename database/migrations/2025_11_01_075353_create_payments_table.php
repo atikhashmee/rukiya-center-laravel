@@ -13,21 +13,17 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            // Optional foreign key to user
             $table->foreignId('customer_id')->nullable()->constrained()->onDelete('set null');
 
-            // Basic payment info
             $table->string('payment_intent_id')->nullable(); // from Stripe
             $table->string('payment_method_id')->nullable(); // from Stripe
             $table->string('currency', 10)->default('usd');
-            $table->integer('amount'); // stored in cents
-            $table->string('status')->default('pending'); // pending|succeeded|failed|requires_action
-
+            $table->integer('amount');
+            $table->string('status')->default('pending');
             // Optional metadata / order info
             $table->string('description')->nullable();
             $table->string('order_id')->nullable();
-
-            // Response data / logs
+            $table->string('order_type')->nullable();
             $table->json('metadata')->nullable();
             $table->json('response_payload')->nullable();
 

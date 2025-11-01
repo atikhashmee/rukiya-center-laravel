@@ -34,7 +34,7 @@ class ServiceController extends Controller
 
     public function myTransactions(Request $request)
     {
-        $transactions = Payment::all();
+        $transactions = Payment::where('customer_id', auth('customer')->id())->get();
 
         return view('Themes.customer.my-transactions', compact('transactions'));
     }

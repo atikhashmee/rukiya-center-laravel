@@ -49,7 +49,7 @@
                         <i class="far fa-calendar-times text-6xl text-gray-400 mb-4"></i>
                         <p class="text-xl font-semibold text-gray-700">No Bookings Found</p>
                         <p class="text-gray-500 mt-2">It looks like you haven't booked any services yet. Start your healing journey now!</p>
-                        <a href="{{ route('booking.page') }}" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-theme-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-primary">
+                        <a href="{{ route('services') }}" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-theme-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-primary">
                             Book a Service
                         </a>
                     </div>

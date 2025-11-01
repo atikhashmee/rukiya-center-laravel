@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Booking extends Model
 {
     protected $fillable = [
-        'customer_id', // Changed from user_id
+        'booking_id',
+        'customer_id',
         'service_id',
         'full_name',
         'email',
@@ -17,7 +18,7 @@ class Booking extends Model
         'service_price',
         'price_type',
         'payment_status',
-        'booking_status', // Included booking status
+        'booking_status',
         'phone_number',
     ];
 

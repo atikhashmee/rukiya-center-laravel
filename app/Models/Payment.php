@@ -15,6 +15,7 @@ class Payment extends Model
         'status',
         'description',
         'order_id',
+        'order_type', // model name
         'metadata',
         'response_payload',
     ];
@@ -32,7 +33,7 @@ class Payment extends Model
 
     public function booking()
     {
-        return $this->belongsTo(Booking::class);
+        return $this->belongsTo(Booking::class, 'order_id');
     }
 
     // Helper: convert cents → readable amount

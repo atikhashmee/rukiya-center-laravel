@@ -146,7 +146,7 @@
                         <span class="text-xl font-semibold">Total Amount Due:</span>
                         
                         @if ($service->price_type === 'FIXED')
-                            <span class="text-4xl font-extrabold text-theme-gold">£{{ number_format($service->price, 2) }}</span>
+                            <span class="text-4xl font-extrabold text-theme-gold">£{{ number_format($service->price_value, 2) }}</span>
                         @elseif ($service->price_type === 'DONATION')
                             <span class="text-4xl font-extrabold text-theme-gold">Min. Donation: £{{ number_format($service->min_donation, 2) }}</span>
                         @elseif ($service->price_type === 'RESERVATION')
