@@ -14,8 +14,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="w-full text-left py-3 px-4 rounded-lg text-sm transition duration-150 font-semibold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                                Payments Made
+                            <a href="{{ route("customer.mytransactions") }}" class="w-full text-left py-3 px-4 rounded-lg text-sm transition duration-150 font-semibold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
+                                Payments History
                             </a>
                         </li>
                         <li>

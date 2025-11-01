@@ -9,7 +9,7 @@
     <!-- HEADER END -->
 
     <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Welcome Back, User Name!</h1>
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Welcome Back, <span style="text-transform: capitalize;">{{ auth()->user()->name}}</span> !</h1>
 
         <div class="flex flex-col lg:flex-row gap-8">
             @include('themes.layouts.sidebar-customer-profile') 

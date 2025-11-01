@@ -30,6 +30,11 @@ class Payment extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
+    }
+
     // Helper: convert cents → readable amount
     public function getFormattedAmountAttribute()
     {

@@ -9,7 +9,6 @@
     <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         
         <div class="w-full max-w-lg">
-            
             <!-- Success Content -->
             <div id="success-view" class="bg-white p-8 md:p-10 rounded-xl shadow-2xl border-t-8 border-theme-success hidden">
                 <div class="flex flex-col items-center text-center">
@@ -39,10 +38,10 @@
                     
                     <!-- Action Buttons -->
                     <div class="flex flex-col space-y-3 w-full">
-                        <a href="profile.html?tab=services" class="px-6 py-3 bg-theme-success text-white rounded-xl font-bold shadow-md hover:bg-green-700 transition duration-150">
+                        <a href="{{ route("customer.mybooking") }}" class="px-6 py-3 bg-theme-success text-white rounded-xl font-bold shadow-md hover:bg-green-700 transition duration-150">
                             <i class="fas fa-calendar-check mr-2"></i> View Confirmed Booking
                         </a>
-                        <a href="index.html" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition duration-150">
+                        <a href="{{ route("home") }}" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition duration-150">
                             Back to Home
                         </a>
                     </div>

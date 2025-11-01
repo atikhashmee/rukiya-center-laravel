@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,5 +30,12 @@ class ServiceController extends Controller
             ->get();
 
         return view('Themes.customer.my-booking', compact('bookings'));
+    }
+
+    public function myTransactions(Request $request)
+    {
+        $transactions = Payment::all();
+
+        return view('Themes.customer.my-transactions', compact('transactions'));
     }
 }

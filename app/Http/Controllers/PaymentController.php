@@ -79,13 +79,14 @@ class PaymentController extends Controller
                 // Update DB status (ensure)
                 $payment->update(['status' => 'succeeded', 'response_payload' => $intent->toArray()]);
 
-                return response()->json(['success' => true]);
+                return response()->json(['success' => true, 'data' => $payment]);
             }
 
             // Otherwise, return the status
             return response()->json([
                 'error' => 'Unhandled PaymentIntent status: '.$intent->status,
                 'status' => $intent->status,
+                'data' => $payment,
             ], 400);
 
         } catch (\Exception $e) {
