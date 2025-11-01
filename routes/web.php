@@ -24,6 +24,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::post('/register-store', [AuthController::class, 'registerStore'])->name('store');
     Route::middleware(['verified.customer', 'auth.customer:customer'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+        Route::get('my-booking', [CustomerController::class, 'myBooking'])->name('mybooking');
         Route::get('/booking-preview/{service}', [BookController::class, 'index'])->name('book.preview');
         Route::post('/booking-store', [BookController::class, 'store'])->name('book.store');
         Route::get('/booking-confirm', [BookController::class, 'bookConfirm'])->name('book.confirm');

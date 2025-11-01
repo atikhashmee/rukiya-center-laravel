@@ -26,7 +26,7 @@ class BookingRequest extends FormRequest
             'full_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'inquiry_description' => ['required', 'string'],
-            'service_id' => ['required', 'string', 'exists:service_options,id'], // Ensure service exists
+            'service_id' => ['required', 'string', 'exists:services,id'], // Ensure service exists
 
             // These fields are always optional unless required by service logic
             'mother_name' => ['nullable', 'string', 'max:255'],

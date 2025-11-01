@@ -59,7 +59,7 @@ class BookController extends Controller
                 'phone_number' => $request->phone_number,
                 'mother_name' => $request->mother_name,
                 'inquiry_description' => $request->inquiry_description,
-                'service_id' => $serviceOption->service_id,
+                'service_id' => $serviceOption->id,
                 'price_type' => $serviceOption->price_type,
                 'service_price' => $finalPrice,
                 'payment_status' => $paymentStatus,
@@ -75,12 +75,12 @@ class BookController extends Controller
 
             } elseif ($paymentStatus === 'assessment_required') {
                 // Redirect to a specific page informing the user they will be contacted
-                return redirect()->route('booking.pending')
+                return redirect()->route('customer.book.pending')
                     ->with('success', 'Your assessment request has been submitted. We will contact you shortly.');
             }
 
             // Default for FREE services
-            return redirect()->route('booking.confirmed')
+            return redirect()->route('customer.book.confirm')
                 ->with('success', 'Your free session is booked! Check your email for confirmation.');
         });
 

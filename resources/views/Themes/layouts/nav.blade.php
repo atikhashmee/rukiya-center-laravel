@@ -23,14 +23,12 @@
         
         <!-- Auth Buttons (Always visible, simplified for mobile) -->
         <div class="flex space-x-3 items-center">
-                @auth("customer")
-            <form action="{{route("customer.logout")}}" method="POST" id="logout-form">
-                @csrf
-            </form>
-            <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit()" class="px-3 py-2 md:px-4 md:py-2 text-white border border-white rounded-lg text-sm md:text-base hover:bg-white hover:text-indigo-900 transition duration-300">
-                Logout
-            </a>
-        @else
+            @auth("customer")
+           
+                <a href="{{ route("customer.profile") }}" class="w-10 h-10 bg-theme-gold rounded-full flex items-center justify-center text-indigo-900 text-base font-bold ring-2 ring-white hover:ring-indigo-300 transition duration-300">
+                        JD
+                    </a>
+            @else
             <a href="{{ route("customer.login") }}" class="px-3 py-2 md:px-4 md:py-2 text-white border border-white rounded-lg text-sm md:text-base hover:bg-white hover:text-indigo-900 transition duration-300">
                 Login
             </a>
