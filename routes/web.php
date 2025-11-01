@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\Customer\AuthController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ServiceController as CustomerController;
@@ -12,6 +13,8 @@ use Inertia\Inertia;
 Route::get('/', fn () => view('Themes.index'))->name('home');
 Route::get('/about', fn () => view('Themes.about'))->name('about');
 Route::get('/contact', fn () => view('Themes.contact'))->name('contact');
+Route::get('/services', fn () => view('Themes.service'))->name('services');
+Route::get('/free-counselling', fn () => view('Themes.free-counselling'))->name('free.counselling');
 Route::get('service/{name}', [CustomerController::class, 'index'])->name('service');
 
 Route::prefix('customer')->name('customer.')->group(function () {
@@ -19,7 +22,13 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::post('/login-auth', [AuthController::class, 'login'])->name('login.auth');
     Route::get('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/register-store', [AuthController::class, 'registerStore'])->name('store');
-    Route::middleware(['auth:customer', 'verified.customer'])->group(function () {
+    Route::middleware(['verified.customer', 'auth.customer:customer'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+        Route::get('/booking-preview/{service}', [BookController::class, 'index'])->name('book.preview');
+        Route::post('/booking-store', [BookController::class, 'store'])->name('book.store');
+        Route::get('/booking-confirm', [BookController::class, 'bookConfirm'])->name('book.confirm');
+        Route::get('/booking-pending', [BookController::class, 'bookPending'])->name('book.pending');
+        Route::get('/booking-failed', [BookController::class, 'bookFailed'])->name('book.failed');
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });

@@ -33,13 +33,13 @@ class AuthController extends Controller
             'about' => 'nullable',
         ]);
         try {
-            $validated['about'] = 'ss';
+            // $validated['about'] = 'ss';
             $customer = Customer::create($validated);
             event(new Registered($customer));
 
             return redirect(route('customer.profile'));
         } catch (\Throwable $th) {
-            dd($th);
+            return redirect()->back()->withErrors($th->getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ class AuthController extends Controller
 
     public function emailVerify()
     {
-        return view('Themes.auth.verify-email');
+        return view('Themes.auth.verify-email-page', ['email' => auth()->guard('customer')->user()->email]);
     }
 
     public function emailVerified(EmailVerificationRequest $request)

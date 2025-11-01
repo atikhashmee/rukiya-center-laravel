@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\ServiceType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,23 +15,31 @@ class Service extends Model
      * @var array
      */
     protected $fillable = [
-        'service_name',
-        'service_type',
-        'price',
-        'start_date_and_time',
-        'end_date_and_time',
+        'id_code',
+        'category',
+        'title',
+        'tagline',
         'description',
-        'duration',
+        'icon',
+        'card_color',
+        'features',
+        'order',
+        'price_type',
+        'price_value',
+        'min_donation',
+        'requires_custom_assessment',
+        'required_form_fields',
+        'submit_button_text',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'service_type' => ServiceType::class,
-        'start_date_and_time' => 'datetime',
-        'end_date_and_time' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'features' => 'array',
+            'required_form_fields' => 'array',
+            'price_value' => 'decimal:2',
+            'min_donation' => 'decimal:2',
+            'requires_custom_assessment' => 'boolean',
+        ];
+    }
 }

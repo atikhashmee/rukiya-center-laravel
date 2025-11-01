@@ -17,9 +17,9 @@
             </div>
             <ul class="nav-links">
                 <li><a href="{{route("home")}}" class="active">Home</a></li>
-                <li><a href="{{route("service", ["name" => "counselling"])}}" >Counselling</a></li>
+                <li><a href="{{route("service", ["name" => "counseling"])}}" >Counseling</a></li>
                 <li><a href="{{route("service" , ["name" => "estekhara"])}}" >Estekhara</a></li>
-                <li><a href="{{route("service", ["name" => "mental-health"])}}" >Rukiya</a></li>
+                <li><a href="{{route("service", ["name" => "rukiya"])}}" >Rukiya</a></li>
                 <li><a href="{{route("about")}}" >About</a></li>
                 <li><a href="{{route("contact")}}" >Contact</a></li>
             </ul>
@@ -43,5 +43,6 @@
         </div>
     </footer>
 <script src="{{asset("themes/assets/js/script.js")}}"></script>
+@stack('scripts')
 </body>
 </html>
