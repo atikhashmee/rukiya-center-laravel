@@ -411,7 +411,7 @@ export default function Create({ serviceTypes = [] }: CreateServiceOptionProps) 
                                 className="bg-green-600 hover:bg-green-700 transition duration-150 shadow-md hover:shadow-lg text-white"
                             >
                                 <Save className="mr-2 h-4 w-4" />
-                                {processing ? 'Saving...' : 'Create Option'}
+                                {processing ? 'Saving....' : 'Create Option'}
                             </Button>
                         </div>
                     </form>
