@@ -1,13 +1,56 @@
-import { Head } from '@inertiajs/react';
-import { Service } from '@/types/service'; // Assuming you have a types file
-import AppLayout from '@/layouts/app-layout';
-import { create, index } from "@/actions/App/Http/Controllers/ServiceController";
-import { BreadcrumbItem } from '@/types';
+import React from 'react';
+import AppLayout from "@/layouts/app-layout";
+import { Head, useForm, router } from '@inertiajs/react';
+const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
+import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
-import { Button } from '@/components/ui/button';
-import { Table, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { store, index, create, destroy } from "@/actions/App/Http/Controllers/ServiceController";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
+import { Pencil, Trash2, PlusCircle, CornerUpLeft, DollarSign, Gift, Heart, ShieldQuestion, AlertTriangle } from 'lucide-react';
 
-const breadcrumbs: BreadcrumbItem[] = [
+
+type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
+
+interface ServiceOption {
+    id: number;
+    serviceId: number;
+    id_code: string;
+    category: string;
+    title: string;
+    tagline: string;
+    card_color: string; 
+    order: number;
+    price_type: PriceType;
+    price_value: number | null;
+    min_donation: number | null;
+    requires_custom_assessment: boolean;
+}
+
+interface ServiceOptionsIndexProps {
+    services: ServiceOption[];
+}
+
+
+const getPriceDisplay = (option: ServiceOption) => {
+    switch (option.price_type) {
+        case 'FREE':
+            return <div className="flex items-center text-green-600 font-semibold text-sm"><Gift className="h-3 w-3 mr-1" /> Free</div>;
+        case 'DONATION':
+            return <div className="flex items-center text-yellow-600 font-semibold text-sm"><Heart className="h-3 w-3 mr-1" /> Min. £{option.min_donation || '0.00'}</div>;
+        case 'FIXED':
+            return <div className="flex items-center text-indigo-600 font-semibold text-sm"><DollarSign className="h-3 w-3 mr-1" /> £{option.price_value}</div>;
+        case 'RESERVATION':
+            return <div className="flex items-center text-red-600 font-semibold text-sm"><ShieldQuestion className="h-3 w-3 mr-1" /> Reservation</div>;
+        default:
+            return option.price_type;
+    }
+};
+
+
+export default function Index({ services}: ServiceOptionsIndexProps) {
+    
+    const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
         href: dashboard().url,
@@ -15,49 +58,140 @@ const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Services',
         href: index().url,
-    },
-];
+    }
+    ];
 
-export default function Index({ services }: any) {
+    const handleDelete = (optionId: number, title: string) => {
+        if (window.confirm(`Are you sure you want to delete the option: "${title}"? This is permanent.`)) {
+             console.log(`Attempting to delete option ID: ${optionId}`);
+             router.delete(destroy(optionId), {
+                onSuccess: () => {
+                    console.log(`Option ${title} deleted successfully.`);
+                },
+                onError: (errors: any) => {
+                    console.error("Deletion failed:", errors);
+                }
+            });
+        }
+    };
+
+    const displayOptions = services.sort((a, b) => a.order - b.order);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Services" />
-            <div className="container p-4 bg-[var(--background)]">
-                <div className="flex flex-col justify-between gap-3 w-full ">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-x-1">
-                        <div className="md:col-start-11 md:col-span-2 justify-self-end">
-                            <Button className='text-end' onClick={() => window.location.href = create().url}>Create new Service</Button>
-                        </div>
+            <Head title={`Options for ${services[0]?.title || 'Service'}`} />
+            <div className="container py-4 pl-4">
+                <div className="flex flex-col gap-6 w-full ">
+                    
+                    {/* Header and Create Button */}
+                    <div className="flex justify-between items-center mb-4">
+                         <Link 
+                            href={index().url}
+                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
+                        >
+                            <CornerUpLeft className="mr-2 h-4 w-4" />
+                            Back to Services
+                        </Link>
+
+                          <Link 
+                            href={create().url}
+                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
+                        >
+                         <PlusCircle className="mr-2 h-4 w-4" />
+                          Create New Option
+                        </Link>
+                       
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-1 w-full border rounded-lg">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Sl</TableHead>
-                                    <TableHead>Service Name</TableHead>
-                                    <TableHead>Service Category</TableHead>
-                                    <TableHead>Start Date</TableHead>
-                                    <TableHead>End Date</TableHead>
-                                    <TableHead>Price</TableHead>
-                                    <TableHead>No. Registraion</TableHead>
-                                    <TableHead>Action</TableHead>
+
+                    {/* Options Table */}
+                    <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">
+                        <Table className="min-w-full">
+                            <TableCaption>List of available  services</TableCaption>
+                            <TableHeader className="bg-gray-100/70">
+                                <TableRow className="hover:bg-gray-100/70">
+                                    <TableHead className="w-[50px] font-bold text-gray-700">Order</TableHead>
+                                    <TableHead className="w-[150px] font-bold text-gray-700">ID Code</TableHead>
+                                    <TableHead className="font-bold text-gray-700">Title & Tagline</TableHead>
+                                    <TableHead className="text-center font-bold text-gray-700">Pricing</TableHead>
+                                    <TableHead className="text-center font-bold text-gray-700">Assessment</TableHead>
+                                    <TableHead className="text-center font-bold text-gray-700">Category</TableHead>
+                                    <TableHead className="text-center w-[150px] font-bold text-gray-700">Actions</TableHead>
                                 </TableRow>
-                                {services.length > 0 && services.map((service: Service) => (
-                                    <TableRow key={service.id}>
-                                        <TableCell>{service.id}</TableCell>
-                                        <TableCell>{service.service_name}</TableCell>
-                                        <TableCell>{service.service_type}</TableCell>
-                                        <TableCell>{service.start_date_and_time}</TableCell>
-                                        <TableCell>{service.end_date_and_time}</TableCell>
-                                        <TableCell>{service.price}</TableCell>
-                                        <TableCell>0</TableCell>
-                                        <TableCell>
-                                             <Button> Edit</Button>
-                                            <Button className="bg-red-900"> Delete</Button>
+                            </TableHeader>
+                            <TableBody>
+                                {displayOptions.length > 0 ? (
+                                    displayOptions.map((option) => (
+                                        <TableRow 
+                                            key={option.id} 
+                                            // Dynamic left border using the `card_color` value
+                                            className={`hover:bg-indigo-50/50 transition-colors border-l-4 ${option.card_color.replace('border-l-', 'border-')} hover:border-r-4`}
+                                        >
+                                            <TableCell className="font-bold text-lg">{option.order}</TableCell>
+                                            <TableCell className="font-mono text-xs text-gray-500">{option.id_code}</TableCell>
+                                            <TableCell>
+                                                <div className="font-semibold text-base text-indigo-800">{option.title}</div>
+                                                <div className="text-sm text-gray-500">{option.tagline}</div>
+                                            </TableCell>
+                                            
+                                            {/* Pricing Column */}
+                                            <TableCell className="text-center">
+                                                {getPriceDisplay(option)}
+                                            </TableCell>
+
+                                            {/* Custom Assessment Column */}
+                                            <TableCell className="text-center">
+                                                {option.requires_custom_assessment ? (
+                                                    <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 shadow-sm">
+                                                        <AlertTriangle className="h-3 w-3 mr-1" /> Required
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                                        Standard
+                                                    </span>
+                                                )}
+                                            </TableCell>
+
+                                            <TableCell className="text-center">
+                                                <span className="capitalize text-xs font-medium text-gray-700 bg-gray-200 px-2 py-0.5 rounded-full shadow-inner">
+                                                    {option.category}
+                                                </span>
+                                            </TableCell>
+                                            
+                                            {/* Action Buttons */}
+                                            <TableCell className="text-center flex space-x-2 justify-center">
+                                                
+                                                {/* Edit Button */}
+                                                <Button 
+                                                    variant="outline" 
+                                                    size="icon" 
+                                                    className="h-8 w-8 hover:bg-indigo-100 border-indigo-300 text-indigo-600 transition-transform hover:scale-105"
+                                                    onClick={() => alert('hello world')}
+                                                >
+                                                    <Pencil className="h-4 w-4" />
+                                                </Button>
+                                                
+                                                {/* Delete Button */}
+                                                <Button
+                                                    variant="destructive"
+                                                    size="icon"
+                                                    className="h-8 w-8 bg-red-600 hover:bg-red-700 transition-transform hover:scale-105"
+                                                    onClick={() => handleDelete(option.id, option.title)}
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    // Empty State Row
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="h-24 text-center text-muted-foreground bg-gray-50/50">
+                                            <AlertTriangle className="h-6 w-6 inline-block mr-2 text-yellow-500" />
+                                            No services found. Click "Create New Option" to begin.
                                         </TableCell>
                                     </TableRow>
-                                ))}
-                            </TableHeader>
+                                )}
+                            </TableBody>
                         </Table>
                     </div>
                 </div>

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
 use App\ServiceType;
+use Inertia\Inertia;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
-use Inertia\Inertia;
+use App\Http\Requests\ServiceStoreRequest;
 
 class ServiceController extends Controller
 {
@@ -34,21 +35,19 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ServiceStoreRequest $request)
     {
-        $validated = $request->validate([
-            'service_name' => ['required', 'string', 'max:255'],
-            'service_type' => ['required', new Enum(ServiceType::class)],
-            'price' => ['required', 'numeric', 'min:0'],
-            'start_date_and_time' => ['required', 'date'],
-            'end_date_and_time' => ['required', 'date', 'after:start_date_and_time'],
-            'description' => ['nullable', 'string'],
-            'duration' => ['nullable', 'integer', 'min:0'],
-        ]);
-        Service::create($validated);
+        $validatedData = $request->validated();
 
-        return to_route('services.index')
-            ->with('success', 'Service created successfully.');
+        try {
+            $service = Service::create($validatedData);
+        } catch (\Exception $e) {
+            // Handle potential database errors
+            return redirect()->back()->with('error', 'Failed to create service option: ' . $e->getMessage());
+        }
+
+        return redirect()->route('admin.services.options.index', $service->id)
+                         ->with('success', 'Service option created successfully.');
     }
 
     /**

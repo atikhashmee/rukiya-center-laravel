@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -54,5 +54,18 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
         ]);
+    }
+
+    public function admin(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'name' => "admin",
+                'email' => "admin@gmail.com",
+                'email_verified_at' => now(),
+                'password' => static::$password ??= 'password',
+                'remember_token' => Str::random(10),
+            ];
+        });
     }
 }

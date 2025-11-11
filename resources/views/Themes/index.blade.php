@@ -150,7 +150,7 @@
         <section id="about" class="py-20 px-4 sm:px-8 bg-white">
             <div class="max-w-7xl mx-auto">
                 <h2 class="text-4xl font-extrabold text-gray-900 text-center mb-4">
-                    Voices of Transformation
+                    Customer Feedbacks
                 </h2>
                 <p class="text-xl text-gray-600 text-center mb-16 max-w-2xl mx-auto">
                     Read what our clients have achieved through clarity, guidance, and spiritual alignment.
