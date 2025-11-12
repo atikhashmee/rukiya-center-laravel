@@ -2,7 +2,7 @@
 
     @section('content')
 
-        <!-- HERO SECTION START -->
+        <!-- HERO SECTION START fix-->
         <header class="relative h-screen flex items-center justify-center overflow-hidden">
             @include('Themes.layouts.nav')
             <!-- Background Image Container -->
