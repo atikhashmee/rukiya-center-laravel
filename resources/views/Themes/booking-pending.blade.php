@@ -1,5 +1,5 @@
 
-    @extends('themes.layouts.app')
+    @extends('Themes.layouts.app')
 
     @section('content')
  <header class="bg-indigo-700 py-16 text-white text-center">

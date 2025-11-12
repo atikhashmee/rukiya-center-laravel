@@ -1,4 +1,4 @@
-    @extends('themes.layouts.app')
+    @extends('Themes.layouts.app')
 
     @section('content')
     <header class="relative bg-indigo-900 pt-8 pb-16 overflow-hidden">
