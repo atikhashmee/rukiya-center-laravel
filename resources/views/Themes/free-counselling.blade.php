@@ -5,7 +5,7 @@
     <!-- HEADER / NAVIGATION (Consistent) -->
     <header class="relative bg-indigo-900 pt-32 pb-20 overflow-hidden">
         
-         @include('themes.layouts.nav')
+         @include('Themes.layouts.nav')
         
         <div class="absolute inset-0 bg-cover bg-center opacity-30" style="background-image: url('https://picsum.photos/1600/900?random=16');"></div>
         <div class="absolute inset-0 bg-indigo-900 opacity-70"></div>

@@ -6,7 +6,7 @@
     <header class="relative bg-indigo-900 pt-32 pb-20 overflow-hidden">
         
         <!-- Navigation Bar (Identical to index.html) -->
-         @include('themes.layouts.nav')
+         @include('Themes.layouts.nav')
         
         <!-- Dark Overlay for subtle background image -->
         <div class="absolute inset-0 bg-cover bg-center opacity-30" style="background-image: url('https://picsum.photos/1600/900?random=11');"></div>

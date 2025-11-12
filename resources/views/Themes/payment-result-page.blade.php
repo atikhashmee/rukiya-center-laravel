@@ -2,7 +2,7 @@
     @extends('themes.layouts.app')
     @section('content')
     <header class="relative bg-indigo-900 pt-8 pb-16 overflow-hidden">
-        @include('themes.layouts.nav') 
+        @include('Themes.layouts.nav') 
     </header>
 
     <!-- Main Content Area -->

@@ -2,7 +2,7 @@
 
     @section('content')
      <header class="relative bg-indigo-900 pt-8 pb-16 overflow-hidden">
-        @include('themes.layouts.nav') 
+        @include('Themes.layouts.nav') 
      </header>
     <main class="py-12 md:py-16 px-4 sm:px-8 bg-gradient-to-br from-indigo-50 via-gray-100 to-white">
         <div class="max-w-7xl mx-auto">

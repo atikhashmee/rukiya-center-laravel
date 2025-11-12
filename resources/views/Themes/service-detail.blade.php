@@ -5,7 +5,7 @@
     @section('content')
         <!-- HEADER / NAVIGATION (Consistent) -->
         <header class="relative bg-indigo-900 pt-8 pb-16 overflow-hidden">
-            @include('themes.layouts.nav')
+            @include('Themes.layouts.nav')
         </header>
         <!-- HEADER END -->
         <main class="flex-grow py-16 px-4 sm:px-8">

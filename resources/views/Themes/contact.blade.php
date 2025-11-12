@@ -1,7 +1,7 @@
     @extends('themes.layouts.app')
 
     @section('content')
-    @include('themes.layouts.nav')
+    @include('Themes.layouts.nav')
     <!-- Page Header -->
     <header class="bg-indigo-700 py-20 text-white text-center">
         <h1 class="text-5xl font-extrabold mb-4">Get in Touch</h1>

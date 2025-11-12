@@ -4,7 +4,7 @@
 
         <!-- HERO SECTION START -->
         <header class="relative h-screen flex items-center justify-center overflow-hidden">
-            @include('themes.layouts.nav')
+            @include('Themes.layouts.nav')
             <!-- Background Image Container -->
             <div 
                 class="absolute inset-0 bg-cover bg-center transition-opacity duration-700"

@@ -3,7 +3,7 @@
     @section('content')
 
     <header class="bg-indigo-700 py-16 text-white text-center">
-        @include('themes.layouts.nav')
+        @include('Themes.layouts.nav')
     </header>
     
     <!-- Main Content: Confirmation Message -->
