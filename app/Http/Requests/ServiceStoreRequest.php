@@ -28,7 +28,7 @@ class ServiceStoreRequest extends FormRequest
                 'string',
                 'uppercase',
                 'regex:/^[A-Z0-9_]+$/', 
-                Rule::unique('service_options', 'id_code') 
+                Rule::unique('services', 'id_code') 
             ],
             'category' => [
                 'required',
@@ -62,11 +62,10 @@ class ServiceStoreRequest extends FormRequest
                 'nullable',
                 'numeric',
                 'min:0',
-                'required_if:price_type,DONATION' // Required only if price_type is DONATION
+                'required_if:price_type,DONATION' 
             ],
             'requires_custom_assessment' => ['required', 'boolean'],
 
-            // JSON Array Fields
             'required_form_fields' => ['nullable', 'array'],
             'required_form_fields.*' => ['string'],
 

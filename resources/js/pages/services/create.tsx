@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import AppLayout from "@/layouts/app-layout";
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
 import { store, index, create, destroy } from "@/actions/App/Http/Controllers/ServiceController";
@@ -40,13 +40,13 @@ interface ServiceOptionFormData {
     description: string;
     icon: string;
     card_color: string;
-    features: string; 
+    features: string[]; 
     order: number;
     price_type: PriceType;
     price_value: number | null;
     min_donation: number | null;
     requires_custom_assessment: boolean;
-    required_form_fields: string; 
+    required_form_fields: string[]; 
     submit_button_text: string;
 }
 
@@ -63,13 +63,13 @@ const initialData: ServiceOptionFormData = {
     description: '',
     icon: 'Sparkles',
     card_color: 'border-l-indigo-500',
-    features: '["Quick turnaround", "Basic analysis"]',
+    features: ["Quick turnaround", "Basic analysis"],
     order: 1,
     price_type: 'FIXED',
     price_value: 50.00,
     min_donation: null,
     requires_custom_assessment: false,
-    required_form_fields: '["email", "question"]',
+    required_form_fields: ["email", "question"],
     submit_button_text: 'Book Now',
 };
 
@@ -78,33 +78,27 @@ export default function Create({ serviceTypes = [] }: CreateServiceOptionProps) 
     
     const pageTitle = `Create New Service `;
 
-    const { data, setData, errors, processing} = useForm<ServiceOptionFormData>(initialData);
-
-    console.log("handle errors");
-    console.log(errors);
-    
-
+    const { data, setData, errors, processing, post} = useForm<ServiceOptionFormData>(initialData);
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         const submitData = {
             ...data,
-            features: JSON.parse(data.features || '[]'),
-            required_form_fields: JSON.parse(data.required_form_fields || '[]'),
+            features: data.features,
+            required_form_fields: data.required_form_fields,
             price_value: data.price_type === 'FIXED' ? data.price_value : null,
             min_donation: data.price_type === 'DONATION' ? data.min_donation : null,
         };
 
         console.log("Final data structure being sent for Creation:", submitData);
 
-        router.post(store(), {
+        post(store().url, {
             ...submitData,
-        } as any, { 
-            forceFormData: true, 
             onSuccess: () => {
                 router.visit(index());
             },
-        });
+        } as any
+);
     };
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -280,7 +274,7 @@ export default function Create({ serviceTypes = [] }: CreateServiceOptionProps) 
 
                                 {/* Features (JSON Textarea) */}
                                 <div>
-                                    <Label htmlFor="features">Features (JSON Array of Strings)</Label>
+                                    <Label htmlFor="features">Features (,) Comma separated</Label>
                                     <Textarea
                                         id="features"
                                         value={data.features}
@@ -374,7 +368,7 @@ export default function Create({ serviceTypes = [] }: CreateServiceOptionProps) 
                                 
                                 {/* Required Form Fields (JSON Textarea) */}
                                 <div>
-                                    <Label htmlFor="required_form_fields">Required Form Fields (JSON Array of Strings)</Label>
+                                    <Label htmlFor="required_form_fields">Required Form Fields (,)comma separated</Label>
                                     <Textarea
                                         id="required_form_fields"
                                         value={data.required_form_fields}

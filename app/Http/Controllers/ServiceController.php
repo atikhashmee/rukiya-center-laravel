@@ -42,11 +42,10 @@ class ServiceController extends Controller
         try {
             $service = Service::create($validatedData);
         } catch (\Exception $e) {
-            // Handle potential database errors
             return redirect()->back()->with('error', 'Failed to create service option: ' . $e->getMessage());
         }
 
-        return redirect()->route('admin.services.options.index', $service->id)
+        return redirect()->route('services.index')
                          ->with('success', 'Service option created successfully.');
     }
 

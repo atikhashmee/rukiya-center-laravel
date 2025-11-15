@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AppLayout from "@/layouts/app-layout";
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
 import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
 import { store, index, create, destroy } from "@/actions/App/Http/Controllers/ServiceController";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { Pencil, Trash2, PlusCircle, CornerUpLeft, DollarSign, Gift, Heart, ShieldQuestion, AlertTriangle } from 'lucide-react';
+import { Pencil, Trash2, PlusCircle, CornerUpLeft, DollarSign, Gift, Heart, ShieldQuestion, AlertTriangle, CheckCircle, XCircle  } from 'lucide-react';
 
 
 type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
@@ -49,7 +49,9 @@ const getPriceDisplay = (option: ServiceOption) => {
 
 
 export default function Index({ services}: ServiceOptionsIndexProps) {
-    
+    const { flash } = usePage().props as any;
+    console.log(usePage().props);
+
     const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
@@ -82,7 +84,20 @@ export default function Index({ services}: ServiceOptionsIndexProps) {
             <Head title={`Options for ${services[0]?.title || 'Service'}`} />
             <div className="container py-4 pl-4">
                 <div className="flex flex-col gap-6 w-full ">
+                  {flash?.success && (
+                        <div key={flash.success} className="flex items-center gap-3 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm animate-fade-in">
+                            <CheckCircle className="h-5 w-5 text-green-600" />
+                            <p className="text-sm font-medium text-green-800">{flash.success}</p>
+                        </div>
+                    )}
                     
+                    {flash?.error && (
+                        <div key={flash.error} className="flex items-center gap-3 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-sm animate-fade-in">
+                            <XCircle className="h-5 w-5 text-red-600" />
+                            <p className="text-sm font-medium text-red-800">{flash.error}</p>
+                        </div>
+                    )}
+ 
                     {/* Header and Create Button */}
                     <div className="flex justify-between items-center mb-4">
                          <Link 
