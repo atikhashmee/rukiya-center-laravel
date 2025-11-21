@@ -24,6 +24,7 @@ class Customer extends User implements MustVerifyEmail
         'phone',
         'interests',
         'about',
+        'is_active',
     ];
 
     /**
@@ -50,6 +51,7 @@ class Customer extends User implements MustVerifyEmail
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
             'interests' => 'array',
+            'is_active' => 'boolean',
         ];
     }
 
