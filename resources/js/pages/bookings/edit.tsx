@@ -5,7 +5,7 @@ import AppLayout from "@/layouts/app-layout";
 import { Head, useForm, Link } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 // Import your custom route helpers
-import { dashboard, index as bookingIndex, update } from '@/routes/booking'; 
+import {  index as bookingIndex, update } from '@/actions/App/Http/Controllers/BookingController'; 
 import { Button } from "@/components/ui/button";
 import { CornerUpLeft } from 'lucide-react';
 
