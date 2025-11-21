@@ -8,9 +8,33 @@ import { store, index, create, destroy } from "@/actions/App/Http/Controllers/Se
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import { Pencil, Trash2, PlusCircle, CornerUpLeft, DollarSign, Gift, Heart, ShieldQuestion, AlertTriangle, CheckCircle, XCircle  } from 'lucide-react';
+import Pagination from '@/components/pagination';
+import { edit } from '@/routes/services';
 
 
 type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
+
+//for paginate data
+interface PaginationLink {
+    url: string | null; 
+    label: string;      
+    active: boolean;    
+}
+interface PaginatedData<T> {
+    current_page: number;
+    data: T[]; 
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    links: PaginationLink[]; 
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+    total: number;
+}
 
 interface ServiceOption {
     id: number;
@@ -28,7 +52,8 @@ interface ServiceOption {
 }
 
 interface ServiceOptionsIndexProps {
-    services: ServiceOption[];
+    // services: ServiceOption[];
+    services: PaginatedData<ServiceOption>;
 }
 
 
@@ -50,7 +75,6 @@ const getPriceDisplay = (option: ServiceOption) => {
 
 export default function Index({ services}: ServiceOptionsIndexProps) {
     const { flash } = usePage().props as any;
-    console.log(usePage().props);
 
     const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -65,7 +89,6 @@ export default function Index({ services}: ServiceOptionsIndexProps) {
 
     const handleDelete = (optionId: number, title: string) => {
         if (window.confirm(`Are you sure you want to delete the option: "${title}"? This is permanent.`)) {
-             console.log(`Attempting to delete option ID: ${optionId}`);
              router.delete(destroy(optionId), {
                 onSuccess: () => {
                     console.log(`Option ${title} deleted successfully.`);
@@ -77,11 +100,11 @@ export default function Index({ services}: ServiceOptionsIndexProps) {
         }
     };
 
-    const displayOptions = services.sort((a, b) => a.order - b.order);
+    const displayOptions = services.data;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Options for ${services[0]?.title || 'Service'}`} />
+            <Head title={`Options for ${services.data[0]?.title || 'Service'}`} />
             <div className="container py-4 pl-4">
                 <div className="flex flex-col gap-6 w-full ">
                   {flash?.success && (
@@ -180,7 +203,7 @@ export default function Index({ services}: ServiceOptionsIndexProps) {
                                                     variant="outline" 
                                                     size="icon" 
                                                     className="h-8 w-8 hover:bg-indigo-100 border-indigo-300 text-indigo-600 transition-transform hover:scale-105"
-                                                    onClick={() => alert('hello world')}
+                                                    onClick={() => edit(option.id).url && router.visit(edit(option.id).url)}
                                                 >
                                                     <Pencil className="h-4 w-4" />
                                                 </Button>
@@ -208,6 +231,7 @@ export default function Index({ services}: ServiceOptionsIndexProps) {
                                 )}
                             </TableBody>
                         </Table>
+                        <Pagination links={services.links} />
                     </div>
                 </div>
             </div>

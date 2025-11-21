@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ServiceStoreRequest extends FormRequest
 {
@@ -22,18 +22,20 @@ class ServiceStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        dd($this->features);
+
         return [
             'id_code' => [
                 'required',
                 'string',
                 'uppercase',
-                'regex:/^[A-Z0-9_]+$/', 
-                Rule::unique('services', 'id_code') 
+                'regex:/^[A-Z0-9_]+$/',
+                Rule::unique('services', 'id_code'),
             ],
             'category' => [
                 'required',
                 'string',
-                Rule::in(['counseling', 'rukiya', 'istekhara', 'other'])
+                Rule::in(['counseling', 'rukiya', 'istekhara', 'other']),
             ],
             'order' => ['required', 'integer', 'min:1'],
 
@@ -43,26 +45,26 @@ class ServiceStoreRequest extends FormRequest
             'description' => ['required', 'string'],
             'icon' => ['required', 'string', 'max:100'],
             'card_color' => ['required', 'string', 'max:100'],
-            
+
             'features' => ['required', 'array'],
-            'features.*' => ['string'], 
-            
+            'features.*' => ['string'],
+
             // Pricing & Logic
             'price_type' => [
                 'required',
-                Rule::in(['FREE', 'DONATION', 'FIXED', 'RESERVATION'])
+                Rule::in(['FREE', 'DONATION', 'FIXED', 'RESERVATION']),
             ],
             'price_value' => [
                 'nullable',
                 'numeric',
                 'min:0',
-                'required_if:price_type,FIXED' 
+                'required_if:price_type,FIXED',
             ],
             'min_donation' => [
                 'nullable',
                 'numeric',
                 'min:0',
-                'required_if:price_type,DONATION' 
+                'required_if:price_type,DONATION',
             ],
             'requires_custom_assessment' => ['required', 'boolean'],
 

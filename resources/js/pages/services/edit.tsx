@@ -1,26 +1,12 @@
 import React, { useEffect } from 'react';
-// --- START: TEMPORARY FIX FOR COMPILATION ERRORS ---
-// NOTE: Please revert these lines to your original imports in your local environment
 import AppLayout from "@/layouts/app-layout";
-import { Head, router } from '@inertiajs/react';
-const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
-const useForm = (initialData: any) => {
-    const [data, setData] = React.useState(initialData);
-    const [errors, setErrors] = React.useState<Record<string, string>>({});
-    const processing = false;
-    const post = (url: string, options: any) => { 
-        console.log(`Mock POST to ${url} (CREATE)`);
-    };
-    const put = (url: string, options: any) => { 
-        console.log(`Mock PUT to ${url} (EDIT) with data:`, data); 
-        console.log("Success! Submitting update...");
-        options.onSuccess(); 
-    };
-    return { data, setData: (keyOrObject: string | Record<string, any>, value?: any) => { if (typeof keyOrObject === 'string') { setData(prev => ({ ...prev, [keyOrObject]: value })); } else { setData(prev => ({ ...prev, ...keyOrObject })); } }, errors, processing, post, put, reset: () => setData(initialData), wasSuccessful: false, };
-};
-// --- END: TEMPORARY FIX ---
+import { Head, router, useForm } from '@inertiajs/react';
+import { BreadcrumbItem} from "@/types";
+import { dashboard } from '@/routes';
+import { index, create, update } from "@/actions/App/Http/Controllers/ServiceController";
+import { CornerUpLeft, Save } from 'lucide-react';
 
-// UI Components (Using mocked components for non-standard UI elements)
+const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
 const Button: React.FC<any> = ({ children, className = '', ...props }) => <button {...props} className={`px-4 py-2 rounded-lg font-medium transition-colors ${className}`}>{children}</button>;
 const Input: React.FC<any> = (props) => <input {...props} className="border border-gray-300 p-2 rounded-lg w-full focus:ring-indigo-500 focus:border-indigo-500" />;
 const Label: React.FC<any> = ({ children, ...props }) => <label {...props} className="block text-sm font-medium text-gray-700 mb-1">{children}</label>;
@@ -39,15 +25,12 @@ const SelectContent: React.FC<any> = ({ children }) => <>{children}</>;
 const SelectItem: React.FC<any> = ({ value, children }) => <option value={value}>{children}</option>;
 const SelectTrigger: React.FC<any> = ({ children }) => <>{children}</>;
 const SelectValue: React.FC<any> = ({ placeholder }) => <option disabled value="">{placeholder}</option>;
-const Checkbox: React.FC<any> = (props) => <input type="checkbox" {...props} className="rounded text-indigo-600 h-4 w-4 border-gray-300 focus:ring-indigo-500" checked={props.checked} onChange={(e) => props.onCheckedChange(e.target.checked)} />;
+const Checkbox: React.FC<any> = (props) => <input type="checkbox" {...props} className="rounded text-indigo-600 h-4 w-4 border-gray-300 focus:ring-indigo-500" />;
 
-import { CornerUpLeft, Save, AlertTriangle, Edit3 } from 'lucide-react';
 
-// --- Type Definitions ---
 type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
 
-interface ServiceOptionData {
-    id: number; // Only present on edit/existing data
+interface ServiceOptionFormData {
     id_code: string;
     category: string;
     title: string;
@@ -55,123 +38,87 @@ interface ServiceOptionData {
     description: string;
     icon: string;
     card_color: string;
-    features: string | string[]; 
+    features: string[]; 
     order: number;
     price_type: PriceType;
     price_value: number | null;
     min_donation: number | null;
     requires_custom_assessment: boolean;
-    required_form_fields: string | string[]; 
+    required_form_fields: string[]; 
     submit_button_text: string;
 }
 
-interface ServiceOptionFormData extends Omit<ServiceOptionData, 'id' | 'features' | 'required_form_fields'> {
-    features: string;
-    required_form_fields: string;
-}
-
-interface BreadcrumbItem {
-    title: string;
-    href: string;
-}
-
 interface EditServiceOptionProps {
-    serviceOption: ServiceOptionData;
-    serviceId: number;
-    serviceName: string;
+    service: ServiceOptionFormData & { id: number };
+    serviceTypes: string[];
 }
 
-// --- Mock Route Helpers ---
-const mockRoutes = {
-    services: {
-        index: () => ({ url: '/admin/services' }),
-        optionsIndex: (serviceId: number) => ({ url: `/admin/services/${serviceId}/options` }),
-        updateOption: (serviceId: number, optionId: number) => `/admin/services/${serviceId}/options/${optionId}`,
-    },
-    dashboard: () => ({ url: '/admin/dashboard' }),
-};
-
-// --- Mock Existing Data (For Canvas Preview) ---
-const MOCK_SERVICE_ID = 42;
-const MOCK_SERVICE_NAME = "Deep Istekhara & Guidance";
-const MOCK_SERVICE_OPTION: ServiceOptionData = {
-    id: 101,
-    id_code: 'DEEP_DIVE',
-    category: 'istekhara',
-    title: 'Advanced Istekhara Report',
-    tagline: 'In-depth analysis for complex matters.',
-    description: 'This service provides a comprehensive report based on advanced Istekhara methods, suitable for life-altering decisions.',
-    icon: 'BookOpen',
-    card_color: 'border-l-teal-500',
-    features: ['Detailed response', '3-day delivery', 'Follow-up consultation'],
-    order: 2,
-    price_type: 'FIXED',
-    price_value: 120.00,
-    min_donation: null,
-    requires_custom_assessment: false,
-    required_form_fields: ['fullName', 'dateOfBirth', 'detailedQuestion'],
-    submit_button_text: 'Purchase Report',
-};
-
-
-// --- Main Page Component (Contains the full form logic for EDIT) ---
-
-export default function Edit({ 
-    serviceOption = MOCK_SERVICE_OPTION, 
-    serviceId = MOCK_SERVICE_ID, 
-    serviceName = MOCK_SERVICE_NAME 
-}: EditServiceOptionProps) {
+export default function Edit({ service, serviceTypes = [] }: EditServiceOptionProps) {
     
-    const pageTitle = `Editing Option: ${serviceOption.title}`;
+    const pageTitle = `Edit Service: ${service.title}`;
 
-    // Helper to prepare the existing data for the form's state, converting array/object props to JSON strings
-    const prepareInitialData = (option: ServiceOptionData): ServiceOptionFormData => ({
-        ...option,
-        // Ensure features and required_form_fields are JSON strings for the Textarea inputs
-        features: Array.isArray(option.features) ? JSON.stringify(option.features) : option.features,
-        required_form_fields: Array.isArray(option.required_form_fields) ? JSON.stringify(option.required_form_fields) : option.required_form_fields,
-    });
+    // Convert arrays to comma-separated strings for the form
+    const initialFormData = {
+        ...service,
+        features: Array.isArray(service.features) ? service.features.join(', ') : service.features,
+        required_form_fields: Array.isArray(service.required_form_fields) 
+            ? service.required_form_fields.join(', ') 
+            : service.required_form_fields
+    };
 
-    // Initialize form with existing data
-    const { data, setData, errors, processing, put } = useForm<ServiceOptionFormData>(
-        prepareInitialData(serviceOption)
-    );
+    const { data, setData, errors, processing, put } = useForm<any>(initialFormData);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Prepare data for submission (parse JSON fields and handle nulls)
+        // Convert comma-separated strings back to arrays
+        const processedFeatures = typeof data.features === 'string' 
+            ? data.features.split(',').map((f: string) => f.trim()).filter((f: string) => f !== '')
+            : Array.isArray(data.features) ? data.features : [];
+
+        const processedFormFields = typeof data.required_form_fields === 'string'
+            ? data.required_form_fields.split(',').map((f: string) => f.trim()).filter((f: string) => f !== '')
+            : Array.isArray(data.required_form_fields) ? data.required_form_fields : [];
+
         const submitData = {
             ...data,
-            features: JSON.parse(data.features || '[]'),
-            required_form_fields: JSON.parse(data.required_form_fields || '[]'),
+            features: processedFeatures,
+            required_form_fields: processedFormFields,
             price_value: data.price_type === 'FIXED' ? data.price_value : null,
             min_donation: data.price_type === 'DONATION' ? data.min_donation : null,
         };
-        
+
         console.log("Final data structure being sent for Update:", submitData);
 
-        // *** Use PUT method for update ***
-        put(mockRoutes.services.updateOption(serviceId, serviceOption.id), {
+        put(update(service.id).url, {
             data: submitData,
-            onSuccess: () => router.get(mockRoutes.services.optionsIndex(serviceId).url),
-        });
+            onSuccess: () => {
+                router.visit(index().url);
+            },
+            onError: (errors: any) => {
+                console.error("Update failed:", errors);
+            }
+        } as any);
     };
 
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: mockRoutes.dashboard().url },
-        { title: 'Services', href: mockRoutes.services.index().url },
-        { title: serviceName, href: mockRoutes.services.optionsIndex(serviceId).url },
-        { title: 'Edit Option', href: '' },
+        { title: 'Dashboard', href: dashboard().url },
+        { title: 'Services', href: index().url },
+        { title: `Edit: ${service.title}`, href: '#' },
     ];
-
+    
     // Cleanup Effect for Price Fields on Type Change
     useEffect(() => {
         if (data.price_type === 'FREE' || data.price_type === 'RESERVATION') {
-            setData({ price_value: null, min_donation: null });
+            setData({ ...data, price_value: null, min_donation: null });
         }
-    }, [data.price_type, setData]);
-
+        if (data.price_type === 'FIXED' && data.price_value === null) {
+            setData('price_value', 50.00); 
+        }
+        if (data.price_type === 'DONATION' && data.min_donation === null) {
+            setData('min_donation', 10.00); 
+        }
+    }, [data.price_type]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -181,16 +128,13 @@ export default function Edit({
                     
                     {/* Header and Back Button */}
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-                            <Edit3 className="mr-3 h-6 w-6 text-indigo-600" />
-                            {pageTitle}
-                        </h2>
+                        <h2 className="text-2xl font-bold text-gray-800">{pageTitle}</h2>
                          <Link 
-                            href={mockRoutes.services.optionsIndex(serviceId).url}
+                            href={index().url}
                             className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
                         >
                             <CornerUpLeft className="mr-2 h-4 w-4" />
-                            Back to Options
+                            Back to Services
                         </Link>
                     </div>
 
@@ -215,8 +159,6 @@ export default function Edit({
                                             onChange={(e: any) => setData('id_code', e.target.value.toUpperCase().replace(/\s/g, '_'))}
                                             className={errors.id_code ? 'border-red-500' : ''}
                                             placeholder="E.g., ISTEKHARA_DEEP"
-                                            // Disabled on Edit to prevent key changes, typically done in real applications
-                                            disabled
                                         />
                                         {errors.id_code && <p className="text-xs text-red-500 mt-1">{errors.id_code}</p>}
                                     </div>
@@ -329,15 +271,15 @@ export default function Edit({
                                     </div>
                                 </div>
 
-                                {/* Features (JSON Textarea) */}
+                                {/* Features (Comma Separated) */}
                                 <div>
-                                    <Label htmlFor="features">Features (JSON Array of Strings)</Label>
+                                    <Label htmlFor="features">Features (comma separated)</Label>
                                     <Textarea
                                         id="features"
                                         value={data.features}
                                         onChange={(e: any) => setData('features', e.target.value)}
                                         className={errors.features ? 'border-red-500 font-mono' : 'font-mono'}
-                                        placeholder='["Feature 1", "Feature 2"]'
+                                        placeholder='Feature 1, Feature 2, Feature 3'
                                         rows={3}
                                     />
                                     {errors.features && <p className="text-xs text-red-500 mt-1">{errors.features}</p>}
@@ -407,13 +349,12 @@ export default function Edit({
                                     )}
                                 </div>
 
-
                                 {/* Custom Assessment */}
                                 <div className="flex items-center space-x-2 pt-2">
                                     <Checkbox
                                         id="requires_custom_assessment"
                                         checked={data.requires_custom_assessment}
-                                        onCheckedChange={(checked: boolean) => setData('requires_custom_assessment', !!checked)}
+                                        onChange={(e: any) => setData('requires_custom_assessment', e.target.checked)}
                                     />
                                     <label
                                         htmlFor="requires_custom_assessment"
@@ -423,15 +364,15 @@ export default function Edit({
                                     </label>
                                 </div>
                                 
-                                {/* Required Form Fields (JSON Textarea) */}
+                                {/* Required Form Fields (Comma Separated) */}
                                 <div>
-                                    <Label htmlFor="required_form_fields">Required Form Fields (JSON Array of Strings)</Label>
+                                    <Label htmlFor="required_form_fields">Required Form Fields (comma separated)</Label>
                                     <Textarea
                                         id="required_form_fields"
                                         value={data.required_form_fields}
-                                        onChange={(e: any) => setData('required_form_fields', e.target.value)}
+                                        onChange={(e : any) => setData('required_form_fields', e.target.value)}
                                         className={errors.required_form_fields ? 'border-red-500 font-mono' : 'font-mono'}
-                                        placeholder='["motherName", "age", "symptoms"]'
+                                        placeholder='motherName, age, symptoms'
                                         rows={3}
                                     />
                                     <p className="text-xs text-gray-500 mt-1">These fields are collected during booking (e.g., motherName, phone).</p>
@@ -453,16 +394,15 @@ export default function Edit({
                             </div>
                         </div>
 
-
                         {/* Form Submission */}
                         <div className="flex justify-end pt-4 border-t">
                             <Button 
                                 type="submit" 
                                 disabled={processing} 
-                                className="bg-indigo-600 hover:bg-indigo-700 transition duration-150 shadow-md hover:shadow-lg text-white"
+                                className="bg-blue-600 hover:bg-blue-700 transition duration-150 shadow-md hover:shadow-lg text-white"
                             >
                                 <Save className="mr-2 h-4 w-4" />
-                                {processing ? 'Updating...' : 'Save Changes'}
+                                {processing ? 'Updating.....' : 'Update Service'}
                             </Button>
                         </div>
                     </form>
