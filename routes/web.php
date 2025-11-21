@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
@@ -63,6 +64,10 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::resource('services', ServiceController::class)->names('services');
     Route::post('verify-customer-email/{id}', [AdminCustomerController::class, 'verifyEmail'])->name('customers.verifyEmail');
     Route::resource('customers', AdminCustomerController::class)->names('customers');
+
+    Route::post('bookings-sendOrderEmail', [BookingController::class, 'sendOrderEmail'])->name('bookings.sendOrderEmail');
+    Route::post('bookings-updateStatus', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+    Route::resource('bookings', BookingController::class)->names('bookings');
 });
 
 require __DIR__.'/settings.php';
