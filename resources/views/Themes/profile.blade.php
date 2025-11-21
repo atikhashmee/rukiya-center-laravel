@@ -12,7 +12,7 @@
         <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Welcome Back, <span style="text-transform: capitalize;">{{ auth()->user()->name}}</span>!</h1>
 
         <div class="flex flex-col lg:flex-row gap-8">
-            @include('themes.layouts.sidebar-customer-profile') 
+            @include('Themes.layouts.sidebar-customer-profile') 
            
 
             @php
