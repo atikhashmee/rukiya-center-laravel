@@ -1,17 +1,18 @@
 <?php
 
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Customer\AuthController;
+use App\Http\Controllers\Customer\ProfileController;
+use App\Http\Controllers\Customer\ServiceController as CustomerController;
+use App\Http\Controllers\CustomerController as AdminCustomerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\Customer\AuthController;
-use App\Http\Controllers\Customer\ProfileController;
-use App\Http\Controllers\CustomerController as AdminCustomerController;
-use App\Http\Controllers\Customer\ServiceController as CustomerController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', fn () => view('Themes.index'))->name('home');
 Route::get('/about', fn () => view('Themes.about'))->name('about');
@@ -47,7 +48,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 
-    Route::middleware(['auth:customer'])->group(function () {
+    Route::middleware(['auth:customer', 'auth.customer'])->group(function () {
         Route::get('/email/verify', [AuthController::class, 'emailVerify'])->name('verification.notice');
         Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'emailVerified'])->middleware(['signed'])->name('verification.verify');
         Route::post('/email/verification-notification', [AuthController::class, 'resendVerificationEmail'])->middleware(['throttle:6,1'])->name('verification.send');
@@ -68,6 +69,7 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::post('bookings-sendOrderEmail', [BookingController::class, 'sendOrderEmail'])->name('bookings.sendOrderEmail');
     Route::post('bookings-updateStatus', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
     Route::resource('bookings', BookingController::class)->names('bookings');
+    Route::resource('users', UserController::class)->names('users');
 });
 
 require __DIR__.'/settings.php';
