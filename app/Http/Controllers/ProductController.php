@@ -88,7 +88,6 @@ class ProductController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
 
             return response()->json(['message' => 'Product creation failed.', 'error' => $e->getMessage()], 500);
         }

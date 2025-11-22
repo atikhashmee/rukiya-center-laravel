@@ -22,7 +22,6 @@ class ServiceStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        dd($this->features);
 
         return [
             'id_code' => [
