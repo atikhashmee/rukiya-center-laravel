@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BookingRequest;
 use App\Models\Booking;
 use App\Models\Service;
+use App\Mail\ServiceBooked;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\BookingRequest;
 
 class BookController extends Controller
 {
@@ -66,6 +68,11 @@ class BookController extends Controller
                 'payment_status' => $paymentStatus,
                 'booking_status' => $bookingStatus,
             ]);
+
+            if ( $booking) {
+                // Send confirmation email
+                Mail::to($booking->email)->send(new ServiceBooked($booking));
+            }
 
             // 4. Handle Redirection based on payment status
             if ($paymentStatus === 'pending') {

@@ -160,7 +160,7 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses }: Bo
                                     </TableCell>
 
                                     <TableCell className="text-right">
-                                        <div className="font-semibold text-sm">${booking.service_price.toFixed(2)}</div>
+                                        <div className="font-semibold text-sm">${Number(booking.service_price).toFixed(2)}</div>
                                     </TableCell>
 
                                     <TableCell className="text-center">
