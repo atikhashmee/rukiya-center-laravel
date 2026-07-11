@@ -44,9 +44,26 @@ export interface User {
 
 export interface Post {
     title: string;
-    title: string;
     slug : string;
     content: string;
     featured_image: string;
     status: string;
+}
+
+export interface Theme {
+    id: number;
+    name: string;
+    slug: string;
+    description: string | null;
+    is_active: boolean;
+    files: Record<string, string> | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ThemeFileData {
+    key: string;
+    filename: string;
+    label: string;
+    content: string;
 }

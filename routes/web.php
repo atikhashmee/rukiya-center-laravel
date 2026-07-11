@@ -10,15 +10,44 @@ use App\Http\Controllers\CustomerController as AdminCustomerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
+use App\Models\Theme;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
 
-Route::get('/', fn () => view('Themes.index'))->name('home');
-Route::get('/about', fn () => view('Themes.about'))->name('about');
-Route::get('/contact', fn () => view('Themes.contact'))->name('contact');
-Route::get('/services', fn () => view('Themes.service'))->name('services');
-Route::get('/free-counselling', fn () => view('Themes.free-counselling'))->name('free.counselling');
+$themeViewPrepended = false;
+
+function resolveThemeView(string $key): string
+{
+    global $themeViewPrepended;
+    $theme = Theme::active();
+
+    if ($theme) {
+        $path = $theme->resolveViewPath($key);
+
+        if ($path && !$themeViewPrepended) {
+            $storageDir = dirname($path);
+            if (is_dir($storageDir)) {
+                View::prependLocation($storageDir);
+                $themeViewPrepended = true;
+            }
+        }
+
+        if ($path) {
+            return $key;
+        }
+    }
+
+    return "Themes.{$key}";
+}
+
+Route::get('/', fn () => view(resolveThemeView('index')))->name('home');
+Route::get('/about', fn () => view(resolveThemeView('about')))->name('about');
+Route::get('/contact', fn () => view(resolveThemeView('contact')))->name('contact');
+Route::get('/services', fn () => view(resolveThemeView('service')))->name('services');
+Route::get('/free-counselling', fn () => view(resolveThemeView('free-counselling')))->name('free.counselling');
 Route::get('service/{name}', [CustomerController::class, 'index'])->name('service');
 
 Route::prefix('customer')->name('customer.')->group(function () {
@@ -70,6 +99,13 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::post('bookings-updateStatus', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
     Route::resource('bookings', BookingController::class)->names('bookings');
     Route::resource('users', UserController::class)->names('users');
+
+    // Theme management
+    Route::resource('themes', ThemeController::class)->names('themes');
+    Route::post('themes/{theme}/activate', [ThemeController::class, 'activate'])->name('themes.activate');
+    Route::post('themes/{theme}/deactivate', [ThemeController::class, 'deactivate'])->name('themes.deactivate');
+    Route::get('themes/{theme}/file/{key}', [ThemeController::class, 'getFile'])->name('themes.file');
+    Route::put('themes/{theme}/file/{key}', [ThemeController::class, 'updateFile'])->name('themes.updateFile');
 });
 
 require __DIR__.'/settings.php';
