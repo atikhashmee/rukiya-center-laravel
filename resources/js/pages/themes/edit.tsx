@@ -122,6 +122,7 @@ export default function ThemeEdit() {
                         size="sm"
                         onClick={handleSave}
                         disabled={saving || !hasChanges}
+                        className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
                     >
                         {saving ? (
                             <RefreshCw className="h-4 w-4 mr-2 animate-spin" />

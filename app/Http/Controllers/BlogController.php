@@ -53,14 +53,14 @@ class BlogController extends Controller
             $query->where('approved', true)->latest();
         }]);
 
-        return Inertia::render('Blog/Show', [
+        return Inertia::render('blog/show', [
             'post' => $post,
         ]);
     }
 
     public function edit(BlogPost $post): Response
     {
-        return Inertia::render('Blog/Edit', [
+        return Inertia::render('blog/edit', [
             'post' => $post,
         ]);
     }

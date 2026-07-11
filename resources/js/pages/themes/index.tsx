@@ -55,12 +55,12 @@ export default function ThemesIndex() {
                                 Create and manage website themes. Activate a theme to apply it to the public site.
                             </p>
                         </div>
-                        <Button className="md:col-start-11 md:col-span-2" onClick={() => window.location.href = create().url}>
+                        <Button className="md:col-start-11 md:col-span-2 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => window.location.href = create().url}>
                             <PlusCircle className="h-4 w-4 mr-2" />
                             New Theme
                         </Button>
                     </div>
-                    <div className="p-3 border rounded-lg bg-[var(--background)] md:col-span-12">
+                    <div className="p-3 border rounded-xl bg-white shadow-xl md:col-span-12">
                         <Table>
                             <TableCaption>A list of all themes.</TableCaption>
                             <TableHeader>
@@ -112,6 +112,7 @@ export default function ThemesIndex() {
                                                     ) : (
                                                         <Button
                                                             size="sm"
+                                                            className="bg-blue-600 hover:bg-blue-700 text-white"
                                                             onClick={() => handleActivate(theme)}
                                                         >
                                                             <CheckCircle className="h-4 w-4" />

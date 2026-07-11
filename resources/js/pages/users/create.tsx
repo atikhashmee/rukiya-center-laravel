@@ -193,7 +193,7 @@ export default function Create() {
                             <Button 
                                 type="submit" 
                                 disabled={processing} 
-                                className="bg-green-600 hover:bg-green-700 transition duration-150 shadow-md hover:shadow-lg text-white disabled:opacity-50"
+                                className="bg-blue-600 hover:bg-blue-700 transition duration-150 shadow-md hover:shadow-lg text-white disabled:opacity-50"
                             >
                                 <Save className="mr-2 h-4 w-4" />
                                 {processing ? 'Creating...' : 'Create User'}

@@ -3,33 +3,46 @@ import AppLayout from "@/layouts/app-layout";
 import { Head, useForm, Link } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
-import { index, store } from "@/actions/App/Http/Controllers/BlogController";
+import { index, update } from "@/actions/App/Http/Controllers/BlogController";
 import { CornerUpLeft } from 'lucide-react';
+
+interface BlogPost {
+    id: number;
+    title: string;
+    slug: string;
+    content: string;
+    featured_image: string | null;
+    status: string;
+}
+
+interface BlogEditProps {
+    post: BlogPost;
+}
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard().url },
     { title: 'Blog', href: index().url },
-    { title: 'Create', href: '#' },
+    { title: 'Edit', href: '#' },
 ];
 
-export default function BlogCreate() {
-    const { data, setData, post, processing, errors } = useForm({
-        title: '',
-        content: '',
-        featured_image: '',
-        status: 'draft',
+export default function BlogEdit({ post }: BlogEditProps) {
+    const { data, setData, processing, errors, put } = useForm({
+        title: post.title,
+        content: post.content,
+        featured_image: post.featured_image || '',
+        status: post.status,
     });
 
     const INPUT_CLASSES = "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2";
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(store().url, { preserveScroll: true });
+        put(update(post.id).url, { preserveScroll: true });
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Blog Post" />
+            <Head title={`Edit: ${post.title}`} />
             <div className="container py-4 pl-4 max-w-4xl mx-auto">
                 <div className="flex flex-col gap-6 w-full">
                     <div className="flex justify-between items-center mb-4">
@@ -43,7 +56,9 @@ export default function BlogCreate() {
                     </div>
 
                     <div className="p-6 border rounded-xl bg-white shadow-xl">
-                        <h2 className="text-2xl font-bold mb-6 text-indigo-700">Create New Blog Post</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-indigo-700">
+                            Editing: <span className="text-gray-900">{post.title}</span>
+                        </h2>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
@@ -80,7 +95,6 @@ export default function BlogCreate() {
                                         value={data.featured_image}
                                         onChange={(e) => setData('featured_image', e.target.value)}
                                         className={INPUT_CLASSES}
-                                        placeholder="https://example.com/image.jpg"
                                     />
                                     {errors.featured_image && <p className="mt-1 text-xs text-red-500">{errors.featured_image}</p>}
                                 </div>
@@ -107,7 +121,7 @@ export default function BlogCreate() {
                                     disabled={processing}
                                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
                                 >
-                                    {processing ? 'Creating...' : 'Create Blog Post'}
+                                    {processing ? 'Updating...' : 'Update Blog Post'}
                                 </button>
                             </div>
                         </form>

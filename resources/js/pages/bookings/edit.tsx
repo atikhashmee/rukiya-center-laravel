@@ -5,6 +5,7 @@ import AppLayout from "@/layouts/app-layout";
 import { Head, useForm, Link } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 // Import your custom route helpers
+import { dashboard } from '@/routes';
 import {  index as bookingIndex, update } from '@/actions/App/Http/Controllers/BookingController'; 
 import { Button } from "@/components/ui/button";
 import { CornerUpLeft } from 'lucide-react';
@@ -74,7 +75,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit Booking: ${booking.booking_id}`} />
-            <div className="container py-4 pl-4">
+            <div className="container py-4 pl-4 max-w-4xl mx-auto">
                 <div className="flex flex-col gap-6 w-full ">
                     <div className="flex justify-between items-center mb-4">
                         <Link 
@@ -107,7 +108,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                         onChange={(e) => setData('full_name', e.target.value)}
                                         className={INPUT_CLASSES}
                                     />
-                                    {errors.full_name && <p className="mt-2 text-sm text-red-600">{errors.full_name}</p>}
+                                    {errors.full_name && <p className="mt-1 text-xs text-red-500">{errors.full_name}</p>}
                                 </div>
 
                                 {/* Email */}
@@ -120,7 +121,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                         onChange={(e) => setData('email', e.target.value)}
                                         className={INPUT_CLASSES}
                                     />
-                                    {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
+                                    {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
                                 </div>
                                 
                                 {/* Phone Number */}
@@ -133,7 +134,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                         onChange={(e) => setData('phone_number', e.target.value)}
                                         className={INPUT_CLASSES}
                                     />
-                                    {errors.phone_number && <p className="mt-2 text-sm text-red-600">{errors.phone_number}</p>}
+                                    {errors.phone_number && <p className="mt-1 text-xs text-red-500">{errors.phone_number}</p>}
                                 </div>
 
                                 {/* Mother's Name (Optional) */}
@@ -146,7 +147,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                         onChange={(e) => setData('mother_name', e.target.value)}
                                         className={INPUT_CLASSES}
                                     />
-                                    {errors.mother_name && <p className="mt-2 text-sm text-red-600">{errors.mother_name}</p>}
+                                    {errors.mother_name && <p className="mt-1 text-xs text-red-500">{errors.mother_name}</p>}
                                 </div>
                                 
                             </div>
@@ -165,7 +166,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                         onChange={(e) => setData('service_id', e.target.value)}
                                         className={INPUT_CLASSES}
                                     />
-                                    {errors.service_id && <p className="mt-2 text-sm text-red-600">{errors.service_id}</p>}
+                                    {errors.service_id && <p className="mt-1 text-xs text-red-500">{errors.service_id}</p>}
                                 </div>
 
                                 {/* Price Type */}
@@ -181,7 +182,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                             <option key={p} value={p}>{p}</option>
                                         ))}
                                     </select>
-                                    {errors.price_type && <p className="mt-2 text-sm text-red-600">{errors.price_type}</p>}
+                                    {errors.price_type && <p className="mt-1 text-xs text-red-500">{errors.price_type}</p>}
                                 </div>
 
                                 {/* Service Price */}
@@ -195,7 +196,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                         onChange={(e) => setData('service_price', e.target.value)}
                                         className={INPUT_CLASSES}
                                     />
-                                    {errors.service_price && <p className="mt-2 text-sm text-red-600">{errors.service_price}</p>}
+                                    {errors.service_price && <p className="mt-1 text-xs text-red-500">{errors.service_price}</p>}
                                 </div>
                             </div>
 
@@ -216,7 +217,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                             <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}</option>
                                         ))}
                                     </select>
-                                    {errors.booking_status && <p className="mt-2 text-sm text-red-600">{errors.booking_status}</p>}
+                                    {errors.booking_status && <p className="mt-1 text-xs text-red-500">{errors.booking_status}</p>}
                                 </div>
 
                                 {/* Payment Status */}
@@ -232,7 +233,7 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                             <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}</option>
                                         ))}
                                     </select>
-                                    {errors.payment_status && <p className="mt-2 text-sm text-red-600">{errors.payment_status}</p>}
+                                    {errors.payment_status && <p className="mt-1 text-xs text-red-500">{errors.payment_status}</p>}
                                 </div>
                             </div>
 
@@ -246,13 +247,17 @@ export default function Edit({ booking, bookingStatuses, paymentStatuses, errors
                                     onChange={(e) => setData('inquiry_description', e.target.value)}
                                     className={INPUT_CLASSES}
                                 />
-                                {errors.inquiry_description && <p className="mt-2 text-sm text-red-600">{errors.inquiry_description}</p>}
+                                {errors.inquiry_description && <p className="mt-1 text-xs text-red-500">{errors.inquiry_description}</p>}
                             </div>
 
                             <div className="flex justify-end pt-4 border-t border-gray-200">
-                                <Button type="submit" disabled={processing} className="bg-indigo-600 hover:bg-indigo-700">
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
+                                >
                                     {processing ? 'Saving...' : 'Save Changes'}
-                                </Button>
+                                </button>
                             </div>
                         </form>
                     </div>

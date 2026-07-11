@@ -125,7 +125,7 @@ export default function Index({ users }: UsersIndexProps) {
                         </div>
                         <Link 
                             href={create().url}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center shadow-sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center shadow-sm"
                         >
                             <PlusCircle className="mr-2 h-4 w-4" />
                             Add New User

@@ -86,12 +86,14 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
         }
     };
 
-    return (
-             <form onSubmit={submit}>
+    const INPUT_CLASSES = "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2";
+
+return (
+             <form onSubmit={submit} className="space-y-6">
                 <div className="mb-4">
                     <Label htmlFor="category">Category</Label>
                         <Select onValueChange={(value) => setData("category_id", Number(value))}>
-                        <SelectTrigger className="w-full bg-[var(--color-input)] ">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select a Category" />
                         </SelectTrigger>
                         <SelectContent>
@@ -115,7 +117,7 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                             step={name === 'price' ? '0.01' : '1'}
                             value={data[name as keyof ProductFormData] as string | number}
                             onChange={(e) => setData(name as keyof ProductFormData, type === 'number' ? Number(e.target.value) : e.target.value)}
-                            className='bg-[var(--color-input)]'
+                            className={INPUT_CLASSES}
                         />
                         {errors[name as keyof ProductFormData] && <InputError message={errors[name as keyof ProductFormData]} />}
                     </div>
@@ -126,9 +128,8 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                     <Label htmlFor="title">Product Images (New)</Label>
                     <Input
                         type="file"
-                        // multiple
                         onChange={handleImageChange}
-                        className='bg-[var(--color-input)]'
+                        className={INPUT_CLASSES}
                     />
                     {errors.images && <div className="text-red-500 text-sm mt-1">{errors.images}</div>}
                 </div>
@@ -157,10 +158,14 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                 )}
 
                 {/* Submit Button */}
-                <div className="flex items-center justify-end mt-4">
-                    <Button>
+                <div className="flex items-center justify-end mt-4 pt-4 border-t border-gray-200">
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
+                    >
                         {isEdit ? 'Update Product' : 'Create Product'}
-                    </Button>
+                    </button>
                 </div>
             </form>
     );

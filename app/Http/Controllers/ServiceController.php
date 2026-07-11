@@ -53,7 +53,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        return Inertia::render('Services/Show', [
+        return Inertia::render('services/show', [
             'service' => $service,
         ]);
     }
