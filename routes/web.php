@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -86,9 +87,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
 
 Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function () {
     Route::redirect('/', 'admin/dashboard', 301);
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::resource('blog', BlogController::class);
     Route::resource('products', ProductController::class)->names('products');
     Route::resource('services', ServiceController::class)->names('services');

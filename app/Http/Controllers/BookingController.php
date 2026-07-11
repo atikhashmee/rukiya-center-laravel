@@ -16,14 +16,35 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource (Index).
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::with('customer') ->latest()->paginate(10);
+        $query = Booking::with('customer');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%{$search}%")
+                  ->orWhere('booking_id', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('service_id', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('booking_status')) {
+            $query->where('booking_status', $request->booking_status);
+        }
+
+        if ($request->filled('payment_status')) {
+            $query->where('payment_status', $request->payment_status);
+        }
+
+        $bookings = $query->latest()->paginate(12)->withQueryString();
 
         return Inertia::render('bookings/index', [
             'bookings' => $bookings,
             'bookingStatuses' => $this->bookingStatuses,
             'paymentStatuses' => $this->paymentStatuses,
+            'filters' => $request->only(['search', 'booking_status', 'payment_status']),
         ]);
     }
 

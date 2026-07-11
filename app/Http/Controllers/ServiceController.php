@@ -10,12 +10,39 @@ use Inertia\Inertia;
 
 class ServiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::orderBy('order', 'asc')->paginate(10);
+        $query = Service::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('tagline', 'like', "%{$search}%")
+                  ->orWhere('id_code', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('price_type')) {
+            $query->where('price_type', $request->price_type);
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('assessment')) {
+            $query->where('requires_custom_assessment', $request->assessment === 'required');
+        }
+
+        $services = $query->orderBy('order', 'asc')->paginate(12)->withQueryString();
+
+        $categories = Service::distinct()->pluck('category')->filter()->values();
 
         return Inertia::render('services/index', [
             'services' => $services,
+            'categories' => $categories,
+            'filters' => $request->only(['search', 'price_type', 'category', 'assessment']),
         ]);
     }
 

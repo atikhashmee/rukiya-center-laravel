@@ -3,11 +3,12 @@ import AppLayout from "@/layouts/app-layout";
 import { Head, router, usePage } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
-import { index, create, edit, destroy } from "@/actions/App/Http/Controllers/UserController";
+import { index, create, edit, destroy, verifyEmail } from "@/actions/App/Http/Controllers/UserController";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import { Pencil, Trash2, PlusCircle, CheckCircle, XCircle, Mail, MailCheck, Shield, UserX } from 'lucide-react';
 import Pagination from '@/components/pagination';
+import FilterBar from '@/components/filter-bar';
 
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
 
@@ -43,9 +44,10 @@ interface User {
 
 interface UsersIndexProps {
     users: PaginatedData<User>;
+    filters: Record<string, string>;
 }
 
-export default function Index({ users }: UsersIndexProps) {
+export default function Index({ users, filters }: UsersIndexProps) {
     const { flash, auth } = usePage().props as any;
     const currentUserId = auth?.user?.id;
 
@@ -131,6 +133,22 @@ export default function Index({ users }: UsersIndexProps) {
                             Add New User
                         </Link>
                     </div>
+
+                    <FilterBar
+                        filters={filters}
+                        placeholder="Search by name or email..."
+                        baseUrl={index().url}
+                        filterConfigs={[
+                            {
+                                key: 'verified',
+                                label: 'All Verification',
+                                options: [
+                                    { label: 'Verified', value: 'yes' },
+                                    { label: 'Not Verified', value: 'no' },
+                                ],
+                            },
+                        ]}
+                    />
 
                     {/* Users Table */}
                     <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">

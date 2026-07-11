@@ -10,12 +10,31 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(15);
+        $query = User::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('verified')) {
+            if ($request->verified === 'yes') {
+                $query->whereNotNull('email_verified_at');
+            } elseif ($request->verified === 'no') {
+                $query->whereNull('email_verified_at');
+            }
+        }
+
+        $users = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
 
         return Inertia::render('users/index', [
             'users' => $users,
+            'filters' => $request->only(['search', 'verified']),
         ]);
     }
 

@@ -1,40 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AppLayout from "@/layouts/app-layout";
-import { Head, useForm, router, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
 import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
 import { store, index, create, destroy } from "@/actions/App/Http/Controllers/ServiceController";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { Pencil, Trash2, PlusCircle, CornerUpLeft, DollarSign, Gift, Heart, ShieldQuestion, AlertTriangle, CheckCircle, XCircle  } from 'lucide-react';
+import { Pencil, Trash2, PlusCircle, DollarSign, Gift, Heart, ShieldQuestion, AlertTriangle, CheckCircle, XCircle  } from 'lucide-react';
 import Pagination from '@/components/pagination';
 import { edit } from '@/routes/services';
-
+import FilterBar from '@/components/filter-bar';
 
 type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
-
-//for paginate data
-interface PaginationLink {
-    url: string | null; 
-    label: string;      
-    active: boolean;    
-}
-interface PaginatedData<T> {
-    current_page: number;
-    data: T[]; 
-    first_page_url: string;
-    from: number;
-    last_page: number;
-    last_page_url: string;
-    links: PaginationLink[]; 
-    next_page_url: string | null;
-    path: string;
-    per_page: number;
-    prev_page_url: string | null;
-    to: number;
-    total: number;
-}
 
 interface ServiceOption {
     id: number;
@@ -43,7 +21,7 @@ interface ServiceOption {
     category: string;
     title: string;
     tagline: string;
-    card_color: string; 
+    card_color: string;
     order: number;
     price_type: PriceType;
     price_value: number | null;
@@ -51,11 +29,24 @@ interface ServiceOption {
     requires_custom_assessment: boolean;
 }
 
-interface ServiceOptionsIndexProps {
-    // services: ServiceOption[];
-    services: PaginatedData<ServiceOption>;
+interface PaginatedServices {
+    data: ServiceOption[];
+    current_page: number;
+    last_page: number;
+    links: { url: string | null; label: string; active: boolean }[];
+    total: number;
 }
 
+interface ServiceOptionsIndexProps {
+    services: PaginatedServices;
+    categories: string[];
+    filters: Record<string, string>;
+}
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Dashboard', href: dashboard().url },
+    { title: 'Services', href: index().url },
+];
 
 const getPriceDisplay = (option: ServiceOption) => {
     switch (option.price_type) {
@@ -72,79 +63,85 @@ const getPriceDisplay = (option: ServiceOption) => {
     }
 };
 
-
-export default function Index({ services}: ServiceOptionsIndexProps) {
+export default function Index({ services, categories, filters }: ServiceOptionsIndexProps) {
     const { flash } = usePage().props as any;
-
-    const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-    },
-    {
-        title: 'Services',
-        href: index().url,
-    }
-    ];
 
     const handleDelete = (optionId: number, title: string) => {
         if (window.confirm(`Are you sure you want to delete the option: "${title}"? This is permanent.`)) {
              router.delete(destroy(optionId), {
-                onSuccess: () => {
-                    console.log(`Option ${title} deleted successfully.`);
-                },
-                onError: (errors: any) => {
-                    console.error("Deletion failed:", errors);
-                }
+                onSuccess: () => {},
+                onError: (errors: any) => console.error("Deletion failed:", errors),
             });
         }
     };
 
-    const displayOptions = services.data;
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Options for ${services.data[0]?.title || 'Service'}`} />
+            <Head title="Services" />
             <div className="container py-4 pl-4">
-                <div className="flex flex-col gap-6 w-full ">
-                  {flash?.success && (
-                        <div key={flash.success} className="flex items-center gap-3 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm animate-fade-in">
+                <div className="flex flex-col gap-6 w-full">
+                    {flash?.success && (
+                        <div className="flex items-center gap-3 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm">
                             <CheckCircle className="h-5 w-5 text-green-600" />
                             <p className="text-sm font-medium text-green-800">{flash.success}</p>
                         </div>
                     )}
-                    
+
                     {flash?.error && (
-                        <div key={flash.error} className="flex items-center gap-3 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-sm animate-fade-in">
+                        <div className="flex items-center gap-3 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-sm">
                             <XCircle className="h-5 w-5 text-red-600" />
                             <p className="text-sm font-medium text-red-800">{flash.error}</p>
                         </div>
                     )}
- 
-                    {/* Header and Create Button */}
-                    <div className="flex justify-between items-center mb-4">
-                         <Link 
-                            href={index().url}
-                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
-                        >
-                            <CornerUpLeft className="mr-2 h-4 w-4" />
-                            Back to Services
-                        </Link>
 
-                          <Link 
+                    <div className="flex justify-between items-center mb-4">
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-800">Service Management</h2>
+                            <p className="text-sm text-gray-500 mt-1">{services.total} total services</p>
+                        </div>
+                        <Link
                             href={create().url}
-                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center shadow-sm"
                         >
-                         <PlusCircle className="mr-2 h-4 w-4" />
-                          Create New Option
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            Create New Option
                         </Link>
-                       
                     </div>
 
-                    {/* Options Table */}
+                    <FilterBar
+                        filters={filters}
+                        placeholder="Search by title, tagline, or code..."
+                        baseUrl={index().url}
+                        filterConfigs={[
+                            {
+                                key: 'price_type',
+                                label: 'All Price Types',
+                                options: [
+                                    { label: 'Free', value: 'FREE' },
+                                    { label: 'Donation', value: 'DONATION' },
+                                    { label: 'Fixed Price', value: 'FIXED' },
+                                    { label: 'Reservation', value: 'RESERVATION' },
+                                ],
+                            },
+                            {
+                                key: 'category',
+                                label: 'All Categories',
+                                options: categories.map(c => ({ label: c.charAt(0).toUpperCase() + c.slice(1), value: c })),
+                            },
+                            {
+                                key: 'assessment',
+                                label: 'Assessment',
+                                options: [
+                                    { label: 'Required', value: 'required' },
+                                    { label: 'Standard', value: 'standard' },
+                                ],
+                            },
+                        ]}
+                    />
+
                     <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">
                         <Table className="min-w-full">
-                            <TableCaption>List of available  services</TableCaption>
+                            <TableCaption>List of available services</TableCaption>
                             <TableHeader className="bg-gray-100/70">
                                 <TableRow className="hover:bg-gray-100/70">
                                     <TableHead className="w-[50px] font-bold text-gray-700">Order</TableHead>
@@ -157,26 +154,21 @@ export default function Index({ services}: ServiceOptionsIndexProps) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {displayOptions.length > 0 ? (
-                                    displayOptions.map((option) => (
-                                        <TableRow 
-                                            key={option.id} 
-                                            // Dynamic left border using the `card_color` value
-                                            className={`hover:bg-indigo-50/50 transition-colors border-l-4 ${option.card_color.replace('border-l-', 'border-')} hover:border-r-4`}
+                                {services.data.length > 0 ? (
+                                    services.data.map((option) => (
+                                        <TableRow
+                                            key={option.id}
+                                            className={`hover:bg-gray-50 transition-colors border-l-4 ${option.card_color.replace('border-l-', 'border-')}`}
                                         >
                                             <TableCell className="font-bold text-lg">{option.order}</TableCell>
                                             <TableCell className="font-mono text-xs text-gray-500">{option.id_code}</TableCell>
                                             <TableCell>
-                                                <div className="font-semibold text-base text-indigo-800">{option.title}</div>
+                                                <div className="font-semibold text-base text-gray-800">{option.title}</div>
                                                 <div className="text-sm text-gray-500">{option.tagline}</div>
                                             </TableCell>
-                                            
-                                            {/* Pricing Column */}
                                             <TableCell className="text-center">
                                                 {getPriceDisplay(option)}
                                             </TableCell>
-
-                                            {/* Custom Assessment Column */}
                                             <TableCell className="text-center">
                                                 {option.requires_custom_assessment ? (
                                                     <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 shadow-sm">
@@ -188,27 +180,20 @@ export default function Index({ services}: ServiceOptionsIndexProps) {
                                                     </span>
                                                 )}
                                             </TableCell>
-
                                             <TableCell className="text-center">
                                                 <span className="capitalize text-xs font-medium text-gray-700 bg-gray-200 px-2 py-0.5 rounded-full shadow-inner">
                                                     {option.category}
                                                 </span>
                                             </TableCell>
-                                            
-                                            {/* Action Buttons */}
                                             <TableCell className="text-center flex space-x-2 justify-center">
-                                                
-                                                {/* Edit Button */}
-                                                <Button 
-                                                    variant="outline" 
-                                                    size="icon" 
+                                                <Button
+                                                    variant="outline"
+                                                    size="icon"
                                                     className="h-8 w-8 hover:bg-indigo-100 border-indigo-300 text-indigo-600 transition-transform hover:scale-105"
-                                                    onClick={() => edit(option.id).url && router.visit(edit(option.id).url)}
+                                                    onClick={() => router.visit(edit(option.id).url)}
                                                 >
                                                     <Pencil className="h-4 w-4" />
                                                 </Button>
-                                                
-                                                {/* Delete Button */}
                                                 <Button
                                                     variant="destructive"
                                                     size="icon"
@@ -221,11 +206,9 @@ export default function Index({ services}: ServiceOptionsIndexProps) {
                                         </TableRow>
                                     ))
                                 ) : (
-                                    // Empty State Row
                                     <TableRow>
-                                        <TableCell colSpan={7} className="h-24 text-center text-muted-foreground bg-gray-50/50">
-                                            <AlertTriangle className="h-6 w-6 inline-block mr-2 text-yellow-500" />
-                                            No services found. Click "Create New Option" to begin.
+                                        <TableCell colSpan={7} className="h-24 text-center text-gray-400">
+                                            No services found matching your filters.
                                         </TableCell>
                                     </TableRow>
                                 )}

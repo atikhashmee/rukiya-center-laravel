@@ -10,11 +10,35 @@ use Illuminate\Support\Facades\Password;
 
 class CustomerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::orderBy('created_at', 'desc')->paginate(10);
+        $query = Customer::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('is_active', $request->status === 'active');
+        }
+
+        if ($request->filled('verified')) {
+            if ($request->verified === 'yes') {
+                $query->whereNotNull('email_verified_at');
+            } elseif ($request->verified === 'no') {
+                $query->whereNull('email_verified_at');
+            }
+        }
+
+        $customers = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
+
         return Inertia::render('customers/index', [
-            'customers' => $customers
+            'customers' => $customers,
+            'filters' => $request->only(['search', 'status', 'verified']),
         ]);
     }
 

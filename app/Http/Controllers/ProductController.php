@@ -13,13 +13,41 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'images'])->orderBy('name')->get();
+        $query = Product::with(['category', 'images']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('sku', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('stock')) {
+            if ($request->stock === 'in_stock') {
+                $query->where('stock_quantity', '>', 0);
+            } elseif ($request->stock === 'out_of_stock') {
+                $query->where('stock_quantity', 0);
+            }
+        }
+
+        if ($request->filled('status')) {
+            $query->where('is_active', $request->status === 'active');
+        }
+
+        $products = $query->orderBy('name')->paginate(12)->withQueryString();
         $categories = ProductCategory::orderBy('name')->get();
+
         return Inertia::render('products/index', [
             'products' => $products,
             'categories' => $categories,
+            'filters' => $request->only(['search', 'category_id', 'stock', 'status']),
         ]);
     }
 
