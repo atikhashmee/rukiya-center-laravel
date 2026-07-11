@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DK Healing Centre | Authentic Ruqyah & Sunnah Remedies</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cream: '#fdfbf7',
+              gold: '#c5a880',
+              goldDark: '#b29369',
+              teal: '#0a3c5c',
+              crimson: '#b31b1b',
+              navy: '#0b253a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+    .t-slot-btn:disabled { opacity: .35; cursor: not-allowed; text-decoration: line-through; }
+  </style>
+</head>
+<body class="bg-brand-cream text-brand-navy selection:bg-brand-gold selection:text-white">
+
+  <div class="bg-brand-teal text-brand-cream py-2 px-4 text-center text-xs tracking-wider font-semibold">
+    🕌 AUTHENTIC RUQYAH CLINIC • 100% SECURE UK GDPR COMPLIANT • ACCORDING TO QUR'AN & SUNNAH
+  </div>
+
+  <header class="sticky top-0 z-50 bg-brand-cream/90 backdrop-blur-md border-b border-brand-gold/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <svg class="w-14 h-14" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="46" fill="white" stroke="#c5a880" stroke-width="2"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#b31b1b" stroke-width="1.5"/>
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#0a3c5c" stroke-width="1.5"/>
+          <text x="24" y="58" font-family="'Playfair Display', serif" font-size="28" font-weight="bold" fill="#0a3c5c">D</text>
+          <text x="48" y="58" font-family="'Playfair Display', serif" font-size="28" font-weight="bold" fill="#b31b1b">K</text>
+        </svg>
+        <div>
+          <span class="block text-lg font-bold tracking-tight text-brand-teal uppercase">DK Healing Centre</span>
+          <span class="block text-[10px] tracking-widest text-brand-gold font-semibold uppercase">Ruqyah & Prophetic Medicine</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
+        <a href="#about" class="hover:text-brand-gold transition">About Us</a>
+        <a href="#booking" class="hover:text-brand-gold transition">Book Appointment</a>
+        <a href="#shop" class="text-brand-crimson font-bold hover:opacity-80 transition">Sunnah Shop</a>
+        <a href="#testimonials" class="hover:text-brand-gold transition">Testimonials</a>
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <div class="relative cursor-pointer" onclick="alert('Your cart contains items from the Sunnah Shop.')">
+          <span class="text-xl">🛒</span>
+          <span id="cart-count" class="absolute -top-2 -right-2 bg-brand-crimson text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+        </div>
+        <a href="#booking" class="bg-brand-teal hover:bg-brand-navy text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">
+          Book Appointment
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="relative py-20 lg:py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div class="inline-block px-3 py-1 bg-brand-gold/15 text-brand-goldDark text-xs font-semibold tracking-wider rounded-md uppercase">
+            Pure Ahl al-Sunnah wa al-Jamāʿah Creed
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-brand-teal leading-tight">
+            Grounded Spiritual Healing Through <span class="italic text-brand-gold">Qur'an & Sunnah</span>
+          </h1>
+          <p class="text-slate-600 max-w-xl mx-auto lg:mx-0 text-sm sm:text-base">
+            We provide structured, transparent Ruqyah Shariah treatment plans and authentic Prophetic herbal remedies. Empowering individuals and families to heal safely under strict privacy rules.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+            <a href="#booking" class="w-full sm:w-auto text-center bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3.5 rounded-full font-semibold transition shadow">
+              Book a Ruqyah Session
+            </a>
+            <a href="#shop" class="w-full sm:w-auto text-center border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-8 py-3 rounded-full font-semibold transition">
+              Browse Sunnah Shop
+            </a>
+          </div>
+        </div>
+        <div class="lg:col-span-5 bg-brand-cream border border-brand-gold/20 rounded-2xl p-6 text-center space-y-4">
+          <span class="text-xs font-bold text-brand-crimson tracking-widest uppercase block">⚠️ Strictly Enforced Policy</span>
+          <h3 class="text-lg font-serif font-bold text-brand-teal">Safe Consultation Guarantee</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            All appointments are conducted with absolute professionalism. Female clients must be accompanied by a Mahram, adult relative, or friend for both in-person and online consultations. NO FEMALES SEEN ALONE.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BOOKING SECTION ================= -->
+  <section id="booking" class="py-20 bg-brand-cream/50 border-y border-brand-gold/10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
+        <h2 class="text-3xl font-serif font-bold text-brand-teal">Book an Appointment</h2>
+        <p class="text-sm text-slate-500">Pick a date, see the times we're actually free, and book in under a minute.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-brand-gold/20 p-6 sm:p-8 space-y-6 shadow-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-brand-teal mb-1">Full Name</label>
+            <input type="text" id="cust-name" placeholder="John Doe" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brand-teal mb-1">Email Address</label>
+            <input type="email" id="cust-email" placeholder="john@example.com" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-teal mb-1">Select Session Type</label>
+          <select id="session-type" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:border-brand-gold">
+            <option value="45 mins - In-Person Ruqya Appointment (1 Person) | £90">45 mins - In-Person Ruqya Appointment (1 Person) — £90</option>
+            <option value="45 mins - In-Person Ruqya Appointment (2 People) | £130">45 mins - In-Person Ruqya Appointment (2 People) — £130</option>
+            <option value="20 mins - Online Consultation via Zoom | £50">20 mins - Online Focused Consultation via Zoom (No Recitation) — £50</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-brand-teal mb-1">Select a Date</label>
+          <input type="date" id="date-picker" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold">
+          <p id="date-feedback" class="text-xs text-slate-400 mt-1.5"></p>
+        </div>
+
+        <div id="slots-area" class="space-y-2 hidden">
+          <label class="block text-xs font-bold text-slate-500">Available Time Slots</label>
+          <div id="slots-dynamic-grid" class="grid grid-cols-3 gap-2"></div>
+        </div>
+
+        <div class="bg-brand-cream p-4 rounded-xl border border-brand-gold/20">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="consent-check" class="mt-1 accent-brand-teal">
+            <span class="text-[11px] text-slate-600 leading-normal">
+              I agree to the clinic terms. I certify that for female patient visits, an adult family member will accompany them. I understand this is a spiritual supplement service and does not replace regular professional clinical medical healthcare guidelines.
+            </span>
+          </label>
+        </div>
+
+        <button onclick="processAppointment()" class="w-full bg-brand-teal hover:bg-brand-navy text-white font-bold py-3.5 rounded-xl transition shadow">
+          Confirm and Book Appointment
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="shop" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-brand-crimson text-xs font-bold tracking-widest uppercase">Sunnah Shop Store</span>
+        <h2 class="text-3xl font-serif font-bold text-brand-teal">Prophetic Remedies & Healing Packs</h2>
+        <p class="text-sm text-slate-500">Pure, authentic ingredients infused and prepared carefully according to prophetic guidelines.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="border border-brand-gold/20 rounded-2xl overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition">
+          <div class="p-5 space-y-3">
+            <div class="w-full h-44 bg-brand-cream rounded-xl flex items-center justify-center text-3xl">🍯</div>
+            <h3 class="font-serif font-bold text-brand-teal text-base">Ruqyah Honey (Ayāt al-Shifā' Blend)</h3>
+            <p class="text-xs text-slate-500">Premium raw dark honey infused with Quranic healing recitations. 250g.</p>
+            <span class="block text-base font-bold text-brand-teal">£26.00</span>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="addToCart('Ruqyah Honey')" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white py-2 rounded-xl text-xs font-semibold transition">Add To Cart</button>
+          </div>
+        </div>
+
+        <div class="border border-brand-gold/20 rounded-2xl overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition">
+          <div class="p-5 space-y-3">
+            <div class="w-full h-44 bg-brand-cream rounded-xl flex items-center justify-center text-3xl">🧴</div>
+            <h3 class="font-serif font-bold text-brand-teal text-base">Ruqyah Organic Black Seed Oil</h3>
+            <p class="text-xs text-slate-500">100% cold-pressed Nigella Sativa oil recited upon for optimal spiritual defense. 100ml.</p>
+            <span class="block text-base font-bold text-brand-teal">£15.00</span>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="addToCart('Black Seed Oil')" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white py-2 rounded-xl text-xs font-semibold transition">Add To Cart</button>
+          </div>
+        </div>
+
+        <div class="border border-brand-gold/20 rounded-2xl overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition">
+          <div class="p-5 space-y-3">
+            <div class="w-full h-44 bg-brand-cream rounded-xl flex items-center justify-center text-3xl">📦</div>
+            <h3 class="font-serif font-bold text-brand-teal text-base">Complete Ruqyah Shariyyah Healing Pack</h3>
+            <p class="text-xs text-slate-500">Full treatment bundle including honey, oil, Sidr powder, and rock salt for home cleansing.</p>
+            <span class="block text-base font-bold text-brand-teal">£80.00</span>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="addToCart('Ruqyah Healing Pack')" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white py-2 rounded-xl text-xs font-semibold transition">Add To Cart</button>
+          </div>
+        </div>
+
+        <div class="border border-brand-gold/20 rounded-2xl overflow-hidden bg-white flex flex-col justify-between hover:shadow-md transition">
+          <div class="p-5 space-y-3">
+            <div class="w-full h-44 bg-brand-cream rounded-xl flex items-center justify-center text-3xl">💧</div>
+            <h3 class="font-serif font-bold text-brand-teal text-base">Ruqyah Zamzam Healing Water</h3>
+            <p class="text-xs text-slate-500">Authentic premium blessed water recited upon for spiritual and physical cleansing. 500ml.</p>
+            <span class="block text-base font-bold text-brand-teal">£15.00</span>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="addToCart('Zamzam Water')" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white py-2 rounded-xl text-xs font-semibold transition">Add To Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" class="py-20 bg-brand-cream/50 border-t border-brand-gold/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="text-3xl font-serif font-bold text-brand-teal">Verified Client Testimonials</h2>
+        <p class="text-sm text-slate-500">Transparent experiences from families who pursued their spiritual pathway with us.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="p-6 bg-white border border-brand-gold/10 rounded-2xl space-y-3 shadow-sm">
+          <p class="text-xs sm:text-sm text-slate-600 italic">
+            "Alhamdulillah, booking an in-person session was extremely straightforward. The clinic setup is highly ethical, completely compliant with Ahlus Sunnah practices, and professional. The treatment pack from the shop also helped immensely."
+          </p>
+          <span class="block text-xs font-bold text-brand-teal">— Fatima R., London</span>
+        </div>
+        <div class="p-6 bg-white border border-brand-gold/10 rounded-2xl space-y-3 shadow-sm">
+          <p class="text-xs sm:text-sm text-slate-600 italic">
+            "Highly structure-driven. Unlike many unregulated places, brother Mohammad Abul explained the process clearly. I ordered the Ruqyah honey and it arrived promptly. Pure transparency."
+          </p>
+          <span class="block text-xs font-bold text-brand-teal">— Ibrahim S., Birmingham</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ADMIN SECTION ================= -->
+  <section id="admin" class="py-20 bg-white border-t border-brand-gold/10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div id="admin-locked" class="text-center space-y-4">
+        <h2 class="text-2xl font-serif font-bold text-brand-teal">Staff Area</h2>
+        <p class="text-xs text-slate-500">Set your weekly hours, block off dates, and manage bookings.</p>
+        <button onclick="unlockAdmin()" class="bg-brand-teal hover:bg-brand-navy text-white px-6 py-2.5 rounded-full text-sm font-semibold transition">Staff Login</button>
+      </div>
+
+      <div id="admin-panel" class="hidden space-y-10">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-serif font-bold text-brand-teal">Manage Availability</h2>
+          <button onclick="lockAdmin()" class="text-xs font-semibold text-slate-400 hover:text-brand-crimson">Log out</button>
+        </div>
+
+        <!-- Weekly hours -->
+        <div class="space-y-3">
+          <h3 class="text-sm font-bold text-brand-teal uppercase tracking-wide">Weekly Hours</h3>
+          <p class="text-xs text-slate-500 -mt-2">Turn a day off if you're closed. These hours repeat every week automatically.</p>
+          <div id="weekly-hours-grid" class="space-y-2"></div>
+          <button onclick="saveWeeklyHours()" class="bg-brand-gold hover:bg-brand-goldDark text-white px-5 py-2.5 rounded-xl text-xs font-bold transition">Save Weekly Hours</button>
+          <span id="hours-saved-msg" class="text-xs text-green-600 font-semibold hidden ml-2">✓ Saved</span>
+        </div>
+
+        <!-- Blocked dates -->
+        <div class="space-y-3 pt-6 border-t border-slate-100">
+          <h3 class="text-sm font-bold text-brand-teal uppercase tracking-wide">Block Specific Dates</h3>
+          <p class="text-xs text-slate-500 -mt-2">For holidays, personal days, or anything outside your usual weekly pattern.</p>
+          <div class="flex gap-2">
+            <input type="date" id="block-date-input" class="px-4 py-2 rounded-xl border border-slate-200 text-sm">
+            <button onclick="addBlockedDate()" class="bg-brand-teal text-white px-4 py-2 rounded-xl text-xs font-bold">Block Date</button>
+          </div>
+          <div id="blocked-dates-list" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Bookings -->
+        <div class="space-y-3 pt-6 border-t border-slate-100">
+          <h3 class="text-sm font-bold text-brand-teal uppercase tracking-wide">Upcoming Bookings</h3>
+          <div id="bookings-list" class="space-y-2"></div>
+        </div>
+
+        <div class="bg-brand-cream border border-brand-gold/20 rounded-xl p-4 text-[11px] text-slate-500 leading-relaxed">
+          <strong class="text-brand-teal">Note:</strong> This data is currently saved in this browser only. To have your hours and bookings sync live for every visitor on every device, connect the <code>loadAvailability()</code> / <code>saveAvailability()</code> / <code>loadBookings()</code> / <code>saveBookings()</code> functions near the top of the script to a shared backend (e.g. your n8n webhook, Google Sheet, or Airtable).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 bg-brand-navy text-slate-400 text-xs border-t border-brand-gold/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3 text-center sm:text-justify">
+      <p class="uppercase text-brand-gold font-bold tracking-widest text-center">Important Legal Healthcare Notice</p>
+      <p class="leading-relaxed text-[11px]">
+        DK Healing Centre offers traditional supplementary spiritual consultations based strictly upon authentic Ruqyah Shariah practices and prophetic sunnah guidelines. Our products and diagnostic services are **NOT** medical procedures and do **NOT** claim to substitute regular professional NHS medical practitioners, clinical drugs, surgeries, or psychological counseling. Your registration details are completely encrypted in alignment with UK GDPR data frameworks.
+      </p>
+      <p class="text-center pt-2"><a href="#admin" class="text-slate-500 hover:text-brand-gold underline">Staff Area</a></p>
+    </div>
+  </section>
+
+  <div id="booking-modal" class="fixed inset-0 z-50 bg-brand-navy/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-sm w-full p-6 rounded-2xl border border-brand-gold/30 text-center space-y-5">
+      <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
+      <h3 class="text-xl font-serif font-bold text-brand-teal">Appointment Received!</h3>
+      <p class="text-xs text-slate-500">Your slot is recorded. n8n is running in the background to log your event on the calendar and issue your email confirmation receipt.</p>
+
+      <div class="p-3 bg-brand-cream border rounded-xl text-left text-xs space-y-1 text-slate-700">
+        <div><strong>Patient:</strong> <span id="m-name"></span></div>
+        <div><strong>Type:</strong> <span id="m-type"></span></div>
+        <div><strong>Schedule:</strong> <span id="m-date"></span></div>
+      </div>
+      <button onclick="document.getElementById('booking-modal').classList.add('hidden')" class="w-full bg-brand-teal text-white font-bold py-2.5 rounded-xl text-xs">Close</button>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       DATA LAYER
+       Everything in this section reads/writes localStorage. To make hours and
+       bookings sync live across every device (not just this browser), replace
+       the bodies of these four functions with fetch() calls to your own
+       backend (n8n webhook, Google Sheet, Airtable, etc). Nothing else in this
+       file needs to change if you keep the same function names & shapes.
+    ========================================================================= */
+    const STORAGE_KEYS = {
+      hours: 'dk_weekly_hours',
+      blocked: 'dk_blocked_dates',
+      bookings: 'dk_bookings'
+    };
+
+    // Sensible defaults matching the clinic's original hours. Admin can change all of this.
+    const DEFAULT_WEEKLY_HOURS = {
+      Monday:    { open: true,  start: '10:00', end: '16:00', breakStart: '13:30', breakEnd: '14:30', slotMins: 45 },
+      Tuesday:   { open: true,  start: '10:00', end: '16:00', breakStart: '13:30', breakEnd: '14:30', slotMins: 45 },
+      Wednesday: { open: true,  start: '10:00', end: '16:00', breakStart: '13:30', breakEnd: '14:30', slotMins: 45 },
+      Thursday:  { open: true,  start: '10:00', end: '16:00', breakStart: '13:30', breakEnd: '14:30', slotMins: 45 },
+      Friday:    { open: false, start: '10:00', end: '16:00', breakStart: '13:30', breakEnd: '14:30', slotMins: 45 },
+      Saturday:  { open: true,  start: '11:00', end: '15:00', breakStart: '13:30', breakEnd: '14:00', slotMins: 45 },
+      Sunday:    { open: true,  start: '11:00', end: '15:00', breakStart: '13:30', breakEnd: '14:00', slotMins: 45 }
+    };
+
+    function loadAvailability() {
+      const raw = localStorage.getItem(STORAGE_KEYS.hours);
+      return raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_WEEKLY_HOURS));
+    }
+    function saveAvailability(hours) {
+      localStorage.setItem(STORAGE_KEYS.hours, JSON.stringify(hours));
+    }
+    function loadBlockedDates() {
+      const raw = localStorage.getItem(STORAGE_KEYS.blocked);
+      return raw ? JSON.parse(raw) : [];
+    }
+    function saveBlockedDates(dates) {
+      localStorage.setItem(STORAGE_KEYS.blocked, JSON.stringify(dates));
+    }
+    function loadBookings() {
+      const raw = localStorage.getItem(STORAGE_KEYS.bookings);
+      return raw ? JSON.parse(raw) : [];
+    }
+    function saveBookings(bookings) {
+      localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(bookings));
+    }
+
+    /* =========================================================================
+       HELPERS
+    ========================================================================= */
+    const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+    function toMinutes(hhmm) {
+      const [h, m] = hhmm.split(':').map(Number);
+      return h * 60 + m;
+    }
+    function toHHMM(mins) {
+      const h = Math.floor(mins / 60), m = mins % 60;
+      return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+    }
+    function formatDisplayTime(hhmm) {
+      const [h, m] = hhmm.split(':').map(Number);
+      const period = h >= 12 ? 'PM' : 'AM';
+      const h12 = h % 12 === 0 ? 12 : h % 12;
+      return `${h12}:${String(m).padStart(2, '0')} ${period}`;
+    }
+    function formatDisplayDate(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function generateSlotsForDate(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      const dayName = DAY_NAMES[d.getDay()];
+      const hours = loadAvailability();
+      const dayConfig = hours[dayName];
+      const blocked = loadBlockedDates();
+
+      if (blocked.includes(dateStr)) return { closed: true, reason: `We're closed on ${formatDisplayDate(dateStr)}.` };
+      if (!dayConfig || !dayConfig.open) return { closed: true, reason: `We're closed on ${dayName}s. Please choose another date.` };
+
+      const bookings = loadBookings();
+      const bookedTimes = bookings.filter(b => b.date === dateStr).map(b => b.time);
+
+      const now = new Date();
+      const isToday = dateStr === now.toISOString().slice(0, 10);
+      const nowMins = now.getHours() * 60 + now.getMinutes();
+
+      const startMins = toMinutes(dayConfig.start);
+      const endMins = toMinutes(dayConfig.end);
+      const breakStartMins = toMinutes(dayConfig.breakStart);
+      const breakEndMins = toMinutes(dayConfig.breakEnd);
+      const slotLen = dayConfig.slotMins;
+
+      const slots = [];
+      for (let t = startMins; t + slotLen <= endMins; t += slotLen) {
+        if (t < breakEndMins && t + slotLen > breakStartMins) continue; // overlaps break
+        if (isToday && t <= nowMins) continue; // skip past times today
+        const hhmm = toHHMM(t);
+        slots.push({ time: hhmm, label: formatDisplayTime(hhmm), booked: bookedTimes.includes(hhmm) });
+      }
+      return { closed: false, slots };
+    }
+
+    /* =========================================================================
+       CUSTOMER BOOKING WIDGET
+    ========================================================================= */
+    let itemsInCart = 0;
+    let activeDateStr = '';
+    let activeSlotTime = '';
+
+    function addToCart(itemName) {
+      itemsInCart++;
+      document.getElementById('cart-count').innerText = itemsInCart;
+      alert(`${itemName} has been added to your shopping cart.`);
+    }
+
+    const datePicker = document.getElementById('date-picker');
+    const today = new Date();
+    const minDateStr = today.toISOString().slice(0, 10);
+    const maxDate = new Date(today);
+    maxDate.setDate(maxDate.getDate() + 60);
+    datePicker.min = minDateStr;
+    datePicker.max = maxDate.toISOString().slice(0, 10);
+
+    datePicker.addEventListener('change', () => {
+      activeSlotTime = '';
+      const dateStr = datePicker.value;
+      activeDateStr = dateStr;
+      const feedback = document.getElementById('date-feedback');
+      const slotsArea = document.getElementById('slots-area');
+      const slotsGrid = document.getElementById('slots-dynamic-grid');
+      slotsGrid.innerHTML = '';
+
+      if (!dateStr) { slotsArea.classList.add('hidden'); return; }
+
+      const result = generateSlotsForDate(dateStr);
+      if (result.closed) {
+        feedback.textContent = result.reason;
+        feedback.classList.add('text-brand-crimson');
+        slotsArea.classList.add('hidden');
+        return;
+      }
+      feedback.textContent = '';
+      feedback.classList.remove('text-brand-crimson');
+
+      if (result.slots.length === 0) {
+        feedback.textContent = 'No time slots left on this date — please try another day.';
+        feedback.classList.add('text-brand-crimson');
+        slotsArea.classList.add('hidden');
+        return;
+      }
+
+      slotsArea.classList.remove('hidden');
+      result.slots.forEach(slot => {
+        const button = document.createElement('button');
+        button.innerText = slot.label;
+        button.disabled = slot.booked;
+        button.className = "t-slot-btn p-2 border border-slate-200 text-xs font-semibold rounded-lg text-brand-teal hover:border-brand-teal transition";
+        button.onclick = function() {
+          document.querySelectorAll('.t-slot-btn').forEach(b => b.classList.remove('bg-brand-teal', 'text-white'));
+          button.classList.add('bg-brand-teal', 'text-white');
+          activeSlotTime = slot.time;
+        };
+        slotsGrid.appendChild(button);
+      });
+    });
+
+    function processAppointment() {
+      const name = document.getElementById('cust-name').value.trim();
+      const email = document.getElementById('cust-email').value.trim();
+      const type = document.getElementById('session-type').value;
+      const consent = document.getElementById('consent-check').checked;
+
+      if (!name || !email || !activeDateStr || !activeSlotTime) {
+        alert("Please fill in your Name, Email, and choose both a Date & Time slot.");
+        return;
+      }
+      if (!consent) {
+        alert("Please confirm consent to the Mahram presence policy and Healthcare notice.");
+        return;
+      }
+
+      // Re-check the slot hasn't just been taken by someone else in this session
+      const freshCheck = generateSlotsForDate(activeDateStr);
+      if (freshCheck.closed || !freshCheck.slots.some(s => s.time === activeSlotTime && !s.booked)) {
+        alert("Sorry, that slot was just taken. Please pick another time.");
+        datePicker.dispatchEvent(new Event('change'));
+        return;
+      }
+
+      const bookings = loadBookings();
+      bookings.push({
+        id: Date.now(),
+        name, email, type,
+        date: activeDateStr,
+        time: activeSlotTime
+      });
+      saveBookings(bookings);
+
+      document.getElementById('m-name').innerText = name;
+      document.getElementById('m-type').innerText = type;
+      document.getElementById('m-date').innerText = `${formatDisplayDate(activeDateStr)} @ ${formatDisplayTime(activeSlotTime)}`;
+      document.getElementById('booking-modal').classList.remove('hidden');
+
+      // Reset form
+      document.getElementById('cust-name').value = '';
+      document.getElementById('cust-email').value = '';
+      document.getElementById('consent-check').checked = false;
+      datePicker.value = '';
+      document.getElementById('slots-area').classList.add('hidden');
+      document.getElementById('date-feedback').textContent = '';
+      activeDateStr = '';
+      activeSlotTime = '';
+
+      renderAdminBookingsList(); // keep admin view fresh if open
+    }
+
+    /* =========================================================================
+       ADMIN PANEL
+       Simple client-side password gate. This is NOT real security — anyone who
+       reads the page source can see the password. It just keeps casual visitors
+       out of the settings. For real protection, this needs a proper backend login.
+    ========================================================================= */
+    const ADMIN_PASSWORD = "dkhealing2026"; // <-- change this to your own password
+
+    function unlockAdmin() {
+      const attempt = prompt("Enter staff password:");
+      if (attempt === ADMIN_PASSWORD) {
+        document.getElementById('admin-locked').classList.add('hidden');
+        document.getElementById('admin-panel').classList.remove('hidden');
+        renderWeeklyHoursGrid();
+        renderBlockedDatesList();
+        renderAdminBookingsList();
+      } else if (attempt !== null) {
+        alert("Incorrect password.");
+      }
+    }
+    function lockAdmin() {
+      document.getElementById('admin-panel').classList.add('hidden');
+      document.getElementById('admin-locked').classList.remove('hidden');
+    }
+
+    function renderWeeklyHoursGrid() {
+      const hours = loadAvailability();
+      const grid = document.getElementById('weekly-hours-grid');
+      grid.innerHTML = '';
+      ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].forEach(day => {
+        const cfg = hours[day];
+        const row = document.createElement('div');
+        row.className = "grid grid-cols-2 sm:grid-cols-6 gap-2 items-center p-3 rounded-xl border border-slate-100 bg-brand-cream/40 text-xs";
+        row.innerHTML = `
+          <label class="flex items-center gap-2 font-bold text-brand-teal col-span-2 sm:col-span-1">
+            <input type="checkbox" data-day="${day}" data-field="open" ${cfg.open ? 'checked' : ''} class="accent-brand-teal admin-hours-input"> ${day}
+          </label>
+          <label class="flex flex-col gap-0.5">Start
+            <input type="time" data-day="${day}" data-field="start" value="${cfg.start}" class="admin-hours-input px-2 py-1 border border-slate-200 rounded-lg">
+          </label>
+          <label class="flex flex-col gap-0.5">End
+            <input type="time" data-day="${day}" data-field="end" value="${cfg.end}" class="admin-hours-input px-2 py-1 border border-slate-200 rounded-lg">
+          </label>
+          <label class="flex flex-col gap-0.5">Break start
+            <input type="time" data-day="${day}" data-field="breakStart" value="${cfg.breakStart}" class="admin-hours-input px-2 py-1 border border-slate-200 rounded-lg">
+          </label>
+          <label class="flex flex-col gap-0.5">Break end
+            <input type="time" data-day="${day}" data-field="breakEnd" value="${cfg.breakEnd}" class="admin-hours-input px-2 py-1 border border-slate-200 rounded-lg">
+          </label>
+          <label class="flex flex-col gap-0.5">Slot length
+            <select data-day="${day}" data-field="slotMins" class="admin-hours-input px-2 py-1 border border-slate-200 rounded-lg">
+              <option value="20" ${cfg.slotMins == 20 ? 'selected' : ''}>20 min</option>
+              <option value="30" ${cfg.slotMins == 30 ? 'selected' : ''}>30 min</option>
+              <option value="45" ${cfg.slotMins == 45 ? 'selected' : ''}>45 min</option>
+              <option value="60" ${cfg.slotMins == 60 ? 'selected' : ''}>60 min</option>
+            </select>
+          </label>
+        `;
+        grid.appendChild(row);
+      });
+    }
+
+    function saveWeeklyHours() {
+      const hours = loadAvailability();
+      document.querySelectorAll('.admin-hours-input').forEach(input => {
+        const day = input.dataset.day;
+        const field = input.dataset.field;
+        if (field === 'open') hours[day].open = input.checked;
+        else if (field === 'slotMins') hours[day].slotMins = Number(input.value);
+        else hours[day][field] = input.value;
+      });
+      saveAvailability(hours);
+      const msg = document.getElementById('hours-saved-msg');
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 2000);
+    }
+
+    function renderBlockedDatesList() {
+      const blocked = loadBlockedDates();
+      const list = document.getElementById('blocked-dates-list');
+      list.innerHTML = '';
+      if (blocked.length === 0) {
+        list.innerHTML = '<span class="text-xs text-slate-400">No dates blocked.</span>';
+        return;
+      }
+      blocked.sort().forEach(dateStr => {
+        const chip = document.createElement('span');
+        chip.className = "inline-flex items-center gap-2 bg-brand-crimson/10 text-brand-crimson text-xs font-semibold px-3 py-1.5 rounded-full";
+        chip.innerHTML = `${dateStr} <button class="font-bold hover:opacity-60">✕</button>`;
+        chip.querySelector('button').onclick = () => {
+          const updated = loadBlockedDates().filter(d => d !== dateStr);
+          saveBlockedDates(updated);
+          renderBlockedDatesList();
+        };
+        list.appendChild(chip);
+      });
+    }
+
+    function addBlockedDate() {
+      const input = document.getElementById('block-date-input');
+      if (!input.value) return;
+      const blocked = loadBlockedDates();
+      if (!blocked.includes(input.value)) {
+        blocked.push(input.value);
+        saveBlockedDates(blocked);
+        renderBlockedDatesList();
+      }
+      input.value = '';
+    }
+
+    function renderAdminBookingsList() {
+      const list = document.getElementById('bookings-list');
+      if (!list) return;
+      const bookings = loadBookings()
+        .filter(b => b.date >= minDateStr)
+        .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+      list.innerHTML = '';
+      if (bookings.length === 0) {
+        list.innerHTML = '<span class="text-xs text-slate-400">No upcoming bookings.</span>';
+        return;
+      }
+      bookings.forEach(b => {
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-brand-cream/40 text-xs";
+        row.innerHTML = `
+          <div>
+            <div class="font-bold text-brand-teal">${b.name} — ${formatDisplayDate(b.date)} @ ${formatDisplayTime(b.time)}</div>
+            <div class="text-slate-500">${b.email} · ${b.type}</div>
+          </div>
+          <button class="text-brand-crimson font-bold hover:opacity-60 shrink-0 ml-3">Cancel</button>
+        `;
+        row.querySelector('button').onclick = () => {
+          if (!confirm(`Cancel ${b.name}'s appointment on ${formatDisplayDate(b.date)} at ${formatDisplayTime(b.time)}?`)) return;
+          const updated = loadBookings().filter(x => x.id !== b.id);
+          saveBookings(updated);
+          renderAdminBookingsList();
+        };
+        list.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>

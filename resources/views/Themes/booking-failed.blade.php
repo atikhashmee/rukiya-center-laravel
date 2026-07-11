@@ -1,28 +1,25 @@
-@extends('themes.layouts.layout')
+@extends('Themes.layouts.app')
 
 @section('content')
-    <main>
-      <div class="flex items-center justify-center min-h-screen p-6">
-        <!-- Failure Card -->
-        <div class="bg-white p-8 rounded-lg shadow-xl max-w-sm text-center">
-            <!-- Cross Icon Container -->
-            <div class="mx-auto bg-red-100 rounded-full h-24 w-24 flex items-center justify-center">
-                <svg class="h-16 w-16 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+    @include('Themes.layouts.nav')
+
+    <main class="py-20 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brand-cream/50 border border-brand-gold/20 p-8 md:p-12 rounded-2xl text-center space-y-6">
+                <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-3xl">
+                    ✗
+                </div>
+
+                <h1 class="text-3xl font-serif font-bold text-brand-teal">Booking Failed</h1>
+
+                <p class="text-sm text-slate-600">
+                    Unfortunately, your booking could not be completed. Please try again or contact support.
+                </p>
+
+                <a href="{{ route('services') }}" class="inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full text-sm font-semibold transition shadow">
+                    Try Again
+                </a>
             </div>
-            
-            <!-- Failure Text -->
-            <h1 class="text-3xl font-bold text-gray-800 mt-6">Booking Failed</h1>
-            <p class="text-gray-600 mt-2">
-                Unfortunately, your booking could not be completed. Please try again or contact support.
-            </p>
-            
-            <!-- Action Button -->
-            <a href="#" class="mt-6 inline-block px-6 py-3 text-sm font-semibold text-white bg-red-600 rounded-md shadow-md hover:bg-red-700 transition-colors">
-                Try Again
-            </a>
         </div>
-    </div>
     </main>
 @endsection

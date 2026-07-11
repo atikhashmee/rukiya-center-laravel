@@ -1,42 +1,45 @@
-<!-- Navigation Bar -->
-<nav class="absolute top-0 left-0 right-0 z-20 p-4 md:p-6 bg-transparent">
-    <div class="flex items-center justify-between max-w-7xl mx-auto">
-        
-        <!-- Logo/Home Link (UPDATED: DK Healing Center SVG) -->
-        <a href="{{ route("home") }}" class="flex flex-col items-start transition duration-300 hover:text-indigo-300 text-white">
-            <svg class="h-8 w-auto" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- DK in large, bold font (using currentColor for main white color) -->
-                <text x="0" y="28" font-family="Inter, sans-serif" font-size="35" font-weight="800" fill="currentColor">DK</text>
-                <!-- healing center in small, regular font, light indigo color -->
-                <text x="0" y="38" font-family="Inter, sans-serif" font-size="10" font-weight="400" fill="#C7D2FE">healing center</text>
+<!-- Top Announcement Bar -->
+<div class="bg-brand-teal text-brand-cream py-2 px-4 text-center text-xs tracking-wider font-semibold">
+    🕌 AUTHENTIC RUQYAH CLINIC • 100% SECURE UK GDPR COMPLIANT • ACCORDING TO QUR'AN & SUNNAH
+</div>
+
+<!-- Sticky Header -->
+<header class="sticky top-0 z-50 bg-brand-cream/90 backdrop-blur-md border-b border-brand-gold/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <a href="{{ route('home') }}" class="flex items-center gap-3">
+            <svg class="w-14 h-14" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="46" fill="white" stroke="#c5a880" stroke-width="2"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#b31b1b" stroke-width="1.5"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#0a3c5c" stroke-width="1.5"/>
+                <text x="24" y="58" font-family="'Playfair Display', serif" font-size="28" font-weight="bold" fill="#0a3c5c">D</text>
+                <text x="48" y="58" font-family="'Playfair Display', serif" font-size="28" font-weight="bold" fill="#b31b1b">K</text>
             </svg>
+            <div>
+                <span class="block text-lg font-bold tracking-tight text-brand-teal uppercase">DK Healing Centre</span>
+                <span class="block text-[10px] tracking-widest text-brand-gold font-semibold uppercase">Ruqyah & Prophetic Medicine</span>
+            </div>
         </a>
-        
-        <!-- Main Navigation Links (Hidden on small, visible on medium+) -->
-        <div class="hidden md:flex space-x-6 lg:space-x-10 items-center text-lg">
-            <a href="{{ route("home") }}" class="text-white hover:text-indigo-300 transition duration-300">Home</a>
-            <a href="{{ route("services") }}" class="text-white hover:text-indigo-300 transition duration-300">Services</a>
-            <a href="{{ route("about") }}" class="text-white hover:text-indigo-300 transition duration-300">About Us</a>
-            <a href="{{ route("contact") }}" class="text-white hover:text-indigo-300 transition duration-300">Contact Us</a>
-            <a href="{{ route("free.counselling") }}" class="text-indigo-300 font-semibold hover:text-white transition duration-300">Free Counseling</a>
-        </div>
-        
-        <!-- Auth Buttons (Always visible, simplified for mobile) -->
-        <div class="flex space-x-3 items-center">
+
+        <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
+            <a href="{{ route('about') }}" class="hover:text-brand-gold transition">About Us</a>
+            <a href="{{ route('services') }}" class="hover:text-brand-gold transition">Services</a>
+            <a href="{{ route('contact') }}" class="hover:text-brand-gold transition">Contact Us</a>
+            <a href="{{ route('free.counselling') }}" class="text-brand-crimson font-bold hover:opacity-80 transition">Free Counseling</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
             @auth("customer")
-           
-                <a href="{{ route("customer.profile") }}" class="w-10 h-10 bg-theme-gold rounded-full flex items-center justify-center text-indigo-900 text-base font-bold ring-2 ring-white hover:ring-indigo-300 transition duration-300">
-                        JD
-                    </a>
+                <a href="{{ route('customer.profile') }}" class="w-10 h-10 bg-brand-gold rounded-full flex items-center justify-center text-white text-base font-bold ring-2 ring-white hover:ring-brand-gold transition">
+                    {{ substr(auth()->user()->name, 0, 2) }}
+                </a>
             @else
-            <a href="{{ route("customer.login") }}" class="px-3 py-2 md:px-4 md:py-2 text-white border border-white rounded-lg text-sm md:text-base hover:bg-white hover:text-indigo-900 transition duration-300">
-                Login
-            </a>
-            <a href="{{ route("customer.register") }}" class="px-3 py-2 md:px-4 md:py-2 text-indigo-900 bg-indigo-300 rounded-lg text-sm md:text-base font-semibold hover:bg-indigo-400 transition duration-300">
-                Register
-            </a>
-        @endauth
-            
+                <a href="{{ route('customer.login') }}" class="bg-brand-teal hover:bg-brand-navy text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">
+                    Login
+                </a>
+                <a href="{{ route('customer.register') }}" class="bg-brand-gold hover:bg-brand-goldDark text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">
+                    Register
+                </a>
+            @endauth
         </div>
     </div>
-</nav>
+</header>
