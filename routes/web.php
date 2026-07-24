@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
@@ -52,6 +53,12 @@ Route::get('/contact', fn () => view(resolveThemeView('contact')))->name('contac
 Route::get('/services', fn () => view(resolveThemeView('service')))->name('services');
 Route::get('/free-counselling', fn () => view(resolveThemeView('free-counselling')))->name('free.counselling');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/shop/{product}', [ShopController::class, 'show'])->name('shop.show');
+Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
+Route::put('/cart', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::get('service/{name}', [CustomerController::class, 'index'])->name('service');
 
 Route::prefix('customer')->name('customer.')->group(function () {

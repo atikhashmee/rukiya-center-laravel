@@ -29,6 +29,15 @@
         </nav>
 
         <div class="flex items-center gap-4">
+            <!-- Cart -->
+            @php $cartCount = collect(session()->get('cart', []))->sum(); @endphp
+            <a href="{{ route('cart') }}" class="relative text-brand-teal hover:text-brand-gold transition">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                @if($cartCount > 0)
+                    <span class="absolute -top-2 -right-2 bg-brand-crimson text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">{{ $cartCount }}</span>
+                @endif
+            </a>
+
             @auth("customer")
                 <a href="{{ route('customer.profile') }}" class="w-10 h-10 bg-brand-gold rounded-full flex items-center justify-center text-white text-base font-bold ring-2 ring-white hover:ring-brand-gold transition">
                     {{ substr(auth()->user()->name, 0, 2) }}

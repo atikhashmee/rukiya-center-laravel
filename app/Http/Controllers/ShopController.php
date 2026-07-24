@@ -33,4 +33,22 @@ class ShopController extends Controller
 
         return view('Themes.shop', compact('products', 'categories', 'minPrice', 'maxPrice'));
     }
+
+    public function show(Product $product)
+    {
+        $product->load(['category', 'images']);
+
+        if (!$product->is_active) {
+            abort(404);
+        }
+
+        $related = Product::with(['category', 'images'])
+            ->where('is_active', true)
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->limit(4)
+            ->get();
+
+        return view('Themes.shop-show', compact('product', 'related'));
+    }
 }
