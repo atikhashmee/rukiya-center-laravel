@@ -8,9 +8,11 @@ use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ServiceController as CustomerController;
 use App\Http\Controllers\CustomerController as AdminCustomerController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Theme;
@@ -49,6 +51,7 @@ Route::get('/about', fn () => view(resolveThemeView('about')))->name('about');
 Route::get('/contact', fn () => view(resolveThemeView('contact')))->name('contact');
 Route::get('/services', fn () => view(resolveThemeView('service')))->name('services');
 Route::get('/free-counselling', fn () => view(resolveThemeView('free-counselling')))->name('free.counselling');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('service/{name}', [CustomerController::class, 'index'])->name('service');
 
 Route::prefix('customer')->name('customer.')->group(function () {
@@ -90,6 +93,7 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::resource('blog', BlogController::class);
     Route::resource('products', ProductController::class)->names('products');
+    Route::resource('product-categories', ProductCategoryController::class)->names('productCategories');
     Route::resource('services', ServiceController::class)->names('services');
     Route::post('verify-customer-email/{id}', [AdminCustomerController::class, 'verifyEmail'])->name('customers.verifyEmail');
     Route::resource('customers', AdminCustomerController::class)->names('customers');

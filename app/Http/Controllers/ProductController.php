@@ -98,7 +98,7 @@ class ProductController extends Controller
 
                     // Create the ProductImage record
                     ProductImage::create([
-                        'product_id' => $product->product_id,
+                        'product_id' => $product->id,
                         'path' => Storage::url($path),
                         'sort_order' => $sortOrder++,
                     ]);
@@ -108,11 +108,6 @@ class ProductController extends Controller
             DB::commit();
 
             return redirect()->route('products.index')->with('success', 'Product created successfully.');
-
-            return response()->json([
-                'message' => 'Product created successfully, including images.',
-                'product' => $product->load('category', 'images'),
-            ], 201);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -164,7 +159,7 @@ class ProductController extends Controller
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('products')->ignore($product->product_id, 'product_id'),
+                Rule::unique('products')->ignore($product->id, 'id'),
             ],
 
             'price' => 'sometimes|required|numeric|min:0.01',
@@ -189,7 +184,7 @@ class ProductController extends Controller
             // 4. Handle Image Deletions
             if (! empty($validated['delete_image_ids'])) {
                 $imagesToDelete = ProductImage::whereIn('id', $validated['delete_image_ids'])
-                    ->where('product_id', $product->product_id)
+                    ->where('product_id', $product->id)
                     ->get();
 
                 foreach ($imagesToDelete as $image) {
@@ -211,7 +206,7 @@ class ProductController extends Controller
                     $path = $imageFile->store('products', 'public');
 
                     ProductImage::create([
-                        'product_id' => $product->product_id,
+                        'product_id' => $product->id,
                         'path' => Storage::url($path),
                         'sort_order' => $sortOrder++,
                     ]);

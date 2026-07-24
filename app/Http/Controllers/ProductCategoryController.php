@@ -4,62 +4,82 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class ProductCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = ProductCategory::withCount('products');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $categories = $query->orderBy('name')->paginate(12)->withQueryString();
+
+        return Inertia::render('product-categories/index', [
+            'categories' => $categories,
+            'filters' => $request->only(['search']),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return Inertia::render('product-categories/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:100|unique:product_categories,name',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name']);
+
+        $category = ProductCategory::create($validated);
+
+        return redirect()->route('productCategories.index')
+            ->with('success', 'Category created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(ProductCategory $productCategory)
     {
-        //
+        $productCategory->loadCount('products');
+
+        return Inertia::render('product-categories/show', [
+            'category' => $productCategory,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(ProductCategory $productCategory)
     {
-        //
+        return Inertia::render('product-categories/edit', [
+            'category' => $productCategory,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, ProductCategory $productCategory)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:100|unique:product_categories,name,' . $productCategory->id,
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name']);
+
+        $productCategory->update($validated);
+
+        return redirect()->route('productCategories.index')
+            ->with('success', 'Category updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(ProductCategory $productCategory)
     {
-        //
+        $productCategory->delete();
+
+        return redirect()->route('productCategories.index')
+            ->with('success', 'Category deleted successfully.');
     }
 }

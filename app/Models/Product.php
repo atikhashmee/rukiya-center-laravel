@@ -16,7 +16,11 @@ class Product extends Model
         'price',
         'stock_quantity',
         'is_active',
-        'images',
+    ];
+
+    protected $casts = [
+        'price' => 'float',
+        'is_active' => 'boolean',
     ];
 
     public function category()

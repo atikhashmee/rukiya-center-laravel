@@ -13,7 +13,7 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Rss, PackageSearch, Kanban, User, Book, MailSearchIcon, Palette } from 'lucide-react';
+import { LayoutGrid, Rss, PackageSearch, Kanban, User, Book, MailSearchIcon, Palette, FolderTree } from 'lucide-react';
 import AppLogo from './app-logo';
 import {index} from '@/actions/App/Http/Controllers/BlogController';
 import productIndex from '@/actions/App/Http/Controllers/ProductController';
@@ -22,6 +22,7 @@ import userIndex from '@/actions/App/Http/Controllers/UserController';
 import customer from '@/actions/App/Http/Controllers/CustomerController';
 import booking from '@/actions/App/Http/Controllers/BookingController';
 import themeIndex from '@/actions/App/Http/Controllers/ThemeController';
+import productCategoryIndex from '@/actions/App/Http/Controllers/ProductCategoryController';
 
 const mainNavItems: NavItem[] = [
     {
@@ -35,9 +36,13 @@ const mainNavItems: NavItem[] = [
         icon: Rss,
     },
     {
-        title: 'Product',
-        href: productIndex.index(),
+        title: 'Catalog',
+        href: '#',
         icon: PackageSearch,
+        items: [
+            { title: 'Products', href: productIndex.index(), icon: PackageSearch },
+            { title: 'Categories', href: productCategoryIndex.index(), icon: FolderTree },
+        ],
     },
     {
         title: 'Service',
