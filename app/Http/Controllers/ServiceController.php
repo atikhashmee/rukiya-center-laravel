@@ -136,14 +136,10 @@ class ServiceController extends Controller
             'submit_button_text' => 'nullable|string|max:100',
         ]);
 
-        // Encode arrays to JSON for storage
-        if (isset($validated['features'])) {
-            $validated['features'] = json_encode($validated['features']);
-        }
-        if (isset($validated['required_form_fields'])) {
-            $validated['required_form_fields'] = json_encode($validated['required_form_fields']);
-        }
-
+        // Service::features / required_form_fields are already cast to 'array' on the
+        // model, so Eloquent encodes them to JSON on save automatically. Encoding them
+        // here too would double-encode: the column would store a JSON string of a JSON
+        // string, which decodes back to a plain string (not an array) on every read.
         $service->update($validated);
 
         return to_route('services.index')
