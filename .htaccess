@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Already inside /public - don't rewrite again (avoids a redirect loop).
+    RewriteCond %{REQUEST_URI} ^/public/
+    RewriteRule ^(.*)$ - [L]
+
+    # Everything else gets served from the public/ subfolder, which holds
+    # Laravel's actual front controller (index.php). This lets the app live
+    # at the shared-hosting document root (public_html) without needing the
+    # host to let us point the domain's document root at public_html/public.
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
