@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Theme;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +32,7 @@ class PaymentController extends Controller
             abort(404);
         }
 
-        return view('Themes.checkout', compact('item', 'type'));
+        return view(Theme::resolveViewName('checkout'), compact('item', 'type'));
     }
 
     public function processPayment(Request $request)
@@ -161,11 +162,11 @@ class PaymentController extends Controller
 
     public function paymentSuccess()
     {
-        return view('Themes.payment-result-page', ['status' => 'success']);
+        return view(Theme::resolveViewName('payment-result-page'), ['status' => 'success']);
     }
 
     public function paymentFailed()
     {
-        return view('Themes.payment-result-page', ['status' => 'failed']);
+        return view(Theme::resolveViewName('payment-result-page'), ['status' => 'failed']);
     }
 }

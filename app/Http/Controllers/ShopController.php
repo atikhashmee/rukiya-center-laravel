@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -31,7 +32,7 @@ class ShopController extends Controller
         $minPrice = Product::where('is_active', true)->min('price') ?? 0;
         $maxPrice = Product::where('is_active', true)->max('price') ?? 100;
 
-        return view('Themes.shop', compact('products', 'categories', 'minPrice', 'maxPrice'));
+        return view(Theme::resolveViewName('shop'), compact('products', 'categories', 'minPrice', 'maxPrice'));
     }
 
     public function show(Product $product)
@@ -49,6 +50,6 @@ class ShopController extends Controller
             ->limit(4)
             ->get();
 
-        return view('Themes.shop-show', compact('product', 'related'));
+        return view(Theme::resolveViewName('shop-show'), compact('product', 'related'));
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Models\Theme;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,7 +19,7 @@ class BlogController extends Controller
             ->latest()
             ->get();
 
-        return view('Themes.blog', compact('posts'));
+        return view(Theme::resolveViewName('blog'), compact('posts'));
     }
 
     public function show(BlogPost $post): View
@@ -36,7 +37,7 @@ class BlogController extends Controller
             ->limit(4)
             ->get();
 
-        return view('Themes.blog-show', compact('post', 'recentPosts'));
+        return view(Theme::resolveViewName('blog-show'), compact('post', 'recentPosts'));
     }
 
     public function storeComment(Request $request, BlogPost $post): RedirectResponse

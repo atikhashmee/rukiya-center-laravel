@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Service;
+use App\Models\Theme;
 use App\Mail\ServiceBooked;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class BookController extends Controller
             abort(404);
         }
 
-        return view('Themes.service-book-preview', [
+        return view(Theme::resolveViewName('service-book-preview'), [
             'service' => $service,
         ]);
     }
@@ -96,16 +97,16 @@ class BookController extends Controller
 
     public function bookConfirm()
     {
-        return view('Themes.booking-confirm');
+        return view(Theme::resolveViewName('booking-confirm'));
     }
 
     public function bookFailed()
     {
-        return view('Themes.booking-failed');
+        return view(Theme::resolveViewName('booking-failed'));
     }
 
     public function bookPending()
     {
-        return view('Themes.booking-pending');
+        return view(Theme::resolveViewName('booking-pending'));
     }
 }

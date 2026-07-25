@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Instructor;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -16,7 +17,7 @@ class BookingWizardController extends Controller
     {
         $categories = ServiceCategory::has('services')->orderBy('name')->get();
 
-        return view('Themes.wizard.category', compact('categories'));
+        return view(Theme::resolveViewName('wizard.category'), compact('categories'));
     }
 
     public function selectService($category)
@@ -31,7 +32,7 @@ class BookingWizardController extends Controller
             return redirect()->route('wizard.index')->with('error', 'No services found in this category.');
         }
 
-        return view('Themes.wizard.service', ['services' => $services, 'category' => $serviceCategory]);
+        return view(Theme::resolveViewName('wizard.service'), ['services' => $services, 'category' => $serviceCategory]);
     }
 
     public function selectInstructor($serviceId)
@@ -42,7 +43,7 @@ class BookingWizardController extends Controller
             ->whereHas('services', fn ($q) => $q->where('services.id', $service->id))
             ->get();
 
-        return view('Themes.wizard.instructor', compact('service', 'instructors'));
+        return view(Theme::resolveViewName('wizard.instructor'), compact('service', 'instructors'));
     }
 
     public function selectSchedule($serviceId, $instructorId)
@@ -95,7 +96,7 @@ class BookingWizardController extends Controller
             ->groupBy('booking_date')
             ->map(fn ($bookings) => $bookings->pluck('booking_time')->map(fn ($t) => substr($t, 0, 5))->toArray());
 
-        return view('Themes.wizard.schedule', compact('service', 'instructor', 'dates', 'bookedSlots', 'anyInstructor'));
+        return view(Theme::resolveViewName('wizard.schedule'), compact('service', 'instructor', 'dates', 'bookedSlots', 'anyInstructor'));
     }
 
     public function confirm(Request $request)
@@ -118,7 +119,7 @@ class BookingWizardController extends Controller
 
         $donationAddon = (float) $request->input('donation_addon', 0);
 
-        return view('Themes.wizard.confirm', compact('service', 'instructor', 'donationAddon'));
+        return view(Theme::resolveViewName('wizard.confirm'), compact('service', 'instructor', 'donationAddon'));
     }
 
     public function store(Request $request)
@@ -253,13 +254,13 @@ class BookingWizardController extends Controller
     public function confirmation(Request $request)
     {
         $booking = Booking::findOrFail($request->booking_id);
-        return view('Themes.wizard.completed', compact('booking'));
+        return view(Theme::resolveViewName('wizard.completed'), compact('booking'));
     }
 
     public function pending(Request $request)
     {
         $booking = Booking::findOrFail($request->booking_id);
-        return view('Themes.wizard.pending', compact('booking'));
+        return view(Theme::resolveViewName('wizard.pending'), compact('booking'));
     }
 
     private function formatTime($time): string

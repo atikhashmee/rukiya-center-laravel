@@ -72,6 +72,8 @@ class ThemeController extends Controller
             'theme' => $theme,
             'fileKeys' => Theme::EDITABLE_FILES,
             'fileLabels' => Theme::FILE_LABELS,
+            'pageGroups' => Theme::PAGE_GROUPS,
+            'previewUrls' => Theme::PAGE_PREVIEW_URLS,
         ]);
     }
 

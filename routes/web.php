@@ -22,39 +22,12 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\BookingWizardController;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
 
-$themeViewPrepended = false;
-
-function resolveThemeView(string $key): string
-{
-    global $themeViewPrepended;
-    $theme = Theme::active();
-
-    if ($theme) {
-        $path = $theme->resolveViewPath($key);
-
-        if ($path && !$themeViewPrepended) {
-            $storageDir = dirname($path);
-            if (is_dir($storageDir)) {
-                View::prependLocation($storageDir);
-                $themeViewPrepended = true;
-            }
-        }
-
-        if ($path) {
-            return $key;
-        }
-    }
-
-    return "Themes.{$key}";
-}
-
-Route::get('/', fn () => view(resolveThemeView('index')))->name('home');
-Route::get('/about', fn () => view(resolveThemeView('about')))->name('about');
-Route::get('/contact', fn () => view(resolveThemeView('contact')))->name('contact');
-Route::get('/free-counselling', fn () => view(resolveThemeView('free-counselling')))->name('free.counselling');
+Route::get('/', fn () => view(Theme::resolveViewName('index')))->name('home');
+Route::get('/about', fn () => view(Theme::resolveViewName('about')))->name('about');
+Route::get('/contact', fn () => view(Theme::resolveViewName('contact')))->name('contact');
+Route::get('/free-counselling', fn () => view(Theme::resolveViewName('free-counselling')))->name('free.counselling');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/{product}', [ShopController::class, 'show'])->name('shop.show');
 Route::get('/blog', [CustomerBlogController::class, 'index'])->name('posts.index');

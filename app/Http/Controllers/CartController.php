@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -34,7 +35,7 @@ class CartController extends Controller
     public function index()
     {
         $data = $this->getCartData();
-        return view('Themes.cart', ['products' => $data['products'], 'total' => $data['total']]);
+        return view(Theme::resolveViewName('cart'), ['products' => $data['products'], 'total' => $data['total']]);
     }
 
     public function checkout()
@@ -43,7 +44,7 @@ class CartController extends Controller
         if ($data['products']->isEmpty()) {
             return redirect()->route('cart')->with('error', 'Your cart is empty.');
         }
-        return view('Themes.checkout-form', ['products' => $data['products'], 'total' => $data['total']]);
+        return view(Theme::resolveViewName('checkout-form'), ['products' => $data['products'], 'total' => $data['total']]);
     }
 
     public function placeOrder(Request $request)

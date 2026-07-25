@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Theme;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -13,12 +14,12 @@ class AuthController extends Controller
 {
     public function index(Request $request)
     {
-        return view('Themes.login');
+        return view(Theme::resolveViewName('login'));
     }
 
     public function register(Request $request)
     {
-        return view('Themes.register');
+        return view(Theme::resolveViewName('register'));
     }
 
     public function registerStore(Request $request)
@@ -76,7 +77,7 @@ class AuthController extends Controller
 
     public function emailVerify()
     {
-        return view('Themes.auth.verify-email-page', ['email' => auth()->guard('customer')->user()->email]);
+        return view(Theme::resolveViewName('auth.verify-email-page'), ['email' => auth()->guard('customer')->user()->email]);
     }
 
     public function emailVerified(EmailVerificationRequest $request)
