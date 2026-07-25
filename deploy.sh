@@ -75,7 +75,10 @@ run_migrations() {
     php artisan migrate --force
 
     echo "  -> storage:link (skipped if it already exists)"
-    [ -L public/storage ] || php artisan storage:link
+    # Not "php artisan storage:link": this host has both symlink() and exec()
+    # disabled in php.ini, so Laravel can't create the link from PHP at all.
+    # A raw shell "ln" isn't constrained by PHP's disable_functions, so do it directly.
+    [ -L public/storage ] || ln -s "\$(pwd)/storage/app/public" "\$(pwd)/public/storage"
 
     echo "  -> rebuilding caches"
     php artisan optimize:clear
