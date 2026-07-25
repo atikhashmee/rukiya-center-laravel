@@ -79,7 +79,7 @@ export default function BlogIndex() {
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-center text-sm text-gray-500 max-w-[200px] truncate">
-                                                {post.content?.substring(0, 80)}...
+                                                {post.content?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 80)}...
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 <div className="flex gap-2 justify-center">

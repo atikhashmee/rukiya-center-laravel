@@ -1,10 +1,10 @@
 import React from 'react';
 import AppLayout from "@/layouts/app-layout";
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index } from "@/actions/App/Http/Controllers/BlogController";
-import { CornerUpLeft } from 'lucide-react';
+import { CornerUpLeft, Check, Trash2 } from 'lucide-react';
 
 interface BlogComment {
     id: number;
@@ -37,6 +37,16 @@ export default function BlogShow({ post }: BlogShowProps) {
         { title: 'Blog', href: index().url },
         { title: post.title, href: '#' },
     ];
+
+    const approveComment = (commentId: number) => {
+        router.post(`/admin/blog-comments/${commentId}/approve`, {}, { preserveScroll: true });
+    };
+
+    const deleteComment = (commentId: number) => {
+        if (confirm('Remove this comment?')) {
+            router.delete(`/admin/blog-comments/${commentId}`, { preserveScroll: true });
+        }
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -91,9 +101,16 @@ export default function BlogShow({ post }: BlogShowProps) {
                         {post.comments && post.comments.length > 0 ? (
                             <div className="space-y-4">
                                 {post.comments.map((comment) => (
-                                    <div key={comment.id} className="p-4 border rounded-lg bg-gray-50">
+                                    <div key={comment.id} className={`p-4 border rounded-lg ${comment.approved ? 'bg-gray-50' : 'bg-yellow-50 border-yellow-200'}`}>
                                         <div className="flex justify-between items-center mb-2">
-                                            <span className="font-medium text-gray-900">{comment.name}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-medium text-gray-900">{comment.name}</span>
+                                                {!comment.approved && (
+                                                    <span className="inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                                                        Pending approval
+                                                    </span>
+                                                )}
+                                            </div>
                                             <span className="text-xs text-gray-500">
                                                 {new Date(comment.created_at).toLocaleDateString()}
                                             </span>
@@ -101,7 +118,23 @@ export default function BlogShow({ post }: BlogShowProps) {
                                         {comment.email && (
                                             <p className="text-xs text-gray-500 mb-1">{comment.email}</p>
                                         )}
-                                        <p className="text-sm text-gray-700">{comment.comment}</p>
+                                        <p className="text-sm text-gray-700 mb-3">{comment.comment}</p>
+                                        <div className="flex gap-2">
+                                            {!comment.approved && (
+                                                <button
+                                                    onClick={() => approveComment(comment.id)}
+                                                    className="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-100 hover:bg-green-200 px-2.5 py-1 rounded-full transition-colors"
+                                                >
+                                                    <Check className="h-3 w-3" /> Approve
+                                                </button>
+                                            )}
+                                            <button
+                                                onClick={() => deleteComment(comment.id)}
+                                                className="inline-flex items-center gap-1 text-xs font-medium text-red-700 bg-red-100 hover:bg-red-200 px-2.5 py-1 rounded-full transition-colors"
+                                            >
+                                                <Trash2 className="h-3 w-3" /> Remove
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

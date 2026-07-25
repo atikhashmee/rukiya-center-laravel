@@ -24,6 +24,7 @@
             <a href="{{ route('about') }}" class="hover:text-brand-gold transition">About Us</a>
             <a href="{{ route('wizard.index') }}" class="hover:text-brand-gold transition">Book an Appointment</a>
             <a href="{{ route('shop') }}" class="hover:text-brand-gold transition">Shop</a>
+            <a href="{{ route('posts.index') }}" class="hover:text-brand-gold transition">Blog</a>
             <a href="{{ route('contact') }}" class="hover:text-brand-gold transition">Contact Us</a>
             <a href="{{ route('free.counselling') }}" class="text-brand-crimson font-bold hover:opacity-80 transition">Free Counseling</a>
         </nav>

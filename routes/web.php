@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Customer\BlogController as CustomerBlogController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Customer\AuthController;
@@ -56,6 +57,9 @@ Route::get('/contact', fn () => view(resolveThemeView('contact')))->name('contac
 Route::get('/free-counselling', fn () => view(resolveThemeView('free-counselling')))->name('free.counselling');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/{product}', [ShopController::class, 'show'])->name('shop.show');
+Route::get('/blog', [CustomerBlogController::class, 'index'])->name('posts.index');
+Route::get('/blog/{post:slug}', [CustomerBlogController::class, 'show'])->name('posts.show');
+Route::post('/blog/{post}/comment', [CustomerBlogController::class, 'storeComment'])->name('posts.comment.store');
 Route::post('/cart', [CartController::class, 'add'])->name('cart.add');
 Route::put('/cart', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart', [CartController::class, 'remove'])->name('cart.remove');
@@ -123,6 +127,8 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::redirect('/', 'admin/dashboard', 301);
     Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::resource('blog', BlogController::class);
+    Route::post('blog-comments/{comment}/approve', [BlogController::class, 'approveComment'])->name('blog.comments.approve');
+    Route::delete('blog-comments/{comment}', [BlogController::class, 'destroyComment'])->name('blog.comments.destroy');
     Route::resource('products', ProductController::class)->names('products');
     Route::resource('product-categories', ProductCategoryController::class)->names('productCategories');
     Route::resource('service-categories', ServiceCategoryController::class)->names('serviceCategories');

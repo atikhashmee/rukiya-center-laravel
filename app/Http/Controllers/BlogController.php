@@ -30,16 +30,14 @@ class BlogController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $slug = Str::slug($request->title);
-        $request->merge(['slug' => $slug]);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:blog_posts,slug',
             'content' => 'required|string',
             'featured_image' => 'nullable|string|max:255',
             'status' => 'required|string|in:draft,published,archived',
         ]);
 
+        $validated['slug'] = $this->uniqueSlug($validated['title']);
         $validated['author_id'] = auth()->id();
 
         BlogPost::create($validated);
@@ -47,58 +45,77 @@ class BlogController extends Controller
         return redirect()->route('blog.index')->with('success', 'Post created successfully.');
     }
 
-    public function show(BlogPost $post): Response
+    public function show(BlogPost $blog): Response
     {
-        $post->load(['comments' => function ($query) {
-            $query->where('approved', true)->latest();
-        }]);
+        $blog->load(['allComments' => fn ($query) => $query->latest()]);
+        $blog->setRelation('comments', $blog->allComments);
 
         return Inertia::render('blog/show', [
-            'post' => $post,
+            'post' => $blog,
         ]);
     }
 
-    public function edit(BlogPost $post): Response
+    public function edit(BlogPost $blog): Response
     {
         return Inertia::render('blog/edit', [
-            'post' => $post,
+            'post' => $blog,
         ]);
     }
 
-    public function update(Request $request, BlogPost $post): RedirectResponse
+    public function update(Request $request, BlogPost $blog): RedirectResponse
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:blog_posts,slug,'.$post->id,
             'content' => 'required|string',
             'featured_image' => 'nullable|string|max:255',
             'status' => 'required|string|in:draft,published,archived',
         ]);
 
-        $post->update($validated);
+        if ($validated['title'] !== $blog->title) {
+            $validated['slug'] = $this->uniqueSlug($validated['title'], $blog->id);
+        }
+
+        $blog->update($validated);
 
         return redirect()->route('blog.index')->with('success', 'Post updated successfully.');
     }
 
-    public function destroy(BlogPost $post): RedirectResponse
+    public function destroy(BlogPost $blog): RedirectResponse
     {
-        $post->delete();
+        $blog->delete();
 
         return redirect()->route('blog.index')->with('success', 'Post deleted successfully.');
     }
 
-    public function storeComment(Request $request, BlogPost $post): RedirectResponse
+    public function approveComment(BlogComment $comment): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'comment' => 'required|string|max:1000',
-        ]);
+        $comment->update(['approved' => true]);
 
-        $validated['post_id'] = $post->id;
+        return back()->with('success', 'Comment approved.');
+    }
 
-        BlogComment::create($validated);
+    public function destroyComment(BlogComment $comment): RedirectResponse
+    {
+        $comment->delete();
 
-        return back()->with('success', 'Comment submitted for approval.');
+        return back()->with('success', 'Comment removed.');
+    }
+
+    private function uniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($title);
+        $slug = $base;
+        $i = 1;
+
+        while (
+            BlogPost::where('slug', $slug)
+                ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = "{$base}-{$i}";
+            $i++;
+        }
+
+        return $slug;
     }
 }

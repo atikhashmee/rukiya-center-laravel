@@ -5,6 +5,7 @@ import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index, update } from "@/actions/App/Http/Controllers/BlogController";
 import { CornerUpLeft } from 'lucide-react';
+import RichTextEditor from '@/components/rich-text-editor';
 
 interface BlogPost {
     id: number;
@@ -74,15 +75,8 @@ export default function BlogEdit({ post }: BlogEditProps) {
                             </div>
 
                             <div>
-                                <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content</label>
-                                <textarea
-                                    id="content"
-                                    rows={12}
-                                    value={data.content}
-                                    onChange={(e) => setData('content', e.target.value)}
-                                    className={INPUT_CLASSES}
-                                    placeholder="Write your blog content here..."
-                                />
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                                <RichTextEditor value={data.content} onChange={(html) => setData('content', html)} />
                                 {errors.content && <p className="mt-1 text-xs text-red-500">{errors.content}</p>}
                             </div>
 
