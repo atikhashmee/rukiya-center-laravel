@@ -18,10 +18,10 @@
                         We provide structured, transparent Ruqyah Shariah treatment plans and authentic Prophetic herbal remedies. Empowering individuals and families to heal safely under strict privacy rules.
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <a href="{{ route('services') }}" class="w-full sm:w-auto text-center bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3.5 rounded-full font-semibold transition shadow">
+                        <a href="{{ route('wizard.index') }}" class="w-full sm:w-auto text-center bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3.5 rounded-full font-semibold transition shadow">
                             Book a Ruqyah Session
                         </a>
-                        <a href="{{ route('services') }}" class="w-full sm:w-auto text-center border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-8 py-3 rounded-full font-semibold transition">
+                        <a href="{{ route('wizard.index') }}" class="w-full sm:w-auto text-center border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-8 py-3 rounded-full font-semibold transition">
                             Browse Our Services
                         </a>
                     </div>

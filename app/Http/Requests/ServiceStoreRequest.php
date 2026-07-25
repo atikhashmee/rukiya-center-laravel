@@ -31,10 +31,9 @@ class ServiceStoreRequest extends FormRequest
                 'regex:/^[A-Z0-9_]+$/',
                 Rule::unique('services', 'id_code'),
             ],
-            'category' => [
+            'category_id' => [
                 'required',
-                'string',
-                Rule::in(['counseling', 'rukiya', 'istekhara', 'other']),
+                Rule::exists('service_categories', 'id'),
             ],
             'order' => ['required', 'integer', 'min:1'],
 

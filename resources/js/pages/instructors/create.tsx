@@ -11,7 +11,7 @@ import { CornerUpLeft } from 'lucide-react';
 interface Service {
     id: number;
     title: string;
-    category: string;
+    category: { id: number; name: string; slug: string } | null;
 }
 
 interface Props {
@@ -64,7 +64,8 @@ export default function CreateInstructor({ services }: Props) {
     };
 
     const grouped = services.reduce((acc, s) => {
-        (acc[s.category] = acc[s.category] || []).push(s);
+        const label = s.category?.name ?? 'Uncategorized';
+        (acc[label] = acc[label] || []).push(s);
         return acc;
     }, {} as Record<string, Service[]>);
 

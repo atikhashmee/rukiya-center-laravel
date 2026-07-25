@@ -6,20 +6,12 @@ import { dashboard } from '@/routes';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CornerUpLeft, Trash2, PlusCircle } from 'lucide-react';
+import { CornerUpLeft } from 'lucide-react';
 
 interface Service {
     id: number;
     title: string;
-    category: string;
-}
-
-interface Schedule {
-    id: number;
-    day_of_week: number;
-    start_time: string;
-    end_time: string;
-    is_active: boolean;
+    category: { id: number; name: string; slug: string } | null;
 }
 
 interface Instructor {
@@ -31,15 +23,12 @@ interface Instructor {
     languages: string[] | string | null;
     is_active: boolean;
     services: { id: number }[];
-    schedules: Schedule[];
 }
 
 interface Props {
     instructor: Instructor;
     services: Service[];
 }
-
-const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard().url },
@@ -58,13 +47,6 @@ export default function EditInstructor({ instructor, services }: Props) {
         service_ids: instructor.services.map(s => s.id),
     });
 
-    const [scheduleData, setScheduleData] = React.useState({
-        day_of_week: 1,
-        start_time: '09:00',
-        end_time: '17:00',
-    });
-    const [addingSchedule, setAddingSchedule] = React.useState(false);
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         put(`/admin/instructors/${instructor.id}`);
@@ -76,22 +58,9 @@ export default function EditInstructor({ instructor, services }: Props) {
             : [...data.service_ids, id]);
     };
 
-    const handleAddSchedule = (e: React.FormEvent) => {
-        e.preventDefault();
-        setAddingSchedule(true);
-        router.post(`/admin/instructors/${instructor.id}/schedules`, scheduleData, {
-            onFinish: () => setAddingSchedule(false),
-        });
-    };
-
-    const handleDeleteSchedule = (scheduleId: number) => {
-        if (confirm('Remove this schedule?')) {
-            router.delete(`/admin/instructors/${instructor.id}/schedules/${scheduleId}`);
-        }
-    };
-
     const grouped = services.reduce((acc, s) => {
-        (acc[s.category] = acc[s.category] || []).push(s);
+        const label = s.category?.name ?? 'Uncategorized';
+        (acc[label] = acc[label] || []).push(s);
         return acc;
     }, {} as Record<string, Service[]>);
 
@@ -165,52 +134,6 @@ export default function EditInstructor({ instructor, services }: Props) {
                                     {processing ? 'Saving...' : 'Update Instructor'}
                                 </Button>
                             </div>
-                        </form>
-                    </div>
-
-                    {/* Schedule Management */}
-                    <div className="bg-white border rounded-xl shadow-xl p-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-6">Weekly Availability</h2>
-
-                        {instructor.schedules.length > 0 ? (
-                            <div className="space-y-3 mb-6">
-                                {instructor.schedules.map(schedule => (
-                                    <div key={schedule.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                                        <div className="flex items-center gap-4">
-                                            <span className="font-medium text-sm text-gray-800">{DAYS[schedule.day_of_week]}</span>
-                                            <span className="text-sm text-gray-500">{schedule.start_time} — {schedule.end_time}</span>
-                                        </div>
-                                        <Button variant="destructive" size="icon" className="h-8 w-8" onClick={() => handleDeleteSchedule(schedule.id)}>
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p className="text-sm text-gray-400 mb-6">No schedules set. Add availability below.</p>
-                        )}
-
-                        <form onSubmit={handleAddSchedule} className="flex flex-wrap items-end gap-4 p-4 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
-                            <div>
-                                <Label className="text-xs font-medium text-gray-600">Day</Label>
-                                <select value={scheduleData.day_of_week} onChange={e => setScheduleData({ ...scheduleData, day_of_week: Number(e.target.value) })}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                                    {DAYS.map((day, i) => (
-                                        <option key={i} value={i}>{day}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <Label className="text-xs font-medium text-gray-600">Start Time</Label>
-                                <Input type="time" value={scheduleData.start_time} onChange={e => setScheduleData({ ...scheduleData, start_time: e.target.value })} className="mt-1" />
-                            </div>
-                            <div>
-                                <Label className="text-xs font-medium text-gray-600">End Time</Label>
-                                <Input type="time" value={scheduleData.end_time} onChange={e => setScheduleData({ ...scheduleData, end_time: e.target.value })} className="mt-1" />
-                            </div>
-                            <Button type="submit" disabled={addingSchedule} className="bg-blue-600 hover:bg-blue-700 text-white">
-                                <PlusCircle className="mr-2 h-4 w-4" /> {addingSchedule ? 'Adding...' : 'Add'}
-                            </Button>
                         </form>
                     </div>
                 </div>

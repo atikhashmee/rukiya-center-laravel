@@ -38,8 +38,8 @@
                     <a href="{{ route('customer.mybooking') }}" class="w-full sm:w-auto bg-brand-teal hover:bg-brand-navy text-white px-6 py-3 rounded-full text-sm font-semibold transition shadow">
                         Go to My Bookings
                     </a>
-                    <a href="{{ route('services') }}" class="w-full sm:w-auto border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-6 py-3 rounded-full text-sm font-semibold transition">
-                        Explore More Services
+                    <a href="{{ route('wizard.index') }}" class="w-full sm:w-auto border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-6 py-3 rounded-full text-sm font-semibold transition">
+                        Book Another Appointment
                     </a>
                 </div>
             </div>

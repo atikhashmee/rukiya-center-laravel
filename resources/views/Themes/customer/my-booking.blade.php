@@ -48,7 +48,7 @@
                         <div class="text-center p-10 border border-brand-gold/20 rounded-2xl bg-white">
                             <p class="text-lg font-semibold text-slate-600">No Bookings Found</p>
                             <p class="text-sm text-slate-400 mt-2">It looks like you haven't booked any services yet. Start your healing journey now!</p>
-                            <a href="{{ route('services') }}" class="mt-4 inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-2.5 rounded-full text-sm font-semibold transition shadow">
+                            <a href="{{ route('wizard.index') }}" class="mt-4 inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-2.5 rounded-full text-sm font-semibold transition shadow">
                                 Book a Service
                             </a>
                         </div>

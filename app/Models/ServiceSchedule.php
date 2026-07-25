@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class InstructorSchedule extends Model
+class ServiceSchedule extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'instructor_id',
+        'service_id',
         'day_of_week',
         'start_time',
         'end_time',
@@ -23,9 +23,9 @@ class InstructorSchedule extends Model
         'is_active' => 'boolean',
     ];
 
-    public function instructor(): BelongsTo
+    public function service(): BelongsTo
     {
-        return $this->belongsTo(Instructor::class);
+        return $this->belongsTo(Service::class);
     }
 
     public function getDayNameAttribute(): string

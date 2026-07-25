@@ -34,7 +34,7 @@ type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
 
 interface ServiceOptionFormData {
     id_code: string;
-    category: string;
+    category_id: number | '';
     title: string;
     tagline: string;
     description: string;
@@ -51,13 +51,13 @@ interface ServiceOptionFormData {
 }
 
 interface CreateServiceOptionProps {
-    serviceTypes: string[];
+    serviceCategories: { id: number; name: string; slug: string }[];
 }
 
 // --- Initial Data ---
 const initialData: ServiceOptionFormData = {
     id_code: '',
-    category: 'counseling',
+    category_id: '',
     title: '',
     tagline: '',
     description: '',
@@ -74,7 +74,7 @@ const initialData: ServiceOptionFormData = {
 };
 
 
-export default function Create({ serviceTypes = [] }: CreateServiceOptionProps) {
+export default function Create({ serviceCategories = [] }: CreateServiceOptionProps) {
     
     const pageTitle = `Create New Service `;
 
@@ -180,22 +180,26 @@ export default function Create({ serviceTypes = [] }: CreateServiceOptionProps) 
 
                                 {/* Category */}
                                 <div>
-                                    <Label htmlFor="category">Category (Parent Service)</Label>
-                                    <Select 
-                                        value={data.category} 
-                                        onValueChange={(value: string) => setData('category', value)}
+                                    <Label htmlFor="category_id">Category</Label>
+                                    <Select
+                                        value={data.category_id}
+                                        onValueChange={(value: string) => setData('category_id', value ? Number(value) : '')}
                                     >
-                                        <SelectTrigger className={errors.category ? 'border-red-500' : ''}>
+                                        <SelectTrigger className={errors.category_id ? 'border-red-500' : ''}>
                                             <SelectValue placeholder="Select Category" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="counseling">Counseling</SelectItem>
-                                            <SelectItem value="rukiya">Rukiya</SelectItem>
-                                            <SelectItem value="istekhara">Istekhara</SelectItem>
-                                            <SelectItem value="other">Other</SelectItem>
+                                            {serviceCategories.map((cat) => (
+                                                <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
-                                    {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category}</p>}
+                                    {serviceCategories.length === 0 && (
+                                        <p className="text-xs text-amber-600 mt-1">
+                                            No categories yet — <a href="/admin/service-categories/create" className="underline">create one first</a>.
+                                        </p>
+                                    )}
+                                    {errors.category_id && <p className="text-xs text-red-500 mt-1">{errors.category_id}</p>}
                                 </div>
                             </div>
                         </div>

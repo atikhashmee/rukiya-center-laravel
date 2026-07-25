@@ -16,7 +16,7 @@
                     Unfortunately, your booking could not be completed. Please try again or contact support.
                 </p>
 
-                <a href="{{ route('services') }}" class="inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full text-sm font-semibold transition shadow">
+                <a href="{{ route('wizard.index') }}" class="inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full text-sm font-semibold transition shadow">
                     Try Again
                 </a>
             </div>

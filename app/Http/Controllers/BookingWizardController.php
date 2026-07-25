@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Instructor;
 use App\Models\Service;
-use App\Models\ServiceType;
+use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -14,20 +14,24 @@ class BookingWizardController extends Controller
 {
     public function index()
     {
-        $categories = Service::select('category')->distinct()->pluck('category');
+        $categories = ServiceCategory::has('services')->orderBy('name')->get();
 
         return view('Themes.wizard.category', compact('categories'));
     }
 
     public function selectService($category)
     {
-        $services = Service::where('category', $category)->orderBy('title')->get();
+        $serviceCategory = ServiceCategory::where('slug', $category)->first();
+
+        $services = $serviceCategory
+            ? Service::where('category_id', $serviceCategory->id)->orderBy('title')->get()
+            : collect();
 
         if ($services->isEmpty()) {
             return redirect()->route('wizard.index')->with('error', 'No services found in this category.');
         }
 
-        return view('Themes.wizard.service', compact('services', 'category'));
+        return view('Themes.wizard.service', ['services' => $services, 'category' => $serviceCategory]);
     }
 
     public function selectInstructor($serviceId)
@@ -36,12 +40,7 @@ class BookingWizardController extends Controller
 
         $instructors = Instructor::where('is_active', true)
             ->whereHas('services', fn ($q) => $q->where('services.id', $service->id))
-            ->with('schedules')
             ->get();
-
-        if ($instructors->isEmpty()) {
-            return back()->with('error', 'No instructors available for this service yet. Please try another service.');
-        }
 
         return view('Themes.wizard.instructor', compact('service', 'instructors'));
     }
@@ -52,20 +51,17 @@ class BookingWizardController extends Controller
         $anyInstructor = $instructorId === 'any';
 
         if ($anyInstructor) {
-            $instructors = Instructor::where('is_active', true)
+            $instructor = (object) ['id' => null, 'name' => 'Any Available'];
+            $instructorIds = Instructor::where('is_active', true)
                 ->whereHas('services', fn ($q) => $q->where('services.id', $service->id))
-                ->with('schedules')
-                ->get();
-
-            $allSchedules = $instructors->pluck('schedules')->flatten()->where('is_active', true);
-
-            $instructor = (object) ['id' => null, 'name' => 'Any Available', 'schedules' => $allSchedules];
-            $instructorIds = $instructors->pluck('id')->toArray();
+                ->pluck('id')
+                ->toArray();
         } else {
-            $instructor = Instructor::with('schedules')->findOrFail($instructorId);
-            $allSchedules = $instructor->schedules->where('is_active', true);
+            $instructor = Instructor::findOrFail($instructorId);
             $instructorIds = [$instructorId];
         }
+
+        $allSchedules = $service->schedules()->where('is_active', true)->get();
 
         $today = now()->startOfDay();
         $dates = collect();
@@ -109,6 +105,7 @@ class BookingWizardController extends Controller
             'instructor_id' => 'required',
             'booking_date' => 'required|date|after_or_equal:today',
             'booking_time' => 'required',
+            'donation_addon' => 'nullable|numeric|min:0|max:9999',
         ]);
 
         $service = Service::findOrFail($request->service_id);
@@ -119,7 +116,9 @@ class BookingWizardController extends Controller
             $instructor = Instructor::findOrFail($request->instructor_id);
         }
 
-        return view('Themes.wizard.confirm', compact('service', 'instructor'));
+        $donationAddon = (float) $request->input('donation_addon', 0);
+
+        return view('Themes.wizard.confirm', compact('service', 'instructor', 'donationAddon'));
     }
 
     public function store(Request $request)
@@ -150,23 +149,15 @@ class BookingWizardController extends Controller
             'guardian_relationship' => 'nullable|string|max:100',
             'guardian_phone' => 'nullable|string|max:50',
             'inquiry_description' => 'nullable|string|max:2000',
+            'donation_addon' => 'nullable|numeric|min:0|max:9999',
         ]);
 
         $service = Service::findOrFail($validated['service_id']);
         $fullName = trim($validated['first_name'] . ' ' . $validated['last_name']);
 
         if ($validated['instructor_id'] === 'any') {
-            $dayOfWeek = \Carbon\Carbon::parse($validated['booking_date'])->dayOfWeek;
-            $bookingTime = substr($validated['booking_time'], 0, 5);
-
             $matchingInstructor = Instructor::where('is_active', true)
                 ->whereHas('services', fn ($q) => $q->where('services.id', $service->id))
-                ->whereHas('schedules', function ($q) use ($dayOfWeek, $bookingTime) {
-                    $q->where('day_of_week', $dayOfWeek)
-                      ->where('is_active', true)
-                      ->where('start_time', '<=', $bookingTime)
-                      ->where('end_time', '>', $bookingTime);
-                })
                 ->whereDoesntHave('bookings', function ($q) use ($validated) {
                     $q->where('booking_date', $validated['booking_date'])
                       ->where('booking_time', $validated['booking_time'])
@@ -177,28 +168,29 @@ class BookingWizardController extends Controller
             $validated['instructor_id'] = $matchingInstructor?->id;
         }
 
+        $donationAddon = (float) ($validated['donation_addon'] ?? 0);
         $finalPrice = 0;
         $paymentStatus = 'paid';
         $bookingStatus = 'new';
 
         switch ($service->price_type) {
             case 'FIXED':
-                $finalPrice = $service->price_value;
+                $finalPrice = $service->price_value + $donationAddon;
                 $paymentStatus = 'pending';
                 break;
             case 'DONATION':
-                $finalPrice = $service->min_donation;
+                $finalPrice = $service->min_donation + $donationAddon;
                 $paymentStatus = 'pending';
                 break;
             case 'RESERVATION':
-                $finalPrice = 0;
-                $paymentStatus = 'assessment_required';
+                $finalPrice = $donationAddon;
+                $paymentStatus = $donationAddon > 0 ? 'pending' : 'assessment_required';
                 break;
             case 'FREE':
             default:
-                $finalPrice = 0;
-                $paymentStatus = 'paid';
-                $bookingStatus = 'confirmed';
+                $finalPrice = $donationAddon;
+                $paymentStatus = $donationAddon > 0 ? 'pending' : 'paid';
+                $bookingStatus = $donationAddon > 0 ? 'new' : 'confirmed';
                 break;
         }
 
@@ -232,6 +224,7 @@ class BookingWizardController extends Controller
             'guardian_phone' => $validated['guardian_phone'] ?? null,
             'inquiry_description' => $validated['inquiry_description'] ?? null,
             'service_price' => $finalPrice,
+            'donation_addon' => $donationAddon,
             'price_type' => $service->price_type,
             'payment_status' => $paymentStatus,
             'booking_status' => $bookingStatus,

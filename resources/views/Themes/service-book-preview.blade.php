@@ -16,7 +16,7 @@
                         <h2 class="text-xl font-serif font-bold text-brand-teal">Your Chosen Service</h2>
 
                         <div class="border-b border-brand-gold/20 pb-6">
-                            <p class="text-xs font-bold text-brand-gold uppercase mb-1">Category: {{ $service->category }}</p>
+                            <p class="text-xs font-bold text-brand-gold uppercase mb-1">Category: {{ $service->category->name }}</p>
                             <h3 class="text-lg font-serif font-bold text-brand-teal mb-2">{{ $service->title }}</h3>
                             <p class="text-sm text-slate-600 text-justify">{{ $service->description }}</p>
 
@@ -35,7 +35,7 @@
                             </ul>
                         </div>
 
-                        <a href="{{ route('service', ['name' => $service->category]) }}" class="block w-full text-center border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-4 py-3 rounded-xl font-semibold text-sm transition">
+                        <a href="{{ route('service', ['name' => $service->category->slug]) }}" class="block w-full text-center border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-4 py-3 rounded-xl font-semibold text-sm transition">
                             Change Service Option
                         </a>
                     </div>
@@ -64,7 +64,7 @@
                             <div id="custom-fields-area" class="md:col-span-2 space-y-4">
                                 @if ($service->id === 'ISTEKHARA_DEFINITIVE' || $service->id === 'ISTEKHARA_GUIDANCE')
                                 <div id="mother-name-group">
-                                    <label for="mother-name" class="block text-xs font-bold text-brand-teal mb-1">Mother's Name (Required for {{ $service->category }})</label>
+                                    <label for="mother-name" class="block text-xs font-bold text-brand-teal mb-1">Mother's Name (Required for {{ $service->category->name }})</label>
                                     <input type="text" id="mother-name" name="motherName" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold">
                                 </div>
                                 @endif

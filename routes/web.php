@@ -10,6 +10,7 @@ use App\Http\Controllers\CustomerController as AdminCustomerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\CartController;
@@ -52,7 +53,6 @@ function resolveThemeView(string $key): string
 Route::get('/', fn () => view(resolveThemeView('index')))->name('home');
 Route::get('/about', fn () => view(resolveThemeView('about')))->name('about');
 Route::get('/contact', fn () => view(resolveThemeView('contact')))->name('contact');
-Route::get('/services', fn () => view(resolveThemeView('service')))->name('services');
 Route::get('/free-counselling', fn () => view(resolveThemeView('free-counselling')))->name('free.counselling');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/{product}', [ShopController::class, 'show'])->name('shop.show');
@@ -125,7 +125,10 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::resource('blog', BlogController::class);
     Route::resource('products', ProductController::class)->names('products');
     Route::resource('product-categories', ProductCategoryController::class)->names('productCategories');
+    Route::resource('service-categories', ServiceCategoryController::class)->names('serviceCategories');
     Route::resource('services', ServiceController::class)->names('services');
+    Route::post('services/{service}/schedules', [ServiceController::class, 'storeSchedule'])->name('services.schedules.store');
+    Route::delete('services/{service}/schedules/{schedule}', [ServiceController::class, 'destroySchedule'])->name('services.schedules.destroy');
     Route::post('verify-customer-email/{id}', [AdminCustomerController::class, 'verifyEmail'])->name('customers.verifyEmail');
     Route::resource('customers', AdminCustomerController::class)->names('customers');
 
@@ -138,8 +141,6 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::get('orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
     Route::put('orders/{order}', [\App\Http\Controllers\OrderController::class, 'update'])->name('orders.update');
     Route::resource('instructors', InstructorController::class)->names('instructors');
-    Route::post('instructors/{instructor}/schedules', [InstructorController::class, 'storeSchedule'])->name('instructors.schedules.store');
-    Route::delete('instructors/{instructor}/schedules/{schedule}', [InstructorController::class, 'destroySchedule'])->name('instructors.schedules.destroy');
 
     // Theme management
     Route::resource('themes', ThemeController::class)->names('themes');

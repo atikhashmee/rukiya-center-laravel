@@ -31,11 +31,6 @@ class Instructor extends Model
         return $this->belongsToMany(Service::class, 'instructor_service');
     }
 
-    public function schedules(): HasMany
-    {
-        return $this->hasMany(InstructorSchedule::class);
-    }
-
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);

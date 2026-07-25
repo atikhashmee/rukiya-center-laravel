@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ServiceStoreRequest;
 use App\Models\Service;
-use App\ServiceType;
+use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,7 +12,7 @@ class ServiceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Service::query();
+        $query = Service::with('category');
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -28,7 +28,7 @@ class ServiceController extends Controller
         }
 
         if ($request->filled('category')) {
-            $query->where('category', $request->category);
+            $query->where('category_id', $request->category);
         }
 
         if ($request->filled('assessment')) {
@@ -37,7 +37,7 @@ class ServiceController extends Controller
 
         $services = $query->orderBy('order', 'asc')->paginate(12)->withQueryString();
 
-        $categories = Service::distinct()->pluck('category')->filter()->values();
+        $categories = ServiceCategory::orderBy('name')->get(['id', 'name']);
 
         return Inertia::render('services/index', [
             'services' => $services,
@@ -51,10 +51,10 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        $serviceTypes = ServiceType::cases();
+        $serviceCategories = ServiceCategory::orderBy('name')->get();
 
         return Inertia::render('services/create', [
-            'serviceTypes' => $serviceTypes,
+            'serviceCategories' => $serviceCategories,
         ]);
     }
 
@@ -90,7 +90,7 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        $serviceTypes = ServiceType::cases();
+        $serviceCategories = ServiceCategory::orderBy('name')->get();
 
         $serviceData = $service->toArray();
         $serviceData['features'] = is_string($service->features)
@@ -99,10 +99,11 @@ class ServiceController extends Controller
         $serviceData['required_form_fields'] = is_string($service->required_form_fields)
             ? json_decode($service->required_form_fields, true)
             : $service->required_form_fields;
+        $serviceData['schedules'] = $service->schedules()->orderBy('day_of_week')->get();
 
         return Inertia::render('services/edit', [
             'service' => $serviceData,
-            'serviceTypes' => $serviceTypes,
+            'serviceCategories' => $serviceCategories,
         ]);
     }
 
@@ -119,7 +120,7 @@ class ServiceController extends Controller
         ]);
         $validated = $request->validate([
             'id_code' => 'required|string|max:255|unique:services,id_code,'.$service->id,
-            'category' => 'required|string|max:255',
+            'category_id' => 'required|exists:service_categories,id',
             'title' => 'required|string|max:255',
             'tagline' => 'nullable|string|max:500',
             'description' => 'nullable|string',
@@ -158,5 +159,27 @@ class ServiceController extends Controller
 
         return to_route('services.index')
             ->with('success', 'Service deleted successfully.');
+    }
+
+    public function storeSchedule(Request $request, Service $service)
+    {
+        $validated = $request->validate([
+            'day_of_week' => 'required|integer|between:0,6',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+        ]);
+
+        $validated['is_active'] = true;
+
+        $service->schedules()->create($validated);
+
+        return back()->with('success', 'Schedule added successfully.');
+    }
+
+    public function destroySchedule(Service $service, $scheduleId)
+    {
+        $service->schedules()->where('id', $scheduleId)->delete();
+
+        return back()->with('success', 'Schedule removed successfully.');
     }
 }

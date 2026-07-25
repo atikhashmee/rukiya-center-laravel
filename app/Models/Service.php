@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
@@ -17,7 +19,7 @@ class Service extends Model
      */
     protected $fillable = [
         'id_code',
-        'category',
+        'category_id',
         'title',
         'tagline',
         'description',
@@ -44,8 +46,18 @@ class Service extends Model
         ];
     }
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(ServiceCategory::class, 'category_id');
+    }
+
     public function instructors(): BelongsToMany
     {
         return $this->belongsToMany(Instructor::class, 'instructor_service');
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(ServiceSchedule::class);
     }
 }

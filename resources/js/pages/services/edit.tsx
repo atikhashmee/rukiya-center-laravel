@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppLayout from "@/layouts/app-layout";
 import { Head, router, useForm } from '@inertiajs/react';
 import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
 import { index, create, update } from "@/actions/App/Http/Controllers/ServiceController";
-import { CornerUpLeft, Save } from 'lucide-react';
+import { CornerUpLeft, Save, Trash2, PlusCircle } from 'lucide-react';
+
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
 const Button: React.FC<any> = ({ children, className = '', ...props }) => <button {...props} className={`px-4 py-2 rounded-lg font-medium transition-colors ${className}`}>{children}</button>;
@@ -32,7 +34,7 @@ type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
 
 interface ServiceOptionFormData {
     id_code: string;
-    category: string;
+    category_id: number | '';
     title: string;
     tagline: string;
     description: string;
@@ -48,14 +50,43 @@ interface ServiceOptionFormData {
     submit_button_text: string;
 }
 
-interface EditServiceOptionProps {
-    service: ServiceOptionFormData & { id: number };
-    serviceTypes: string[];
+interface Schedule {
+    id: number;
+    day_of_week: number;
+    start_time: string;
+    end_time: string;
+    is_active: boolean;
 }
 
-export default function Edit({ service, serviceTypes = [] }: EditServiceOptionProps) {
-    
+interface EditServiceOptionProps {
+    service: ServiceOptionFormData & { id: number; schedules: Schedule[] };
+    serviceCategories: { id: number; name: string; slug: string }[];
+}
+
+export default function Edit({ service, serviceCategories = [] }: EditServiceOptionProps) {
+
     const pageTitle = `Edit Service: ${service.title}`;
+
+    const [scheduleData, setScheduleData] = useState({
+        day_of_week: 1,
+        start_time: '09:00',
+        end_time: '17:00',
+    });
+    const [addingSchedule, setAddingSchedule] = useState(false);
+
+    const handleAddSchedule = (e: React.FormEvent) => {
+        e.preventDefault();
+        setAddingSchedule(true);
+        router.post(`/admin/services/${service.id}/schedules`, scheduleData, {
+            onFinish: () => setAddingSchedule(false),
+        });
+    };
+
+    const handleDeleteSchedule = (scheduleId: number) => {
+        if (confirm('Remove this schedule?')) {
+            router.delete(`/admin/services/${service.id}/schedules/${scheduleId}`);
+        }
+    };
 
     // Convert arrays to comma-separated strings for the form
     const initialFormData = {
@@ -179,22 +210,21 @@ export default function Edit({ service, serviceTypes = [] }: EditServiceOptionPr
 
                                 {/* Category */}
                                 <div>
-                                    <Label htmlFor="category">Category (Parent Service)</Label>
-                                    <Select 
-                                        value={data.category} 
-                                        onValueChange={(value: string) => setData('category', value)}
+                                    <Label htmlFor="category_id">Category</Label>
+                                    <Select
+                                        value={data.category_id}
+                                        onValueChange={(value: string) => setData('category_id', value ? Number(value) : '')}
                                     >
-                                        <SelectTrigger className={errors.category ? 'border-red-500' : ''}>
+                                        <SelectTrigger className={errors.category_id ? 'border-red-500' : ''}>
                                             <SelectValue placeholder="Select Category" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="counseling">Counseling</SelectItem>
-                                            <SelectItem value="rukiya">Rukiya</SelectItem>
-                                            <SelectItem value="istekhara">Istekhara</SelectItem>
-                                            <SelectItem value="other">Other</SelectItem>
+                                            {serviceCategories.map((cat) => (
+                                                <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
-                                    {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category}</p>}
+                                    {errors.category_id && <p className="text-xs text-red-500 mt-1">{errors.category_id}</p>}
                                 </div>
                             </div>
                         </div>
@@ -406,6 +436,54 @@ export default function Edit({ service, serviceTypes = [] }: EditServiceOptionPr
                             </Button>
                         </div>
                     </form>
+
+                    {/* Schedule Management */}
+                    <div className="p-6 border rounded-xl bg-white shadow-2xl">
+                        <h3 className="text-lg font-semibold text-indigo-700 mb-1">Weekly Availability</h3>
+                        <p className="text-sm text-gray-500 mb-4">Days and times customers can book this service, regardless of practitioner.</p>
+
+                        {service.schedules.length > 0 ? (
+                            <div className="space-y-3 mb-6">
+                                {service.schedules.map(schedule => (
+                                    <div key={schedule.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                        <div className="flex items-center gap-4">
+                                            <span className="font-medium text-sm text-gray-800">{DAYS[schedule.day_of_week]}</span>
+                                            <span className="text-sm text-gray-500">{schedule.start_time} — {schedule.end_time}</span>
+                                        </div>
+                                        <button type="button" onClick={() => handleDeleteSchedule(schedule.id)}
+                                            className="h-8 w-8 flex items-center justify-center rounded-lg text-white bg-red-600 hover:bg-red-700">
+                                            <Trash2 className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-gray-400 mb-6">No schedules set. Add availability below.</p>
+                        )}
+
+                        <form onSubmit={handleAddSchedule} className="flex flex-wrap items-end gap-4 p-4 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
+                            <div>
+                                <Label htmlFor="schedule_day">Day</Label>
+                                <select id="schedule_day" value={scheduleData.day_of_week} onChange={e => setScheduleData({ ...scheduleData, day_of_week: Number(e.target.value) })}
+                                    className="appearance-none border border-gray-300 p-2 rounded-lg bg-white focus:ring-indigo-500 focus:border-indigo-500">
+                                    {DAYS.map((day, i) => (
+                                        <option key={i} value={i}>{day}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <Label htmlFor="schedule_start">Start Time</Label>
+                                <Input id="schedule_start" type="time" value={scheduleData.start_time} onChange={(e: any) => setScheduleData({ ...scheduleData, start_time: e.target.value })} />
+                            </div>
+                            <div>
+                                <Label htmlFor="schedule_end">End Time</Label>
+                                <Input id="schedule_end" type="time" value={scheduleData.end_time} onChange={(e: any) => setScheduleData({ ...scheduleData, end_time: e.target.value })} />
+                            </div>
+                            <Button type="submit" disabled={addingSchedule} className="bg-blue-600 hover:bg-blue-700 text-white">
+                                <PlusCircle className="mr-2 h-4 w-4 inline" /> {addingSchedule ? 'Adding...' : 'Add'}
+                            </Button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </AppLayout>

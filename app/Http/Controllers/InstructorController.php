@@ -33,7 +33,7 @@ class InstructorController extends Controller
 
     public function create()
     {
-        $services = Service::orderBy('category')->orderBy('title')->get();
+        $services = Service::with('category')->orderBy('title')->get();
 
         return Inertia::render('instructors/create', [
             'services' => $services,
@@ -69,8 +69,8 @@ class InstructorController extends Controller
 
     public function edit(Instructor $instructor)
     {
-        $instructor->load('services', 'schedules');
-        $services = Service::orderBy('category')->orderBy('title')->get();
+        $instructor->load('services');
+        $services = Service::with('category')->orderBy('title')->get();
 
         return Inertia::render('instructors/edit', [
             'instructor' => $instructor,
@@ -111,27 +111,5 @@ class InstructorController extends Controller
 
         return redirect()->route('instructors.index')
             ->with('success', 'Instructor deleted successfully.');
-    }
-
-    public function storeSchedule(Request $request, Instructor $instructor)
-    {
-        $validated = $request->validate([
-            'day_of_week' => 'required|integer|between:0,6',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-        ]);
-
-        $validated['is_active'] = true;
-
-        $instructor->schedules()->create($validated);
-
-        return back()->with('success', 'Schedule added successfully.');
-    }
-
-    public function destroySchedule(Instructor $instructor, $scheduleId)
-    {
-        $instructor->schedules()->where('id', $scheduleId)->delete();
-
-        return back()->with('success', 'Schedule removed successfully.');
     }
 }

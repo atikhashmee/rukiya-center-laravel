@@ -18,7 +18,7 @@ interface ServiceOption {
     id: number;
     serviceId: number;
     id_code: string;
-    category: string;
+    category: { id: number; name: string; slug: string } | null;
     title: string;
     tagline: string;
     card_color: string;
@@ -39,7 +39,7 @@ interface PaginatedServices {
 
 interface ServiceOptionsIndexProps {
     services: PaginatedServices;
-    categories: string[];
+    categories: { id: number; name: string }[];
     filters: Record<string, string>;
 }
 
@@ -126,7 +126,7 @@ export default function Index({ services, categories, filters }: ServiceOptionsI
                             {
                                 key: 'category',
                                 label: 'All Categories',
-                                options: categories.map(c => ({ label: c.charAt(0).toUpperCase() + c.slice(1), value: c })),
+                                options: categories.map(c => ({ label: c.name, value: String(c.id) })),
                             },
                             {
                                 key: 'assessment',
@@ -181,8 +181,8 @@ export default function Index({ services, categories, filters }: ServiceOptionsI
                                                 )}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <span className="capitalize text-xs font-medium text-gray-700 bg-gray-200 px-2 py-0.5 rounded-full shadow-inner">
-                                                    {option.category}
+                                                <span className="text-xs font-medium text-gray-700 bg-gray-200 px-2 py-0.5 rounded-full shadow-inner">
+                                                    {option.category?.name ?? 'Uncategorized'}
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-center flex space-x-2 justify-center">

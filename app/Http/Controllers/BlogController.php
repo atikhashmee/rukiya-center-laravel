@@ -16,7 +16,7 @@ class BlogController extends Controller
     {
         $posts = BlogPost::with(['comments' => function ($query) {
             $query->latest()->limit(5);
-        }])->where('status', 'published')->latest()->get(); // ->paginate(10);
+        }])->latest()->get(); // ->paginate(10);
 
         return Inertia::render('blog/index', [
             'posts' => $posts,

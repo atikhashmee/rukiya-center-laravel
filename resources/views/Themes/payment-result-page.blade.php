@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="flex flex-col space-y-3">
-                    <a href="{{ route('services') }}" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow">
+                    <a href="{{ route('wizard.index') }}" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow">
                         Try Payment Again
                     </a>
                     <a href="{{ route('contact') }}" class="w-full border border-slate-200 text-slate-600 px-6 py-3 rounded-xl font-medium text-sm hover:bg-slate-50 transition">

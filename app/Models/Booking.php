@@ -36,6 +36,7 @@ class Booking extends Model
         'guardian_relationship',
         'guardian_phone',
         'service_price',
+        'donation_addon',
         'price_type',
         'payment_status',
         'booking_status',

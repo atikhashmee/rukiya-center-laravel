@@ -23,6 +23,7 @@ import customer from '@/actions/App/Http/Controllers/CustomerController';
 import booking from '@/actions/App/Http/Controllers/BookingController';
 import themeIndex from '@/actions/App/Http/Controllers/ThemeController';
 import productCategoryIndex from '@/actions/App/Http/Controllers/ProductCategoryController';
+import serviceCategoryIndex from '@/actions/App/Http/Controllers/ServiceCategoryController';
 
 const mainNavItems: NavItem[] = [
     {
@@ -46,8 +47,12 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Service',
-        href: serviceIndex.index(),
+        href: '#',
         icon: Kanban,
+        items: [
+            { title: 'Services', href: serviceIndex.index(), icon: Kanban },
+            { title: 'Categories', href: serviceCategoryIndex.index(), icon: FolderTree },
+        ],
     },
     {
         title: 'Customers',

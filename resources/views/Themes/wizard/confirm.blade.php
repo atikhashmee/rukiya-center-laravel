@@ -3,25 +3,13 @@
 @section('content')
     @include('Themes.layouts.nav')
 
-    <section class="relative py-20 bg-brand-teal">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-            <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">Book an Appointment</h1>
-            <p class="text-slate-300 text-sm sm:text-base">Step 5 — Complete your booking</p>
-            <div class="flex items-center justify-center gap-2 pt-4">
-                <span class="w-8 h-8 rounded-full bg-white/30 text-white flex items-center justify-center text-sm font-bold">✓</span>
-                <span class="w-8 h-0.5 bg-brand-gold"></span>
-                <span class="w-8 h-8 rounded-full bg-white/30 text-white flex items-center justify-center text-sm font-bold">✓</span>
-                <span class="w-8 h-0.5 bg-brand-gold"></span>
-                <span class="w-8 h-8 rounded-full bg-white/30 text-white flex items-center justify-center text-sm font-bold">✓</span>
-                <span class="w-8 h-0.5 bg-brand-gold"></span>
-                <span class="w-8 h-8 rounded-full bg-white/30 text-white flex items-center justify-center text-sm font-bold">✓</span>
-                <span class="w-8 h-0.5 bg-brand-gold"></span>
-                <span class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center text-sm font-bold">5</span>
-            </div>
-        </div>
-    </section>
+    @include('Themes.wizard.partials.hero', [
+        'step' => 5,
+        'title' => 'Book an Appointment',
+        'subtitle' => 'Just a few details and you\'re booked.',
+    ])
 
-    <main class="py-16 bg-white">
+    <main class="py-16 bg-slate-50">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
             @if($errors->any())
@@ -37,40 +25,48 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <!-- Booking Summary Sidebar -->
                 <div class="lg:col-span-1">
-                    <div class="bg-brand-cream/50 border border-brand-gold/20 p-6 rounded-2xl space-y-4 sticky top-24">
-                        <h2 class="text-lg font-serif font-bold text-brand-teal">Your Appointment</h2>
+                    <div class="bg-brand-teal text-white p-6 rounded-2xl space-y-4 sticky top-24 shadow-lg">
+                        <h2 class="text-lg font-serif font-bold">Your Appointment</h2>
                         <div class="space-y-3 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-slate-500">Service:</span>
-                                <span class="font-semibold text-brand-teal text-right">{{ $service->title }}</span>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-slate-300">Service</span>
+                                <span class="font-semibold text-right">{{ $service->title }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500">Category:</span>
-                                <span class="font-semibold text-brand-teal capitalize">{{ $service->category }}</span>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-slate-300">Category</span>
+                                <span class="font-semibold">{{ $service->category->name }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500">Instructor:</span>
-                                <span class="font-semibold text-brand-teal">{{ $instructor->name }}</span>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-slate-300">Practitioner</span>
+                                <span class="font-semibold">{{ $instructor->name }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500">Date:</span>
-                                <span class="font-semibold text-brand-teal">{{ \Carbon\Carbon::parse(request('booking_date'))->format('l, M j, Y') }}</span>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-slate-300">Date</span>
+                                <span class="font-semibold">{{ \Carbon\Carbon::parse(request('booking_date'))->format('l, M j, Y') }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-500">Time:</span>
-                                <span class="font-semibold text-brand-teal">{{ \Carbon\Carbon::parse(request('booking_time'))->format('g:i A') }}</span>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-slate-300">Time</span>
+                                <span class="font-semibold">{{ \Carbon\Carbon::parse(request('booking_time'))->format('g:i A') }}</span>
                             </div>
-                            <div class="border-t border-brand-gold/20 pt-3">
+                            @if($donationAddon > 0)
+                                <div class="flex justify-between gap-4">
+                                    <span class="text-slate-300">Gift of Ruqyah</span>
+                                    <span class="font-semibold">£{{ number_format($donationAddon, 2) }}</span>
+                                </div>
+                            @endif
+                            <div class="border-t border-white/15 pt-3">
                                 <div class="flex justify-between items-center">
-                                    <span class="font-semibold text-slate-600">Total:</span>
+                                    <span class="font-semibold text-slate-300">Total</span>
                                     @if($service->price_type === 'FIXED')
-                                        <span class="text-lg font-bold text-brand-teal">£{{ number_format($service->price_value, 2) }}</span>
+                                        <span class="text-xl font-serif font-bold text-brand-gold">£{{ number_format($service->price_value + $donationAddon, 2) }}</span>
                                     @elseif($service->price_type === 'DONATION')
-                                        <span class="text-lg font-bold text-brand-teal">Min. £{{ number_format($service->min_donation, 2) }}</span>
-                                    @elseif($service->price_type === 'RESERVATION')
-                                        <span class="text-sm font-bold text-yellow-600">Assessment Required</span>
+                                        <span class="text-xl font-serif font-bold text-brand-gold">Min. £{{ number_format($service->min_donation + $donationAddon, 2) }}</span>
+                                    @elseif($service->price_type === 'RESERVATION' && $donationAddon <= 0)
+                                        <span class="text-sm font-bold text-yellow-400">Assessment Required</span>
+                                    @elseif($service->price_type === 'FREE' && $donationAddon <= 0)
+                                        <span class="text-xl font-serif font-bold text-green-400">Free</span>
                                     @else
-                                        <span class="text-lg font-bold text-green-700">Free</span>
+                                        <span class="text-xl font-serif font-bold text-brand-gold">£{{ number_format($donationAddon, 2) }}</span>
                                     @endif
                                 </div>
                             </div>
@@ -80,27 +76,28 @@
 
                 <!-- Main Form -->
                 <div class="lg:col-span-2">
-                    <form method="POST" action="{{ route('wizard.store') }}" class="space-y-8">
+                    <form method="POST" action="{{ route('wizard.store') }}" class="space-y-6">
                         @csrf
                         <input type="hidden" name="service_id" value="{{ $service->id }}">
                         <input type="hidden" name="instructor_id" value="{{ $instructor->id }}">
                         <input type="hidden" name="booking_date" value="{{ request('booking_date') }}">
                         <input type="hidden" name="booking_time" value="{{ request('booking_time') }}">
+                        <input type="hidden" name="donation_addon" value="{{ $donationAddon }}">
 
                         <!-- Section 1: Your Information -->
-                        <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6 space-y-5">
-                            <h3 class="text-lg font-serif font-bold text-brand-teal">Your Information</h3>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
+                            @include('Themes.wizard.partials.section-header', ['n' => 1, 'title' => 'Your Information'])
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">First Name <span class="text-brand-crimson">*</span></label>
                                     <input type="text" name="first_name" required value="{{ old('first_name') }}" placeholder="First name"
-                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                     @error('first_name') <p class="text-brand-crimson text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">Last Name <span class="text-brand-crimson">*</span></label>
                                     <input type="text" name="last_name" required value="{{ old('last_name') }}" placeholder="Last name"
-                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                     @error('last_name') <p class="text-brand-crimson text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
@@ -117,22 +114,22 @@
                                             <option value="TR" {{ old('phone_country') == 'TR' ? 'selected' : '' }}>🇹🇷 +90</option>
                                         </select>
                                         <input type="tel" name="phone_number" required value="{{ old('phone_number') }}" placeholder="Phone number"
-                                            class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
+                                            class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                     </div>
                                     @error('phone_number') <p class="text-brand-crimson text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">Email <span class="text-brand-crimson">*</span></label>
                                     <input type="email" name="email" required value="{{ old('email') }}" placeholder="your@email.com"
-                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                     @error('email') <p class="text-brand-crimson text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                             </div>
                         </div>
 
                         <!-- Section 2: More About You -->
-                        <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6 space-y-5">
-                            <h3 class="text-lg font-serif font-bold text-brand-teal">More About You</h3>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
+                            @include('Themes.wizard.partials.section-header', ['n' => 2, 'title' => 'More About You'])
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">Gender <span class="text-brand-crimson">*</span></label>
@@ -160,7 +157,7 @@
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">Ethnic Origin <span class="text-brand-crimson">*</span></label>
                                     <input type="text" name="ethnic_origin" required value="{{ old('ethnic_origin') }}" placeholder="e.g. Arab, South Asian, Black African..."
-                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">Age Range <span class="text-brand-crimson">*</span></label>
@@ -178,12 +175,14 @@
                             </div>
                         </div>
 
-                        <!-- Section 3: Mahram / Guardian -->
-                        <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6 space-y-5">
-                            <div>
-                                <h3 class="text-lg font-serif font-bold text-brand-teal">Who Will Accompany You? (Mahram / Guardian)</h3>
-                                <p class="text-xs text-slate-500 mt-1">We DO NOT see people alone — you must bring someone with you to the appointment otherwise we will NOT see you.</p>
-                            </div>
+                        <!-- Section 3: Mahram / Guardian (highlighted — policy-critical) -->
+                        <div class="bg-white border-2 border-brand-gold/50 rounded-2xl p-6 sm:p-7 relative">
+                            <span class="absolute -top-3 left-6 bg-brand-crimson text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">Required policy</span>
+                            @include('Themes.wizard.partials.section-header', [
+                                'n' => 3,
+                                'title' => 'Who Will Accompany You?',
+                                'hint' => 'We do NOT see clients alone — you must bring a Mahram/Guardian with you, or your appointment will not go ahead.',
+                            ])
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">Gender <span class="text-brand-crimson">*</span></label>
@@ -212,11 +211,12 @@
                         </div>
 
                         <!-- Section 4: Symptoms -->
-                        <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6 space-y-5">
-                            <div>
-                                <h3 class="text-lg font-serif font-bold text-brand-teal">Symptoms</h3>
-                                <p class="text-xs text-slate-500 mt-1">Please tick all the relevant symptoms</p>
-                            </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
+                            @include('Themes.wizard.partials.section-header', [
+                                'n' => 4,
+                                'title' => 'Symptoms',
+                                'hint' => 'Tap all that apply.',
+                            ])
                             @php
                                 $symptomOptions = [
                                     'Regular nightmares',
@@ -240,12 +240,11 @@
                                     'Social Services involved in some aspect',
                                 ];
                             @endphp
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex flex-wrap gap-2 mb-5">
                                 @foreach($symptomOptions as $symptom)
-                                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-brand-cream/50 transition cursor-pointer">
-                                        <input type="checkbox" name="symptoms[]" value="{{ $symptom }}" {{ in_array($symptom, old('symptoms', [])) ? 'checked' : '' }}
-                                            class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-teal focus:ring-brand-gold">
-                                        <span class="text-sm text-slate-700">{{ $symptom }}</span>
+                                    <label class="cursor-pointer">
+                                        <input type="checkbox" name="symptoms[]" value="{{ $symptom }}" {{ in_array($symptom, old('symptoms', [])) ? 'checked' : '' }} class="peer sr-only">
+                                        <span class="inline-block text-sm px-3.5 py-2 rounded-full border border-slate-200 text-slate-600 peer-checked:bg-brand-teal peer-checked:text-white peer-checked:border-brand-teal transition">{{ $symptom }}</span>
                                     </label>
                                 @endforeach
                             </div>
@@ -257,11 +256,12 @@
                         </div>
 
                         <!-- Section 5: How did you find us -->
-                        <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6 space-y-5">
-                            <div>
-                                <h3 class="text-lg font-serif font-bold text-brand-teal">How Did You Find Us?</h3>
-                                <p class="text-xs text-slate-500 mt-1">Please select at least one</p>
-                            </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
+                            @include('Themes.wizard.partials.section-header', [
+                                'n' => 5,
+                                'title' => 'How Did You Find Us?',
+                                'hint' => 'Select at least one.',
+                            ])
                             @php
                                 $foundViaOptions = [
                                     'Search engine',
@@ -275,23 +275,23 @@
                                     'Returning patient',
                                 ];
                             @endphp
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 @foreach($foundViaOptions as $option)
-                                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-brand-cream/50 transition cursor-pointer">
-                                        <input type="checkbox" name="found_via[]" value="{{ $option }}" {{ in_array($option, old('found_via', [])) ? 'checked' : '' }}
-                                            class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-teal focus:ring-brand-gold">
-                                        <span class="text-sm text-slate-700">{{ $option }}</span>
+                                    <label class="cursor-pointer">
+                                        <input type="checkbox" name="found_via[]" value="{{ $option }}" {{ in_array($option, old('found_via', [])) ? 'checked' : '' }} class="peer sr-only">
+                                        <span class="inline-block text-sm px-3.5 py-2 rounded-full border border-slate-200 text-slate-600 peer-checked:bg-brand-teal peer-checked:text-white peer-checked:border-brand-teal transition">{{ $option }}</span>
                                     </label>
                                 @endforeach
                             </div>
                         </div>
 
                         <!-- Section 6: First Appointment -->
-                        <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6 space-y-5">
-                            <div>
-                                <h3 class="text-lg font-serif font-bold text-brand-teal">Your Visit</h3>
-                                <p class="text-xs text-slate-500 mt-1">If this is your first appointment we may move your appointment with another practitioner if we feel it will be more appropriate.</p>
-                            </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
+                            @include('Themes.wizard.partials.section-header', [
+                                'n' => 6,
+                                'title' => 'Your Visit',
+                                'hint' => 'If this is your first appointment we may move you to another practitioner if we feel it will be more appropriate.',
+                            ])
                             @php
                                 $visitOptions = [
                                     'Yes',
@@ -301,20 +301,19 @@
                                     'Raaqi visited home',
                                 ];
                             @endphp
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex flex-wrap gap-2">
                                 @foreach($visitOptions as $option)
-                                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-brand-cream/50 transition cursor-pointer">
-                                        <input type="radio" name="is_first_appointment" value="{{ $option }}" {{ old('is_first_appointment') == $option ? 'checked' : '' }}
-                                            class="mt-0.5 h-4 w-4 border-slate-300 text-brand-teal focus:ring-brand-gold">
-                                        <span class="text-sm text-slate-700">{{ $option }}</span>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="is_first_appointment" value="{{ $option }}" {{ old('is_first_appointment') == $option ? 'checked' : '' }} class="peer sr-only">
+                                        <span class="inline-block text-sm px-3.5 py-2 rounded-full border border-slate-200 text-slate-600 peer-checked:bg-brand-gold peer-checked:text-white peer-checked:border-brand-gold transition">{{ $option }}</span>
                                     </label>
                                 @endforeach
                             </div>
                         </div>
 
                         <!-- Section 7: Inquiry Description -->
-                        <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6 space-y-5">
-                            <h3 class="text-lg font-serif font-bold text-brand-teal">Tell Us More</h3>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
+                            @include('Themes.wizard.partials.section-header', ['n' => 7, 'title' => 'Tell Us More'])
                             <div>
                                 <label class="block text-xs font-bold text-brand-teal mb-1">Describe Your Inquiry</label>
                                 <textarea name="inquiry_description" rows="4" placeholder="Please share any additional information you'd like us to know..."
@@ -323,17 +322,15 @@
                         </div>
 
                         <!-- Section 8: Consent -->
-                        <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6">
-                            <label class="flex items-start gap-3 cursor-pointer">
-                                <input type="checkbox" name="consent_updates" value="1" {{ old('consent_updates') ? 'checked' : '' }}
-                                    class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-teal focus:ring-brand-gold">
-                                <span class="text-sm text-slate-600">I consent to receive DK Healing Centre updates and promotions by email, SMS, phone, and WhatsApp.</span>
-                            </label>
-                        </div>
+                        <label class="flex items-start gap-3 cursor-pointer px-1">
+                            <input type="checkbox" name="consent_updates" value="1" {{ old('consent_updates') ? 'checked' : '' }}
+                                class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-teal focus:ring-brand-gold">
+                            <span class="text-sm text-slate-600">I consent to receive DK Healing Centre updates and promotions by email, SMS, phone, and WhatsApp.</span>
+                        </label>
 
                         <!-- Submit Button -->
                         <div class="text-center pt-4">
-                            @if($service->price_type !== 'FREE' && $service->price_type !== 'RESERVATION')
+                            @if($service->price_type !== 'FREE' && $service->price_type !== 'RESERVATION' || $donationAddon > 0)
                                 <button type="submit" class="w-full sm:w-auto bg-brand-gold hover:bg-brand-goldDark text-white px-12 py-4 rounded-full font-semibold text-sm transition shadow">
                                     Continue to Payment →
                                 </button>

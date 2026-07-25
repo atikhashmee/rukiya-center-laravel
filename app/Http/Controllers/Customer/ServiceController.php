@@ -13,7 +13,7 @@ class ServiceController extends Controller
 {
     public function index($name, Request $request)
     {
-        $services = Service::where('category', $name)->get();
+        $services = Service::whereHas('category', fn ($q) => $q->where('slug', $name))->get();
 
         return view('Themes.service-detail', [
             'services' => $services,

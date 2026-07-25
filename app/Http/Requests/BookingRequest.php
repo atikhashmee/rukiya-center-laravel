@@ -25,11 +25,11 @@ class BookingRequest extends FormRequest
 
         $service = Service::find($this->input('service_id'));
 
-        if ($service) {
-            if (str_contains($service->category, 'istekhara')) {
+        if ($service && $service->category) {
+            if (str_contains($service->category->slug, 'istekhara')) {
                 $rules['mother_name'][] = 'required';
             }
-            if ($service->category === 'rukiya') {
+            if ($service->category->slug === 'rukiya') {
                 $rules['phone_number'][] = 'required';
             }
         }
