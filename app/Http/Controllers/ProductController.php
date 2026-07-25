@@ -63,12 +63,12 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // 'category_id' => 'required|integer|exists:product_categories,id',
-            // 'name' => 'required|string|max:255',
+            'category_id' => 'required|integer|exists:product_categories,id',
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            // 'sku' => 'required|string|unique:products|max:50',
-            // 'price' => 'required|numeric|min:0.01',
-            // 'stock_quantity' => 'required|integer|min:0',
+            'sku' => 'required|string|unique:products|max:50',
+            'price' => 'required|numeric|min:0.01',
+            'stock_quantity' => 'required|integer|min:0',
             'is_active' => 'nullable|boolean',
             'images' => 'nullable|array|max:5', // Max 5 images per product
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5000',
@@ -80,12 +80,12 @@ class ProductController extends Controller
             // 3. Create Product
 
             $product = Product::create([
-                'category_id' => $validated['category_id'] ?? '1',
-                'name' => $validated['name'] ?? 'billu',
-                'description' => $validated['description'],
-                'sku' => $validated['sku'] ?? 'b-2343',
-                'price' => $validated['price'] ?? 1230,
-                'stock_quantity' => $validated['stock_quantity'] ?? 120,
+                'category_id' => $validated['category_id'],
+                'name' => $validated['name'],
+                'description' => $validated['description'] ?? null,
+                'sku' => $validated['sku'],
+                'price' => $validated['price'],
+                'stock_quantity' => $validated['stock_quantity'],
                 'is_active' => $validated['is_active'] ?? true,
             ]);
 
@@ -149,7 +149,7 @@ class ProductController extends Controller
 
         // 1. Validation
         $validated = $request->validate([
-            'category_id' => 'sometimes|required|integer|exists:categories,id',
+            'category_id' => 'sometimes|required|integer|exists:product_categories,id',
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
 
