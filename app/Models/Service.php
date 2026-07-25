@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Service extends Model
 {
@@ -41,5 +42,10 @@ class Service extends Model
             'min_donation' => 'decimal:2',
             'requires_custom_assessment' => 'boolean',
         ];
+    }
+
+    public function instructors(): BelongsToMany
+    {
+        return $this->belongsToMany(Instructor::class, 'instructor_service');
     }
 }

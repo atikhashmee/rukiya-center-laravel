@@ -16,6 +16,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\BookingWizardController;
 use App\Models\Theme;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -59,7 +61,30 @@ Route::put('/cart', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart', [CartController::class, 'remove'])->name('cart.remove');
 Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::post('/cart/checkout', [CartController::class, 'placeOrder'])->name('cart.placeOrder');
 Route::get('service/{name}', [CustomerController::class, 'index'])->name('service');
+
+// Booking Wizard (no auth required)
+Route::prefix('book')->name('wizard.')->group(function () {
+    Route::get('/', [BookingWizardController::class, 'index'])->name('index');
+    Route::get('/service/{category}', [BookingWizardController::class, 'selectService'])->name('service');
+    Route::get('/instructor/{serviceId}', [BookingWizardController::class, 'selectInstructor'])->name('instructor');
+    Route::get('/schedule/{serviceId}/{instructorId}', [BookingWizardController::class, 'selectSchedule'])->name('schedule');
+    Route::get('/confirm', [BookingWizardController::class, 'confirm'])->name('confirm');
+    Route::post('/store', [BookingWizardController::class, 'store'])->name('store');
+    Route::get('/completed', [BookingWizardController::class, 'confirmation'])->name('confirmation');
+    Route::get('/pending', [BookingWizardController::class, 'pending'])->name('pending');
+
+    // Public payment routes (no auth required)
+    Route::prefix('payment')->name('payment.')->group(function () {
+        Route::get('/', [PaymentController::class, 'checkout'])->name('checkout');
+        Route::post('/process', [PaymentController::class, 'processPayment'])->name('process');
+        Route::get('/success', [PaymentController::class, 'paymentSuccess'])->name('success');
+        Route::get('/failed', [PaymentController::class, 'paymentFailed'])->name('failed');
+        Route::post('/stripe/webhook', [PaymentController::class, 'handleWebhook'])->name('stripe.webhook');
+    });
+});
 
 Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -79,7 +104,6 @@ Route::prefix('customer')->name('customer.')->group(function () {
         // start payment section
         Route::get('/payment', [PaymentController::class, 'checkout'])->name('checkout');
         Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('payment.process');
-        Route::post('/stripe/webhook', [PaymentController::class, 'handleWebhook'])->name('stripe.webhook');
 
         Route::get('/payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
         Route::get('/payment-failed', [PaymentController::class, 'paymentFailed'])->name('payment.failed');
@@ -109,6 +133,13 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::post('bookings-updateStatus', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
     Route::resource('bookings', BookingController::class)->names('bookings');
     Route::resource('users', UserController::class)->names('users');
+
+    Route::get('orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
+    Route::put('orders/{order}', [\App\Http\Controllers\OrderController::class, 'update'])->name('orders.update');
+    Route::resource('instructors', InstructorController::class)->names('instructors');
+    Route::post('instructors/{instructor}/schedules', [InstructorController::class, 'storeSchedule'])->name('instructors.schedules.store');
+    Route::delete('instructors/{instructor}/schedules/{schedule}', [InstructorController::class, 'destroySchedule'])->name('instructors.schedules.destroy');
 
     // Theme management
     Route::resource('themes', ThemeController::class)->names('themes');

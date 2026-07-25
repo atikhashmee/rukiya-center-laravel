@@ -13,7 +13,7 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Rss, PackageSearch, Kanban, User, Book, MailSearchIcon, Palette, FolderTree } from 'lucide-react';
+import { LayoutGrid, Rss, PackageSearch, Kanban, User, Book, MailSearchIcon, Palette, FolderTree, GraduationCap, ShoppingCart } from 'lucide-react';
 import AppLogo from './app-logo';
 import {index} from '@/actions/App/Http/Controllers/BlogController';
 import productIndex from '@/actions/App/Http/Controllers/ProductController';
@@ -58,6 +58,16 @@ const mainNavItems: NavItem[] = [
         title: 'Bookings',
         href: booking.index(),
         icon: Book,
+    },
+    {
+        title: 'Orders',
+        href: '/admin/orders',
+        icon: ShoppingCart,
+    },
+    {
+        title: 'Instructors',
+        href: '/admin/instructors',
+        icon: GraduationCap,
     },
     {
         title: 'Users',

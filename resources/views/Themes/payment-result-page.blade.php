@@ -30,10 +30,7 @@
                 </div>
 
                 <div class="flex flex-col space-y-3">
-                    <a href="{{ route('customer.mybooking') }}" class="w-full bg-brand-teal hover:bg-brand-navy text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow">
-                        View Confirmed Booking
-                    </a>
-                    <a href="{{ route('home') }}" class="w-full border border-slate-200 text-slate-600 px-6 py-3 rounded-xl font-medium text-sm hover:bg-slate-50 transition">
+                    <a href="{{ route('home') }}" class="w-full bg-brand-teal hover:bg-brand-navy text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow">
                         Back to Home
                     </a>
                 </div>

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function index()
+    private function getCartData()
     {
         $cart = session()->get('cart', []);
         $products = collect();
@@ -27,7 +28,62 @@ class CartController extends Controller
                 });
         }
 
-        return view('Themes.cart', compact('products', 'total'));
+        return ['products' => $products, 'total' => $total, 'cart' => $cart];
+    }
+
+    public function index()
+    {
+        $data = $this->getCartData();
+        return view('Themes.cart', ['products' => $data['products'], 'total' => $data['total']]);
+    }
+
+    public function checkout()
+    {
+        $data = $this->getCartData();
+        if ($data['products']->isEmpty()) {
+            return redirect()->route('cart')->with('error', 'Your cart is empty.');
+        }
+        return view('Themes.checkout-form', ['products' => $data['products'], 'total' => $data['total']]);
+    }
+
+    public function placeOrder(Request $request)
+    {
+        $data = $this->getCartData();
+        if ($data['products']->isEmpty()) {
+            return redirect()->route('cart')->with('error', 'Your cart is empty.');
+        }
+
+        $request->validate([
+            'email' => 'required|email|max:255',
+            'full_name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:50',
+        ]);
+
+        $order = Order::create([
+            'order_number' => 'ORD-' . time(),
+            'email' => $request->email,
+            'full_name' => $request->full_name,
+            'phone' => $request->phone,
+            'subtotal' => $data['total'],
+            'total' => $data['total'],
+            'status' => 'pending',
+            'payment_status' => 'pending',
+        ]);
+
+        foreach ($data['products'] as $product) {
+            $order->items()->create([
+                'product_id' => $product->id,
+                'product_name' => $product->name,
+                'price' => $product->price,
+                'quantity' => $product->quantity,
+                'subtotal' => $product->line_total,
+            ]);
+        }
+
+        session()->forget('cart');
+
+        return redirect()->route('wizard.payment.checkout', ['order' => $order->id])
+            ->with('success', 'Order created! Please complete payment.');
     }
 
     public function add(Request $request)

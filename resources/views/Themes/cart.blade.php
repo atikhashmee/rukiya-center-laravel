@@ -98,7 +98,9 @@
                             <div class="text-2xl font-bold text-brand-teal">
                                 Total: <span class="text-brand-goldDark">£{{ number_format($total, 2) }}</span>
                             </div>
-                            <p class="text-xs text-slate-500">Checkout coming soon</p>
+                            <a href="{{ route('cart.checkout') }}" class="inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full font-semibold text-sm transition shadow">
+                                Proceed to Checkout &rarr;
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -53,7 +53,7 @@
                                 </li>
                             @endforeach
                         </ul>
-                        <a href="{{ route('customer.book.preview', ['service' => $service->id]) }}" class="block w-full text-center bg-brand-gold hover:bg-brand-goldDark text-white px-4 py-3 rounded-xl font-semibold text-sm transition shadow">
+                        <a href="{{ route('wizard.instructor', ['serviceId' => $service->id]) }}" class="block w-full text-center bg-brand-gold hover:bg-brand-goldDark text-white px-4 py-3 rounded-xl font-semibold text-sm transition shadow">
                             {{ $service->submit_button_text }}
                         </a>
                     </div>

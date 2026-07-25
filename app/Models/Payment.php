@@ -25,10 +25,14 @@ class Payment extends Model
         'response_payload' => 'array',
     ];
 
-    // Relation: each payment belongs to a user
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function payable()
+    {
+        return $this->morphTo('order', 'order_type', 'order_id');
     }
 
     public function booking()
