@@ -27,18 +27,26 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function CreateInstructor({ services }: Props) {
     const [data, setData] = React.useState<{
         name: string;
+        title: string;
         email: string;
         phone: string;
         bio: string;
         languages: string;
+        experience: string;
+        location: string;
+        appointment_type: string;
         is_active: boolean;
         service_ids: number[];
     }>({
         name: '',
+        title: '',
         email: '',
         phone: '',
         bio: '',
         languages: '',
+        experience: '',
+        location: '',
+        appointment_type: '',
         is_active: true,
         service_ids: [],
     });
@@ -90,6 +98,11 @@ export default function CreateInstructor({ services }: Props) {
                                     {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                                 </div>
                                 <div>
+                                    <Label className="text-sm font-medium text-gray-700">Title</Label>
+                                    <Input value={data.title} onChange={e => setData(prev => ({ ...prev, title: e.target.value }))} className="mt-1" placeholder="e.g. Senior Imam & Ruqyah Practitioner" />
+                                    {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
+                                </div>
+                                <div>
                                     <Label className="text-sm font-medium text-gray-700">Email</Label>
                                     <Input type="email" value={data.email} onChange={e => setData(prev => ({ ...prev, email: e.target.value }))} className="mt-1" placeholder="instructor@example.com" />
                                     {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
@@ -115,6 +128,24 @@ export default function CreateInstructor({ services }: Props) {
                                 <Input value={data.languages} onChange={e => setData(prev => ({ ...prev, languages: e.target.value }))} className="mt-1" placeholder="English, Arabic, Bengali, Urdu" />
                                 {errors.languages && <p className="text-xs text-red-500 mt-1">{errors.languages}</p>}
                             </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <Label className="text-sm font-medium text-gray-700">Experience</Label>
+                                    <Input value={data.experience} onChange={e => setData(prev => ({ ...prev, experience: e.target.value }))} className="mt-1" placeholder="30+ Years Experience" />
+                                    {errors.experience && <p className="text-xs text-red-500 mt-1">{errors.experience}</p>}
+                                </div>
+                                <div>
+                                    <Label className="text-sm font-medium text-gray-700">Location</Label>
+                                    <Input value={data.location} onChange={e => setData(prev => ({ ...prev, location: e.target.value }))} className="mt-1" placeholder="UK Based" />
+                                    {errors.location && <p className="text-xs text-red-500 mt-1">{errors.location}</p>}
+                                </div>
+                                <div>
+                                    <Label className="text-sm font-medium text-gray-700">Appointment Type</Label>
+                                    <Input value={data.appointment_type} onChange={e => setData(prev => ({ ...prev, appointment_type: e.target.value }))} className="mt-1" placeholder="Online & In Person" />
+                                    {errors.appointment_type && <p className="text-xs text-red-500 mt-1">{errors.appointment_type}</p>}
+                                </div>
+                            </div>
+                            <p className="text-xs text-gray-400 -mt-4">These three show as small badges on the booking page. Leave any blank to hide that badge.</p>
 
                             <div>
                                 <Label className="text-sm font-medium text-gray-700 mb-3 block">Assigned Services *</Label>

@@ -44,10 +44,14 @@ class InstructorController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
             'bio' => 'nullable|string|max:1000',
             'languages' => 'nullable|string|max:500',
+            'experience' => 'nullable|string|max:100',
+            'location' => 'nullable|string|max:100',
+            'appointment_type' => 'nullable|string|max:100',
             'service_ids' => 'required|array|min:1',
             'service_ids.*' => 'exists:services,id',
         ]);
@@ -82,10 +86,14 @@ class InstructorController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
             'bio' => 'nullable|string|max:1000',
             'languages' => 'nullable|string|max:500',
+            'experience' => 'nullable|string|max:100',
+            'location' => 'nullable|string|max:100',
+            'appointment_type' => 'nullable|string|max:100',
             'service_ids' => 'required|array|min:1',
             'service_ids.*' => 'exists:services,id',
         ]);

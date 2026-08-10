@@ -17,10 +17,14 @@ interface Service {
 interface Instructor {
     id: number;
     name: string;
+    title: string | null;
     email: string | null;
     phone: string | null;
     bio: string | null;
     languages: string[] | string | null;
+    experience: string | null;
+    location: string | null;
+    appointment_type: string | null;
     is_active: boolean;
     services: { id: number }[];
 }
@@ -39,10 +43,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function EditInstructor({ instructor, services }: Props) {
     const { data, setData, put, processing, errors } = useForm({
         name: instructor.name,
+        title: instructor.title || '',
         email: instructor.email || '',
         phone: instructor.phone || '',
         bio: instructor.bio || '',
         languages: Array.isArray(instructor.languages) ? instructor.languages.join(', ') : (instructor.languages || ''),
+        experience: instructor.experience || '',
+        location: instructor.location || '',
+        appointment_type: instructor.appointment_type || '',
         is_active: instructor.is_active,
         service_ids: instructor.services.map(s => s.id),
     });
@@ -85,6 +93,11 @@ export default function EditInstructor({ instructor, services }: Props) {
                                     {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                                 </div>
                                 <div>
+                                    <Label className="text-sm font-medium text-gray-700">Title</Label>
+                                    <Input value={data.title} onChange={e => setData('title', e.target.value)} className="mt-1" placeholder="e.g. Senior Imam & Ruqyah Practitioner" />
+                                    {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
+                                </div>
+                                <div>
                                     <Label className="text-sm font-medium text-gray-700">Email</Label>
                                     <Input type="email" value={data.email} onChange={e => setData('email', e.target.value)} className="mt-1" />
                                     {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
@@ -110,6 +123,24 @@ export default function EditInstructor({ instructor, services }: Props) {
                                 <Input value={data.languages} onChange={e => setData('languages', e.target.value)} className="mt-1" placeholder="English, Arabic, Bengali, Urdu" />
                                 {errors.languages && <p className="text-xs text-red-500 mt-1">{errors.languages}</p>}
                             </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <Label className="text-sm font-medium text-gray-700">Experience</Label>
+                                    <Input value={data.experience} onChange={e => setData('experience', e.target.value)} className="mt-1" placeholder="30+ Years Experience" />
+                                    {errors.experience && <p className="text-xs text-red-500 mt-1">{errors.experience}</p>}
+                                </div>
+                                <div>
+                                    <Label className="text-sm font-medium text-gray-700">Location</Label>
+                                    <Input value={data.location} onChange={e => setData('location', e.target.value)} className="mt-1" placeholder="UK Based" />
+                                    {errors.location && <p className="text-xs text-red-500 mt-1">{errors.location}</p>}
+                                </div>
+                                <div>
+                                    <Label className="text-sm font-medium text-gray-700">Appointment Type</Label>
+                                    <Input value={data.appointment_type} onChange={e => setData('appointment_type', e.target.value)} className="mt-1" placeholder="Online & In Person" />
+                                    {errors.appointment_type && <p className="text-xs text-red-500 mt-1">{errors.appointment_type}</p>}
+                                </div>
+                            </div>
+                            <p className="text-xs text-gray-400 -mt-4">These three show as small badges on the booking page. Leave any blank to hide that badge.</p>
 
                             <div>
                                 <Label className="text-sm font-medium text-gray-700 mb-3 block">Assigned Services *</Label>

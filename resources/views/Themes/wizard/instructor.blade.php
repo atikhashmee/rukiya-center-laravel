@@ -77,6 +77,22 @@
                             </div>
                             <div class="min-w-0">
                                 <div class="text-base font-semibold text-slate-800">{{ $instructor->name }}</div>
+                                @if($instructor->title)
+                                    <div class="text-xs text-brand-gold font-semibold mt-0.5">{{ $instructor->title }}</div>
+                                @endif
+                                @if($instructor->experience || $instructor->location || $instructor->appointment_type)
+                                    <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                        @if($instructor->experience)
+                                            <span class="text-[11px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full">{{ $instructor->experience }}</span>
+                                        @endif
+                                        @if($instructor->location)
+                                            <span class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{{ $instructor->location }}</span>
+                                        @endif
+                                        @if($instructor->appointment_type)
+                                            <span class="text-[11px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full">{{ $instructor->appointment_type }}</span>
+                                        @endif
+                                    </div>
+                                @endif
                                 @if($instructor->languages && count($instructor->languages) > 0)
                                     <div class="flex flex-wrap gap-1 mt-1.5">
                                         @foreach($instructor->languages as $language)

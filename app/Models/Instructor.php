@@ -13,10 +13,14 @@ class Instructor extends Model
 
     protected $fillable = [
         'name',
+        'title',
         'email',
         'phone',
         'bio',
         'languages',
+        'experience',
+        'location',
+        'appointment_type',
         'photo',
         'is_active',
     ];
