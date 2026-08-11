@@ -89,12 +89,25 @@ class BookingWizardController extends Controller
             }
         }
 
-        $bookedSlots = Booking::whereIn('instructor_id', $instructorIds)
+        $existingBookings = Booking::whereIn('instructor_id', $instructorIds)
             ->whereIn('booking_date', $dates->pluck('date')->toArray())
             ->whereNotIn('booking_status', ['cancelled'])
             ->get()
-            ->groupBy('booking_date')
-            ->map(fn ($bookings) => $bookings->pluck('booking_time')->map(fn ($t) => substr($t, 0, 5))->toArray());
+            ->groupBy(fn ($b) => $b->booking_date->toDateString());
+
+        if ($anyInstructor) {
+            // A slot is only unavailable once every instructor offering this service is booked at that time.
+            $totalInstructors = count($instructorIds);
+            $bookedSlots = $existingBookings->map(function ($bookings) use ($totalInstructors) {
+                return $bookings
+                    ->groupBy(fn ($b) => substr($b->booking_time, 0, 5))
+                    ->filter(fn ($group) => $group->pluck('instructor_id')->unique()->count() >= $totalInstructors)
+                    ->keys()
+                    ->toArray();
+            });
+        } else {
+            $bookedSlots = $existingBookings->map(fn ($bookings) => $bookings->pluck('booking_time')->map(fn ($t) => substr($t, 0, 5))->toArray());
+        }
 
         return view(Theme::resolveViewName('wizard.schedule'), compact('service', 'instructor', 'dates', 'bookedSlots', 'anyInstructor'));
     }
