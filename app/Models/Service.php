@@ -33,6 +33,7 @@ class Service extends Model
         'requires_custom_assessment',
         'required_form_fields',
         'submit_button_text',
+        'appointment_type',
     ];
 
     protected function casts(): array

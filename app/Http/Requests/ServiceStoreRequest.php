@@ -66,6 +66,11 @@ class ServiceStoreRequest extends FormRequest
             ],
             'requires_custom_assessment' => ['required', 'boolean'],
 
+            'appointment_type' => [
+                'required',
+                Rule::in(['online', 'in_person', 'both']),
+            ],
+
             'required_form_fields' => ['nullable', 'array'],
             'required_form_fields.*' => ['string'],
 

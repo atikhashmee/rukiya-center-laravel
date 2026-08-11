@@ -31,6 +31,7 @@ const Checkbox: React.FC<any> = (props) => <input type="checkbox" {...props} cla
 import { CornerUpLeft, Save, Sparkles, AlertTriangle } from 'lucide-react';
 
 type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
+type AppointmentType = 'online' | 'in_person' | 'both';
 
 interface ServiceOptionFormData {
     id_code: string;
@@ -40,13 +41,14 @@ interface ServiceOptionFormData {
     description: string;
     icon: string;
     card_color: string;
-    features: string[]; 
+    features: string[];
     order: number;
     price_type: PriceType;
     price_value: number | null;
     min_donation: number | null;
     requires_custom_assessment: boolean;
-    required_form_fields: string[]; 
+    appointment_type: AppointmentType;
+    required_form_fields: string[];
     submit_button_text: string;
 }
 
@@ -69,6 +71,7 @@ const initialData: ServiceOptionFormData = {
     price_value: 50.00,
     min_donation: null,
     requires_custom_assessment: false,
+    appointment_type: 'both',
     required_form_fields: ["email", "question"],
     submit_button_text: 'Book Now',
 };
@@ -370,6 +373,26 @@ export default function Create({ serviceCategories = [] }: CreateServiceOptionPr
                                     </label>
                                 </div>
                                 
+                                {/* Appointment Type */}
+                                <div>
+                                    <Label htmlFor="appointment_type">Appointment Type</Label>
+                                    <Select
+                                        value={data.appointment_type}
+                                        onValueChange={(value: AppointmentType) => setData('appointment_type', value)}
+                                    >
+                                        <SelectTrigger className={errors.appointment_type ? 'border-red-500' : ''}>
+                                            <SelectValue placeholder="Select Appointment Type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="online">Online only</SelectItem>
+                                            <SelectItem value="in_person">In-person only</SelectItem>
+                                            <SelectItem value="both">Both (customer chooses)</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <p className="text-xs text-gray-500 mt-1">Controls which consultation formats are offered on the booking form.</p>
+                                    {errors.appointment_type && <p className="text-xs text-red-500 mt-1">{errors.appointment_type}</p>}
+                                </div>
+
                                 {/* Required Form Fields (JSON Textarea) */}
                                 <div>
                                     <Label htmlFor="required_form_fields">Required Form Fields (,)comma separated</Label>

@@ -84,9 +84,61 @@
                         <input type="hidden" name="booking_time" value="{{ request('booking_time') }}">
                         <input type="hidden" name="donation_addon" value="{{ $donationAddon }}">
 
-                        <!-- Section 1: Your Information -->
+                        <!-- Section 1: Appointment Type -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
-                            @include('Themes.wizard.partials.section-header', ['n' => 1, 'title' => 'Your Information'])
+                            @include('Themes.wizard.partials.section-header', ['n' => 1, 'title' => 'Appointment Type'])
+
+                            @if($service->appointment_type === 'online')
+                                <input type="hidden" name="appointment_format" value="online">
+                                <div class="border border-brand-gold/30 rounded-xl p-5 bg-brand-cream/40">
+                                    <div class="flex items-start gap-4">
+                                        <div class="text-3xl">💻</div>
+                                        <div>
+                                            <h3 class="font-serif font-bold text-brand-teal">Online Consultation</h3>
+                                            <p class="text-sm text-slate-600 mt-1">This service is delivered online only.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif($service->appointment_type === 'in_person')
+                                <input type="hidden" name="appointment_format" value="in_person">
+                                <div class="border border-brand-gold/30 rounded-xl p-5 bg-brand-cream/40">
+                                    <div class="flex items-start gap-4">
+                                        <div class="text-3xl">🏢</div>
+                                        <div>
+                                            <h3 class="font-serif font-bold text-brand-teal">In-Person Consultation</h3>
+                                            <p class="text-sm text-slate-600 mt-1">This service is delivered in person at DK Healing Centre.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <p class="text-sm text-slate-600 mb-5">Choose how you would like to attend your consultation.</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="appointment_format" value="online" required class="peer sr-only" {{ old('appointment_format') === 'online' ? 'checked' : '' }}>
+                                        <div class="border border-slate-200 rounded-xl p-5 text-center peer-checked:border-brand-gold peer-checked:ring-2 peer-checked:ring-brand-gold/20 hover:border-brand-gold transition">
+                                            <div class="text-3xl mb-2">💻</div>
+                                            <h3 class="font-serif font-bold text-brand-teal">Online Consultation</h3>
+                                            <p class="text-xs text-slate-500 mt-2">Attend by video call from anywhere.</p>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="appointment_format" value="in_person" required class="peer sr-only" {{ old('appointment_format') === 'in_person' ? 'checked' : '' }}>
+                                        <div class="border border-slate-200 rounded-xl p-5 text-center peer-checked:border-brand-gold peer-checked:ring-2 peer-checked:ring-brand-gold/20 hover:border-brand-gold transition">
+                                            <div class="text-3xl mb-2">🏢</div>
+                                            <h3 class="font-serif font-bold text-brand-teal">In-Person Consultation</h3>
+                                            <p class="text-xs text-slate-500 mt-2">Attend at DK Healing Centre.</p>
+                                        </div>
+                                    </label>
+                                </div>
+                                @error('appointment_format')
+                                    <p class="text-brand-crimson text-xs mt-3">{{ $message }}</p>
+                                @enderror
+                            @endif
+                        </div>
+
+                        <!-- Section 2: Your Information -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
+                            @include('Themes.wizard.partials.section-header', ['n' => 2, 'title' => 'Your Information'])
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">First Name <span class="text-brand-crimson">*</span></label>
@@ -129,7 +181,7 @@
 
                         <!-- Section 2: More About You -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
-                            @include('Themes.wizard.partials.section-header', ['n' => 2, 'title' => 'More About You'])
+                            @include('Themes.wizard.partials.section-header', ['n' => 3, 'title' => 'More About You'])
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label class="block text-xs font-bold text-brand-teal mb-1">Gender <span class="text-brand-crimson">*</span></label>
@@ -179,7 +231,7 @@
                         <div class="bg-white border-2 border-brand-gold/50 rounded-2xl p-6 sm:p-7 relative">
                             <span class="absolute -top-3 left-6 bg-brand-crimson text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">Required policy</span>
                             @include('Themes.wizard.partials.section-header', [
-                                'n' => 3,
+                                'n' => 4,
                                 'title' => 'Who Will Accompany You?',
                                 'hint' => 'We do NOT see clients alone — you must bring a Mahram/Guardian with you, or your appointment will not go ahead.',
                             ])
@@ -213,7 +265,7 @@
                         <!-- Section 4: Symptoms -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
                             @include('Themes.wizard.partials.section-header', [
-                                'n' => 4,
+                                'n' => 5,
                                 'title' => 'Symptoms',
                                 'hint' => 'Tap all that apply.',
                             ])
@@ -258,7 +310,7 @@
                         <!-- Section 5: How did you find us -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
                             @include('Themes.wizard.partials.section-header', [
-                                'n' => 5,
+                                'n' => 6,
                                 'title' => 'How Did You Find Us?',
                                 'hint' => 'Select at least one.',
                             ])
@@ -288,7 +340,7 @@
                         <!-- Section 6: First Appointment -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
                             @include('Themes.wizard.partials.section-header', [
-                                'n' => 6,
+                                'n' => 7,
                                 'title' => 'Your Visit',
                                 'hint' => 'If this is your first appointment we may move you to another practitioner if we feel it will be more appropriate.',
                             ])
@@ -313,7 +365,7 @@
 
                         <!-- Section 7: Inquiry Description -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
-                            @include('Themes.wizard.partials.section-header', ['n' => 7, 'title' => 'Tell Us More'])
+                            @include('Themes.wizard.partials.section-header', ['n' => 8, 'title' => 'Tell Us More'])
                             <div>
                                 <label class="block text-xs font-bold text-brand-teal mb-1">Describe Your Inquiry</label>
                                 <textarea name="inquiry_description" rows="4" placeholder="Please share any additional information you'd like us to know..."

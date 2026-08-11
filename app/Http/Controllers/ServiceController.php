@@ -132,6 +132,7 @@ class ServiceController extends Controller
             'price_value' => 'nullable|numeric|min:0',
             'min_donation' => 'nullable|numeric|min:0',
             'requires_custom_assessment' => 'boolean',
+            'appointment_type' => 'required|in:online,in_person,both',
             'required_form_fields' => 'nullable|array',
             'submit_button_text' => 'nullable|string|max:100',
         ]);
