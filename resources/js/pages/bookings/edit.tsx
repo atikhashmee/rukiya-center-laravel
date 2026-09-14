@@ -1,267 +1,231 @@
-// resources/js/Pages/Bookings/Edit.tsx (Updated)
-
 import React from 'react';
 import AppLayout from "@/layouts/app-layout";
 import { Head, useForm, Link } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
-// Import your custom route helpers
 import { dashboard } from '@/routes';
-import {  index as bookingIndex, update } from '@/actions/App/Http/Controllers/BookingController'; 
+import { index as bookingIndex, show, update } from '@/actions/App/Http/Controllers/BookingController';
 import { Button } from "@/components/ui/button";
-import { CornerUpLeft } from 'lucide-react';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import InputError from "@/components/input-error";
+import { ArrowLeft, Eye } from 'lucide-react';
 
 type BookingStatus = 'new' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
 type PaymentStatus = 'pending' | 'paid' | 'failed' | 'assessment_required';
-type PriceType = 'FIXED' | 'DONATION' | 'FREE' | 'RESERVATION';
-
-interface Customer { id: number; name: string; } 
 
 interface Booking {
     id: number;
-    customer: Customer | null;
-    booking_id: string; 
+    booking_id: string;
+    service_id: string;
+    instructor_id: number | null;
+    booking_date: string | null;
+    booking_time: string | null;
+    first_name: string | null;
+    last_name: string | null;
     full_name: string;
     email: string;
+    phone_country: string | null;
+    phone_number: string | null;
     mother_name: string | null;
-    inquiry_description: string;
-    service_id: string;
-    price_type: PriceType;
-    service_price: number;
+    gender: string | null;
+    age: string | null;
+    language: string | null;
+    ethnic_origin: string | null;
+    is_first_appointment: string | null;
+    symptoms: string[] | null;
+    symptoms_other: string | null;
+    inquiry_description: string | null;
+    found_via: string[] | null;
+    consent_updates: boolean | null;
+    guardian_gender: string | null;
+    guardian_name: string | null;
+    guardian_relationship: string | null;
+    guardian_phone: string | null;
+    price_type: string;
+    service_price: string | number;
+    donation_addon: string | number | null;
     payment_status: PaymentStatus;
     booking_status: BookingStatus;
-    phone_number: string | null;
 }
 
 interface BookingsEditProps {
     booking: Booking;
+    services: { id: number; title: string }[];
+    instructors: { id: number; name: string }[];
     bookingStatuses: BookingStatus[];
     paymentStatuses: PaymentStatus[];
-    errors: { [key: string]: string };
 }
 
-export default function Edit({ booking, bookingStatuses, paymentStatuses, errors }: BookingsEditProps) {
-    
-    // Price types defined based on migration comment
-    const priceTypes: PriceType[] = ['FIXED', 'DONATION', 'FREE', 'RESERVATION'];
+const priceTypes = ['FIXED', 'DONATION', 'FREE', 'RESERVATION'];
+const label = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).replaceAll('_', ' ');
+const toList = (s: string) => s.split(',').map(v => v.trim()).filter(Boolean);
 
-    const { data, setData, patch, processing } = useForm({
-        full_name: booking.full_name,
-        email: booking.email,
-        mother_name: booking.mother_name || '',
-        inquiry_description: booking.inquiry_description,
-        service_id: booking.service_id,
-        price_type: booking.price_type,
-        service_price: booking.service_price.toString(),
-        payment_status: booking.payment_status,
+const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+    <div className="border rounded-xl bg-card text-card-foreground shadow-sm">
+        <h3 className="px-5 py-3 border-b bg-muted/50 rounded-t-xl font-semibold">{title}</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-5">{children}</div>
+    </div>
+);
+
+const Field: React.FC<{ id: string; name: string; error?: string; wide?: boolean; children: React.ReactNode }> = ({ id, name, error, wide, children }) => (
+    <div className={`grid gap-2 content-start ${wide ? 'sm:col-span-2 lg:col-span-3' : ''}`}>
+        <Label htmlFor={id}>{name}</Label>
+        {children}
+        <InputError message={error} />
+    </div>
+);
+
+export default function Edit({ booking, services, instructors, bookingStatuses, paymentStatuses }: BookingsEditProps) {
+    const { data, setData, transform, patch, processing, errors } = useForm({
+        service_id: String(booking.service_id ?? ''),
+        instructor_id: booking.instructor_id ? String(booking.instructor_id) : '',
+        booking_date: booking.booking_date?.slice(0, 10) ?? '',
+        booking_time: booking.booking_time?.slice(0, 5) ?? '',
         booking_status: booking.booking_status,
-        phone_number: booking.phone_number || '',
+        payment_status: booking.payment_status,
+        first_name: booking.first_name ?? '',
+        last_name: booking.last_name ?? '',
+        full_name: booking.full_name ?? '',
+        email: booking.email ?? '',
+        phone_country: booking.phone_country ?? '',
+        phone_number: booking.phone_number ?? '',
+        mother_name: booking.mother_name ?? '',
+        gender: booking.gender ?? '',
+        age: booking.age ?? '',
+        language: booking.language ?? '',
+        ethnic_origin: booking.ethnic_origin ?? '',
+        is_first_appointment: booking.is_first_appointment ?? '',
+        symptoms: (booking.symptoms ?? []).join(', '),
+        symptoms_other: booking.symptoms_other ?? '',
+        inquiry_description: booking.inquiry_description ?? '',
+        found_via: (booking.found_via ?? []).join(', '),
+        consent_updates: Boolean(booking.consent_updates),
+        guardian_name: booking.guardian_name ?? '',
+        guardian_relationship: booking.guardian_relationship ?? '',
+        guardian_gender: booking.guardian_gender ?? '',
+        guardian_phone: booking.guardian_phone ?? '',
+        price_type: booking.price_type,
+        service_price: String(booking.service_price ?? '0'),
+        donation_addon: String(booking.donation_addon ?? '0'),
     });
-
-    const INPUT_CLASSES = "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2";
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: dashboard().url },
         { title: 'Bookings', href: bookingIndex().url },
-        { title: `Edit: ${booking.booking_id}`, href: update(booking.id).url }
+        { title: `Edit: ${booking.booking_id}`, href: '#' },
     ];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        patch(update(booking.id).url, {
-            preserveScroll: true,
-        });
+        transform((d) => ({ ...d, symptoms: toList(d.symptoms), found_via: toList(d.found_via) }));
+        patch(update(booking.id).url, { preserveScroll: true });
     };
+
+    type Key = keyof typeof data;
+    const text = (key: Key, name: string, type = 'text') => (
+        <Field id={key} name={name} error={errors[key]}>
+            <Input id={key} type={type} value={data[key] as string} onChange={(e) => setData(key, e.target.value)} />
+        </Field>
+    );
+    const select = (key: Key, name: string, options: { value: string; label: string }[], empty?: string) => (
+        <Field id={key} name={name} error={errors[key]}>
+            <NativeSelect id={key} className="w-full" value={data[key] as string} onChange={(e) => setData(key, e.target.value)}>
+                {empty !== undefined && <NativeSelectOption value="">{empty}</NativeSelectOption>}
+                {options.map(o => <NativeSelectOption key={o.value} value={o.value}>{o.label}</NativeSelectOption>)}
+            </NativeSelect>
+        </Field>
+    );
+    const genders = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit Booking: ${booking.booking_id}`} />
-            <div className="container py-4 pl-4 max-w-4xl mx-auto">
-                <div className="flex flex-col gap-6 w-full ">
-                    <div className="flex justify-between items-center mb-4">
-                        <Link 
-                            href={bookingIndex().url}
-                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
-                        >
-                            <CornerUpLeft className="mr-2 h-4 w-4" />
-                            Back to Bookings List
+            <div className="container py-4 px-4 max-w-5xl">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                    <h2 className="text-2xl font-bold">Edit Booking {booking.booking_id}</h2>
+                    <div className="flex gap-2">
+                        <Link href={bookingIndex().url}>
+                            <Button variant="outline"><ArrowLeft className="h-4 w-4" /> Back</Button>
+                        </Link>
+                        <Link href={show(booking.id).url}>
+                            <Button variant="outline"><Eye className="h-4 w-4" /> View</Button>
                         </Link>
                     </div>
-
-                    <div className="p-6 border rounded-xl bg-white shadow-xl max-w-4xl mx-auto w-full">
-                        <h2 className="text-2xl font-bold mb-6 text-indigo-700">
-                            Editing Booking: <span className="text-gray-900">{booking.booking_id}</span>
-                        </h2>
-                        
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            
-                            {/* --- CUSTOMER DETAILS --- */}
-                            <div className="grid grid-cols-3 gap-6 border-b pb-4">
-                                <h3 className="text-lg font-semibold text-gray-700 col-span-3">Customer Details</h3>
-                                
-                                {/* Full Name */}
-                                <div>
-                                    <label htmlFor="full_name" className="block text-sm font-medium text-gray-700">Full Name</label>
-                                    <input
-                                        id="full_name"
-                                        type="text"
-                                        value={data.full_name}
-                                        onChange={(e) => setData('full_name', e.target.value)}
-                                        className={INPUT_CLASSES}
-                                    />
-                                    {errors.full_name && <p className="mt-1 text-xs text-red-500">{errors.full_name}</p>}
-                                </div>
-
-                                {/* Email */}
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-                                    <input
-                                        id="email"
-                                        type="email"
-                                        value={data.email}
-                                        onChange={(e) => setData('email', e.target.value)}
-                                        className={INPUT_CLASSES}
-                                    />
-                                    {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
-                                </div>
-                                
-                                {/* Phone Number */}
-                                <div>
-                                    <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700">Phone Number</label>
-                                    <input
-                                        id="phone_number"
-                                        type="text"
-                                        value={data.phone_number}
-                                        onChange={(e) => setData('phone_number', e.target.value)}
-                                        className={INPUT_CLASSES}
-                                    />
-                                    {errors.phone_number && <p className="mt-1 text-xs text-red-500">{errors.phone_number}</p>}
-                                </div>
-
-                                {/* Mother's Name (Optional) */}
-                                <div className="col-span-1">
-                                    <label htmlFor="mother_name" className="block text-sm font-medium text-gray-700">Mother's Name (Optional)</label>
-                                    <input
-                                        id="mother_name"
-                                        type="text"
-                                        value={data.mother_name}
-                                        onChange={(e) => setData('mother_name', e.target.value)}
-                                        className={INPUT_CLASSES}
-                                    />
-                                    {errors.mother_name && <p className="mt-1 text-xs text-red-500">{errors.mother_name}</p>}
-                                </div>
-                                
-                            </div>
-                            
-                            {/* --- SERVICE & PRICE DETAILS --- */}
-                            <div className="grid grid-cols-3 gap-6 border-b pb-4 pt-4">
-                                <h3 className="text-lg font-semibold text-gray-700 col-span-3">Service & Price</h3>
-
-                                {/* Service ID */}
-                                <div>
-                                    <label htmlFor="service_id" className="block text-sm font-medium text-gray-700">Service ID</label>
-                                    <input
-                                        id="service_id"
-                                        type="text"
-                                        value={data.service_id}
-                                        onChange={(e) => setData('service_id', e.target.value)}
-                                        className={INPUT_CLASSES}
-                                    />
-                                    {errors.service_id && <p className="mt-1 text-xs text-red-500">{errors.service_id}</p>}
-                                </div>
-
-                                {/* Price Type */}
-                                <div>
-                                    <label htmlFor="price_type" className="block text-sm font-medium text-gray-700">Price Type</label>
-                                    <select
-                                        id="price_type"
-                                        value={data.price_type}
-                                        onChange={(e) => setData('price_type', e.target.value as PriceType)}
-                                        className={INPUT_CLASSES}
-                                    >
-                                        {priceTypes.map(p => (
-                                            <option key={p} value={p}>{p}</option>
-                                        ))}
-                                    </select>
-                                    {errors.price_type && <p className="mt-1 text-xs text-red-500">{errors.price_type}</p>}
-                                </div>
-
-                                {/* Service Price */}
-                                <div>
-                                    <label htmlFor="service_price" className="block text-sm font-medium text-gray-700">Service Price/Donation</label>
-                                    <input
-                                        id="service_price"
-                                        type="number"
-                                        step="0.01"
-                                        value={data.service_price}
-                                        onChange={(e) => setData('service_price', e.target.value)}
-                                        className={INPUT_CLASSES}
-                                    />
-                                    {errors.service_price && <p className="mt-1 text-xs text-red-500">{errors.service_price}</p>}
-                                </div>
-                            </div>
-
-                            {/* --- STATUS DETAILS --- */}
-                            <div className="grid grid-cols-2 gap-6 pt-4">
-                                <h3 className="text-lg font-semibold text-gray-700 col-span-2">Status Management</h3>
-
-                                {/* Booking Status */}
-                                <div>
-                                    <label htmlFor="booking_status" className="block text-sm font-medium text-gray-700">Booking Status</label>
-                                    <select
-                                        id="booking_status"
-                                        value={data.booking_status}
-                                        onChange={(e) => setData('booking_status', e.target.value as BookingStatus)}
-                                        className={INPUT_CLASSES}
-                                    >
-                                        {bookingStatuses.map(s => (
-                                            <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}</option>
-                                        ))}
-                                    </select>
-                                    {errors.booking_status && <p className="mt-1 text-xs text-red-500">{errors.booking_status}</p>}
-                                </div>
-
-                                {/* Payment Status */}
-                                <div>
-                                    <label htmlFor="payment_status" className="block text-sm font-medium text-gray-700">Payment Status</label>
-                                    <select
-                                        id="payment_status"
-                                        value={data.payment_status}
-                                        onChange={(e) => setData('payment_status', e.target.value as PaymentStatus)}
-                                        className={INPUT_CLASSES}
-                                    >
-                                        {paymentStatuses.map(s => (
-                                            <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}</option>
-                                        ))}
-                                    </select>
-                                    {errors.payment_status && <p className="mt-1 text-xs text-red-500">{errors.payment_status}</p>}
-                                </div>
-                            </div>
-
-                            {/* Inquiry Description */}
-                            <div className="pt-4">
-                                <label htmlFor="inquiry_description" className="block text-sm font-medium text-gray-700">Inquiry Description</label>
-                                <textarea
-                                    id="inquiry_description"
-                                    rows={4}
-                                    value={data.inquiry_description}
-                                    onChange={(e) => setData('inquiry_description', e.target.value)}
-                                    className={INPUT_CLASSES}
-                                />
-                                {errors.inquiry_description && <p className="mt-1 text-xs text-red-500">{errors.inquiry_description}</p>}
-                            </div>
-
-                            <div className="flex justify-end pt-4 border-t border-gray-200">
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
-                                >
-                                    {processing ? 'Saving...' : 'Save Changes'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    <Section title="Booking">
+                        {select('service_id', 'Service', services.map(s => ({ value: String(s.id), label: s.title })))}
+                        {select('instructor_id', 'Instructor', instructors.map(i => ({ value: String(i.id), label: i.name })), 'No instructor')}
+                        {text('booking_date', 'Date', 'date')}
+                        {text('booking_time', 'Time', 'time')}
+                        {select('booking_status', 'Booking status', bookingStatuses.map(s => ({ value: s, label: label(s) })))}
+                        {select('payment_status', 'Payment status', paymentStatuses.map(s => ({ value: s, label: label(s) })))}
+                        {text('is_first_appointment', 'First appointment')}
+                    </Section>
+
+                    <Section title="Client details">
+                        {text('first_name', 'First name')}
+                        {text('last_name', 'Last name')}
+                        {text('full_name', 'Full name')}
+                        {text('email', 'Email', 'email')}
+                        {text('phone_country', 'Phone country')}
+                        {text('phone_number', 'Phone number', 'tel')}
+                        {select('gender', 'Gender', genders, '—')}
+                        {text('age', 'Age')}
+                        {text('language', 'Language')}
+                        {text('ethnic_origin', 'Ethnic origin')}
+                        {text('mother_name', "Mother's name")}
+                    </Section>
+
+                    <Section title="Guardian">
+                        {text('guardian_name', 'Name')}
+                        {text('guardian_relationship', 'Relationship')}
+                        {select('guardian_gender', 'Gender', genders, '—')}
+                        {text('guardian_phone', 'Phone', 'tel')}
+                    </Section>
+
+                    <Section title="Enquiry & symptoms">
+                        <Field id="symptoms" name="Symptoms (comma separated)" error={errors.symptoms} wide>
+                            <Input id="symptoms" value={data.symptoms} onChange={(e) => setData('symptoms', e.target.value)} />
+                        </Field>
+                        <Field id="symptoms_other" name="Other symptoms" error={errors.symptoms_other} wide>
+                            <Textarea id="symptoms_other" rows={2} value={data.symptoms_other} onChange={(e) => setData('symptoms_other', e.target.value)} />
+                        </Field>
+                        <Field id="inquiry_description" name="Inquiry description" error={errors.inquiry_description} wide>
+                            <Textarea id="inquiry_description" rows={4} value={data.inquiry_description} onChange={(e) => setData('inquiry_description', e.target.value)} />
+                        </Field>
+                    </Section>
+
+                    <Section title="Pricing">
+                        {select('price_type', 'Price type', priceTypes.map(p => ({ value: p, label: p })))}
+                        {text('service_price', 'Service price (£)', 'number')}
+                        {text('donation_addon', 'Donation add-on (£)', 'number')}
+                    </Section>
+
+                    <Section title="Marketing">
+                        <Field id="found_via" name="Found us via (comma separated)" error={errors.found_via} wide>
+                            <Input id="found_via" value={data.found_via} onChange={(e) => setData('found_via', e.target.value)} />
+                        </Field>
+                        <label className="flex items-center gap-2 text-sm">
+                            <input
+                                type="checkbox"
+                                className="h-4 w-4 accent-primary"
+                                checked={data.consent_updates}
+                                onChange={(e) => setData('consent_updates', e.target.checked)}
+                            />
+                            Consents to receive updates
+                        </label>
+                    </Section>
+
+                    <div className="flex justify-end">
+                        <Button type="submit" disabled={processing}>
+                            {processing ? 'Saving...' : 'Save Changes'}
+                        </Button>
+                    </div>
+                </form>
             </div>
         </AppLayout>
     );

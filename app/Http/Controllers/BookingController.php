@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Mail\ServiceBooked;
 use App\Models\Booking;
+use App\Models\Instructor;
+use App\Models\Payment;
+use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
@@ -18,7 +23,7 @@ class BookingController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Booking::with('customer');
+        $query = Booking::with(['customer', 'service:id,title', 'instructor:id,name']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -49,12 +54,31 @@ class BookingController extends Controller
     }
 
     /**
+     * Display every detail of a booking: client, guardian, customer account and payments.
+     */
+    public function show(Booking $booking)
+    {
+        // order_type has been stored both as "App\Models\Booking" and with its backslashes stripped.
+        $payments = Payment::where('order_id', $booking->id)
+            ->where('order_type', 'like', '%Booking')
+            ->latest()
+            ->get(['id', 'payment_intent_id', 'amount', 'currency', 'status', 'created_at']);
+
+        return Inertia::render('bookings/show', [
+            'booking' => $booking->load(['customer', 'service', 'instructor']),
+            'payments' => $payments,
+        ]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Booking $booking)
     {
         return Inertia::render('bookings/edit', [
-            'booking' => $booking->load('customer'), // Load customer data
+            'booking' => $booking,
+            'services' => Service::orderBy('title')->get(['id', 'title']),
+            'instructors' => Instructor::orderBy('name')->get(['id', 'name']),
             'bookingStatuses' => $this->bookingStatuses,
             'paymentStatuses' => $this->paymentStatuses,
         ]);
@@ -66,20 +90,41 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        // Simple validation based on the fields provided
         $validated = $request->validate([
+            'service_id' => 'required|exists:services,id',
+            'instructor_id' => 'nullable|exists:instructors,id',
+            'booking_date' => 'nullable|date',
+            'booking_time' => 'nullable|date_format:H:i,H:i:s',
+            'booking_status' => 'required|in:' . implode(',', $this->bookingStatuses),
+            'payment_status' => 'required|in:' . implode(',', $this->paymentStatuses),
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'phone_country' => 'nullable|string|max:10',
+            'phone_number' => 'nullable|string|max:20',
             'mother_name' => 'nullable|string|max:255',
-            'inquiry_description' => 'required|string',
-            'service_id' => 'required|string|max:255',
+            'gender' => 'nullable|string|max:20',
+            'age' => 'nullable|string|max:20',
+            'language' => 'nullable|string|max:100',
+            'ethnic_origin' => 'nullable|string|max:100',
+            'is_first_appointment' => 'nullable|string|max:50',
+            'symptoms' => 'nullable|array',
+            'symptoms.*' => 'string|max:255',
+            'symptoms_other' => 'nullable|string',
+            'inquiry_description' => 'nullable|string',
+            'found_via' => 'nullable|array',
+            'found_via.*' => 'string|max:255',
+            'consent_updates' => 'boolean',
+            'guardian_name' => 'nullable|string|max:255',
+            'guardian_relationship' => 'nullable|string|max:100',
+            'guardian_gender' => 'nullable|string|max:20',
+            'guardian_phone' => 'nullable|string|max:20',
             'price_type' => 'required|in:' . implode(',', ['FIXED', 'DONATION', 'FREE', 'RESERVATION']),
             'service_price' => 'required|numeric|min:0',
-            'payment_status' => 'required|in:' . implode(',', $this->paymentStatuses),
-            'booking_status' => 'required|in:' . implode(',', $this->bookingStatuses),
-            'phone_number' => 'nullable|string|max:20',
+            'donation_addon' => 'nullable|numeric|min:0',
         ]);
-        
+
         $booking->update($validated);
 
         return redirect()->route('bookings.index')
@@ -97,24 +142,23 @@ class BookingController extends Controller
 
         $booking->update(['booking_status' => $request->booking_status]);
 
-        return redirect()->route('bookings.index')
+        return back()
             ->with('success', "Booking Status for **{$booking->booking_id}** changed to **{$booking->booking_status}**.");
     }
 
     /**
-     * Send the order email (now confirmation/service details email).
+     * Send the booking confirmation email to the booking's email address.
      */
     public function sendOrderEmail(Booking $booking)
     {
-        // Use the email field directly from the booking table
-        $recipient = $booking->email; 
+        $recipient = $booking->email;
 
         if (!$recipient) {
             return redirect()->back()->with('error', "Cannot send email: Booking has no email address.");
         }
 
         try {
-            // Mail::to($recipient)->send(new BookingServiceMail($booking)); // Assume this Mailable class exists
+            Mail::to($recipient)->send(new ServiceBooked($booking));
 
             return redirect()->back()->with('success', "Service detail email sent successfully to **{$recipient}**.");
         } catch (\Exception $e) {

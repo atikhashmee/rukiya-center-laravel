@@ -111,8 +111,8 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
     Route::post('verify-customer-email/{id}', [AdminCustomerController::class, 'verifyEmail'])->name('customers.verifyEmail');
     Route::resource('customers', AdminCustomerController::class)->names('customers');
 
-    Route::post('bookings-sendOrderEmail', [BookingController::class, 'sendOrderEmail'])->name('bookings.sendOrderEmail');
-    Route::post('bookings-updateStatus', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+    Route::post('bookings/{booking}/send-email', [BookingController::class, 'sendOrderEmail'])->name('bookings.sendOrderEmail');
+    Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
     Route::resource('bookings', BookingController::class)->names('bookings');
     Route::resource('users', UserController::class)->names('users');
 

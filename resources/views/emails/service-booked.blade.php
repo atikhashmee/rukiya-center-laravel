@@ -1,15 +1,17 @@
 <x-mail::message>
 # Your Service Booking Confirmation
 
-Hi {{ $customer->name }},
+Hi {{ $customer?->name ?? $booking->full_name }},
 
 Thank you for booking a service with **{{ config('app.name') }}**! We're excited to confirm your appointment.
 
 Here are the details of your booking:
 
--   **Service Booked:** {{ $service->title }}
--   **Date:** {{ $booking->created_at->format('F d, Y') }}
--   **Time:** {{ $booking->created_at->format('h:i A') }}
+-   **Service Booked:** {{ $service?->title }}
+-   **Date:** {{ ($booking->booking_date ?? $booking->created_at)->format('F d, Y') }}
+@if($booking->booking_time)
+-   **Time:** {{ \Carbon\Carbon::parse($booking->booking_time)->format('h:i A') }}
+@endif
 @if(isset($service->location)) {{-- Only show location if applicable --}}
 -   **Location/Address:** {{ $service->location }}
 @endif
