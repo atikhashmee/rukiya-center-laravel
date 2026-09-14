@@ -5,7 +5,9 @@ import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { create, index } from '@/routes/productCategories';
 import CategoryForm from './form';
-import { CornerUpLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import PageHeader from '@/components/page-header';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard().url },
@@ -17,22 +19,20 @@ export default function Create() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Category" />
-            <div className="container py-4 pl-4 max-w-4xl mx-auto">
-                <div className="flex flex-col gap-6 w-full">
-                    <div className="flex justify-between items-center mb-4">
-                        <Link
-                            href={index().url}
-                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
-                        >
-                            <CornerUpLeft className="mr-2 h-4 w-4" />
-                            Back to Categories
-                        </Link>
-                    </div>
+            <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title="Create New Category"
+                    actions={
+                        <Button variant="outline" asChild>
+                            <Link href={index().url}>
+                                <ArrowLeft className="h-4 w-4" /> Back to Categories
+                            </Link>
+                        </Button>
+                    }
+                />
 
-                    <div className="p-6 border rounded-xl bg-white shadow-xl">
-                        <h2 className="text-2xl font-bold mb-6 text-indigo-700">Create New Category</h2>
-                        <CategoryForm />
-                    </div>
+                <div className="rounded-xl border bg-card p-5 text-card-foreground shadow-sm md:p-6">
+                    <CategoryForm />
                 </div>
             </div>
         </AppLayout>

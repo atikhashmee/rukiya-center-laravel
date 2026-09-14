@@ -5,10 +5,12 @@ import { BreadcrumbItem } from "@/types";
 import { index as bookingIndex, edit, show, updateStatus, sendOrderEmail } from '@/actions/App/Http/Controllers/BookingController';
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Eye, Mail, Pencil } from 'lucide-react';
+import { CalendarX2, Eye, Mail, Pencil } from 'lucide-react';
 import Pagination from '@/components/pagination';
 import { dashboard } from '@/routes';
 import FilterBar from '@/components/filter-bar';
+import PageHeader from '@/components/page-header';
+import { statusClasses, statusLabel } from '@/lib/status';
 
 interface Customer { id: number; name: string; }
 
@@ -50,22 +52,7 @@ interface BookingsIndexProps {
     filters: Record<string, string>;
 }
 
-const getStatusColor = (status: string) => {
-    switch (status) {
-        case 'completed': return 'bg-green-100 text-green-800 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800';
-        case 'confirmed': return 'bg-indigo-100 text-indigo-800 border-indigo-300 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-800';
-        case 'in_progress':
-        case 'paid':
-        case 'assessment_required': return 'bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800';
-        case 'cancelled':
-        case 'failed': return 'bg-red-100 text-red-800 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800';
-        case 'new':
-        case 'pending':
-        default: return 'bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800';
-    }
-};
-
-const label = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).replaceAll('_', ' ');
+const th = 'text-xs font-medium uppercase tracking-wide text-muted-foreground';
 
 export default function Index({ bookings, bookingStatuses, paymentStatuses, filters }: BookingsIndexProps) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -93,11 +80,11 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
         <select
             value={booking.booking_status}
             onChange={(e) => handleStatusChange(booking, e.target.value as BookingStatus)}
-            className={`rounded-md text-xs font-medium border p-1 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-ring ${getStatusColor(booking.booking_status)}`}
+            className={`${statusClasses(booking.booking_status)} cursor-pointer appearance-none pr-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
         >
             {bookingStatuses.map(s => (
                 <option key={s} value={s} className="bg-background text-foreground">
-                    {label(s)}
+                    {statusLabel(s)}
                 </option>
             ))}
         </select>
@@ -106,12 +93,8 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Bookings Management" />
-            <div className="container py-4 pl-4">
-                <div className="flex flex-col gap-6 w-full">
-                    <div>
-                        <h2 className="text-2xl font-bold">Booking Management</h2>
-                        <p className="text-sm text-muted-foreground mt-1">{bookings.total} total bookings</p>
-                    </div>
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+                    <PageHeader title="Booking Management" description={`${bookings.total} total bookings`} />
 
                     <FilterBar
                         filters={filters}
@@ -121,35 +104,36 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                             {
                                 key: 'booking_status',
                                 label: 'All Booking Status',
-                                options: bookingStatuses.map(s => ({ label: label(s), value: s })),
+                                options: bookingStatuses.map(s => ({ label: statusLabel(s), value: s })),
                             },
                             {
                                 key: 'payment_status',
                                 label: 'All Payment Status',
-                                options: paymentStatuses.map(s => ({ label: label(s), value: s })),
+                                options: paymentStatuses.map(s => ({ label: statusLabel(s), value: s })),
                             },
                         ]}
                     />
 
-                    <div className="p-3 border rounded-xl bg-card text-card-foreground shadow-xl overflow-x-auto">
+                    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                      <div className="overflow-x-auto">
                         <Table>
                             <TableHeader className="bg-muted/50">
-                                <TableRow>
-                                    <TableHead className="w-[150px]">Ref / Client</TableHead>
-                                    <TableHead>Service Info</TableHead>
-                                    <TableHead className="text-center">Booking Status</TableHead>
-                                    <TableHead className="text-center">Payment Status</TableHead>
-                                    <TableHead className="text-right">Price</TableHead>
-                                    <TableHead className="text-center w-[150px]">Actions</TableHead>
+                                <TableRow className="hover:bg-transparent">
+                                    <TableHead className={`w-[150px] ${th}`}>Ref / Client</TableHead>
+                                    <TableHead className={th}>Service Info</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Booking Status</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Payment Status</TableHead>
+                                    <TableHead className={`text-right ${th}`}>Price</TableHead>
+                                    <TableHead className={`w-[150px] text-center ${th}`}>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {bookings.data.length > 0 ? (
                                     bookings.data.map((booking) => (
-                                        <TableRow key={booking.id} className="hover:bg-muted/50">
+                                        <TableRow key={booking.id} className="hover:bg-muted/40">
                                             <TableCell>
-                                                <div className="font-semibold text-blue-700 dark:text-blue-400">{booking.booking_id}</div>
-                                                <div className="text-sm">{booking.full_name}</div>
+                                                <Link href={show(booking.id).url} className="font-medium text-primary hover:underline">{booking.booking_id}</Link>
+                                                <div className="text-sm font-medium">{booking.full_name}</div>
                                                 <div className="text-xs text-muted-foreground">{booking.email}</div>
                                                 {booking.phone_number && <div className="text-xs text-muted-foreground">{booking.phone_number}</div>}
                                             </TableCell>
@@ -166,27 +150,23 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                                                 <StatusDropdown booking={booking} />
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${getStatusColor(booking.payment_status)}`}>
-                                                    {label(booking.payment_status)}
+                                                <span className={statusClasses(booking.payment_status)}>
+                                                    {statusLabel(booking.payment_status)}
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-right">
-                                                <div className="font-semibold text-sm">£{Number(booking.service_price).toFixed(2)}</div>
+                                                <div className="text-sm font-semibold tabular-nums">£{Number(booking.service_price).toFixed(2)}</div>
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <div className="flex space-x-2 justify-center">
-                                                    <Link href={show(booking.id).url}>
-                                                        <Button variant="outline" size="icon" className="h-8 w-8" title="View Details">
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
-                                                    <Link href={edit(booking.id).url}>
-                                                        <Button variant="outline" size="icon" className="h-8 w-8" title="Edit Booking">
-                                                            <Pencil className="h-4 w-4" />
-                                                        </Button>
-                                                    </Link>
+                                                <div className="flex justify-center gap-1">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="View Details" asChild>
+                                                        <Link href={show(booking.id).url}><Eye className="h-4 w-4" /></Link>
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit Booking" asChild>
+                                                        <Link href={edit(booking.id).url}><Pencil className="h-4 w-4" /></Link>
+                                                    </Button>
                                                     <Button
-                                                        variant="outline" size="icon"
+                                                        variant="ghost" size="icon"
                                                         onClick={() => handleSendEmail(booking)}
                                                         className="h-8 w-8"
                                                         title="Send Confirmation Email"
@@ -198,17 +178,20 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                                         </TableRow>
                                     ))
                                 ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
-                                            No bookings found matching your filters.
+                                    <TableRow className="hover:bg-transparent">
+                                        <TableCell colSpan={6}>
+                                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                                <CalendarX2 className="h-8 w-8 opacity-40" />
+                                                <p className="text-sm">No bookings found matching your filters.</p>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
+                      </div>
                         <Pagination links={bookings.links} />
                     </div>
-                </div>
             </div>
         </AppLayout>
     );

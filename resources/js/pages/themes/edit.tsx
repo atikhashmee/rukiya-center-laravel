@@ -44,6 +44,7 @@ export default function ThemeEdit() {
         () => Object.fromEntries(Object.keys(pageGroups).map((g) => [g, true]))
     );
     const editorRef = useRef<any>(null);
+    const [editorTheme] = useState(() => (document.documentElement.classList.contains('dark') ? 'vs-dark' : 'light'));
 
     const fetchFileContent = useCallback(async (key: string) => {
         if (fileContents[key] !== undefined) return;
@@ -144,7 +145,7 @@ export default function ThemeEdit() {
             <Head title={`Edit Theme: ${theme.name}`} />
             <div className="flex flex-col h-[calc(100vh-4rem)]" onKeyDown={handleKeyDown}>
                 {/* Top bar */}
-                <div className="border-b bg-background px-4 py-2.5 flex items-center justify-between gap-4">
+                <div className="border-b bg-card px-4 py-2.5 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
                         <a href={index().url} className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0" title="Back to Themes">
                             <CornerUpLeft className="h-4 w-4" />
@@ -157,7 +158,7 @@ export default function ThemeEdit() {
                                     {theme.is_active ? 'Active' : 'Inactive'}
                                 </Badge>
                                 {dirtyCount > 0 && (
-                                    <Badge variant="outline" className="text-[10px] text-amber-600 border-amber-300">
+                                    <Badge variant="outline" className="border-amber-500/40 text-[10px] text-amber-700 dark:text-amber-300">
                                         {dirtyCount} unsaved
                                     </Badge>
                                 )}
@@ -170,7 +171,7 @@ export default function ThemeEdit() {
 
                     <div className="flex items-center gap-3 flex-shrink-0">
                         {saveMessage && (
-                            <span className={`text-xs flex items-center gap-1 ${saveMessage.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                            <span className={`text-xs flex items-center gap-1 ${saveMessage.type === 'success' ? 'text-emerald-700 dark:text-emerald-300' : 'text-destructive'}`}>
                                 {saveMessage.type === 'success' ? <CheckCircle2 className="h-3.5 w-3.5" /> : <AlertCircle className="h-3.5 w-3.5" />}
                                 {saveMessage.text}
                             </span>
@@ -179,7 +180,6 @@ export default function ThemeEdit() {
                             size="sm"
                             onClick={handleSave}
                             disabled={saving || !activeDirty}
-                            className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
                         >
                             {saving ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
                             {saving ? 'Saving...' : 'Save'}
@@ -227,7 +227,7 @@ export default function ThemeEdit() {
                                                         onClick={() => handleSelect(key)}
                                                         className={`w-full flex items-center gap-2 pl-7 pr-3 py-1.5 text-sm text-left transition-colors ${
                                                             isActive
-                                                                ? 'bg-blue-50 text-blue-700 font-medium border-r-2 border-blue-600'
+                                                                ? 'bg-primary/10 text-primary font-medium border-r-2 border-primary'
                                                                 : 'text-foreground/80 hover:bg-muted/60'
                                                         }`}
                                                     >
@@ -271,7 +271,7 @@ export default function ThemeEdit() {
                                 <Editor
                                     height="100%"
                                     language="html"
-                                    theme="vs-dark"
+                                    theme={editorTheme}
                                     value={fileContents[activeKey] || ''}
                                     onChange={handleEditorChange}
                                     onMount={(editor) => {

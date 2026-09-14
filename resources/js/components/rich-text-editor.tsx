@@ -16,7 +16,8 @@ function ToolbarButton({ onClick, active, title, children }: { onClick: () => vo
             type="button"
             onClick={onClick}
             title={title}
-            className={`p-2 rounded transition-colors ${active ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
+            aria-pressed={active}
+            className={`rounded-md p-2 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ${active ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}
         >
             {children}
         </button>
@@ -34,7 +35,7 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
         onUpdate: ({ editor }) => onChange(editor.getHTML()),
         editorProps: {
             attributes: {
-                class: 'tiptap-content min-h-[280px] max-h-[600px] overflow-y-auto px-4 py-3 text-sm text-gray-800 focus:outline-none',
+                class: 'tiptap-content min-h-[280px] max-h-[600px] overflow-y-auto px-4 py-3 text-sm text-foreground focus:outline-none',
             },
         },
     });
@@ -67,8 +68,8 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
     };
 
     return (
-        <div className="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-indigo-500 focus-within:border-indigo-500">
-            <div className="flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 px-2 py-1.5">
+        <div className="overflow-hidden rounded-lg border border-input bg-transparent shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:bg-input/30">
+            <div className="flex flex-wrap items-center gap-0.5 border-b bg-muted/50 px-2 py-1.5">
                 <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive('bold')} title="Bold">
                     <Bold className="h-4 w-4" />
                 </ToolbarButton>
@@ -96,7 +97,7 @@ export default function RichTextEditor({ value, onChange }: RichTextEditorProps)
                 <ToolbarButton onClick={addImage} title="Insert image">
                     <ImageIcon className="h-4 w-4" />
                 </ToolbarButton>
-                <div className="w-px h-5 bg-gray-300 mx-1" />
+                <div className="mx-1 h-5 w-px bg-border" />
                 <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo">
                     <Undo2 className="h-4 w-4" />
                 </ToolbarButton>

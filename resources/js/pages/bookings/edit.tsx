@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import InputError from "@/components/input-error";
-import { ArrowLeft, Eye } from 'lucide-react';
+import { ArrowLeft, Eye, Save } from 'lucide-react';
+import PageHeader from '@/components/page-header';
 
 type BookingStatus = 'new' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
 type PaymentStatus = 'pending' | 'paid' | 'failed' | 'assessment_required';
@@ -63,8 +64,10 @@ const label = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).replaceAll('
 const toList = (s: string) => s.split(',').map(v => v.trim()).filter(Boolean);
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-    <div className="border rounded-xl bg-card text-card-foreground shadow-sm">
-        <h3 className="px-5 py-3 border-b bg-muted/50 rounded-t-xl font-semibold">{title}</h3>
+    <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+        <div className="flex items-center justify-between border-b px-5 py-4">
+            <h2 className="font-semibold">{title}</h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-5">{children}</div>
     </div>
 );
@@ -142,18 +145,20 @@ export default function Edit({ booking, services, instructors, bookingStatuses, 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit Booking: ${booking.booking_id}`} />
-            <div className="container py-4 px-4 max-w-5xl">
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                    <h2 className="text-2xl font-bold">Edit Booking {booking.booking_id}</h2>
-                    <div className="flex gap-2">
-                        <Link href={bookingIndex().url}>
-                            <Button variant="outline"><ArrowLeft className="h-4 w-4" /> Back</Button>
-                        </Link>
-                        <Link href={show(booking.id).url}>
-                            <Button variant="outline"><Eye className="h-4 w-4" /> View</Button>
-                        </Link>
-                    </div>
-                </div>
+            <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title={`Edit Booking ${booking.booking_id}`}
+                    actions={
+                        <>
+                            <Button variant="outline" asChild>
+                                <Link href={bookingIndex().url}><ArrowLeft className="h-4 w-4" /> Back</Link>
+                            </Button>
+                            <Button variant="outline" asChild>
+                                <Link href={show(booking.id).url}><Eye className="h-4 w-4" /> View</Link>
+                            </Button>
+                        </>
+                    }
+                />
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <Section title="Booking">
@@ -209,10 +214,10 @@ export default function Edit({ booking, services, instructors, bookingStatuses, 
                         <Field id="found_via" name="Found us via (comma separated)" error={errors.found_via} wide>
                             <Input id="found_via" value={data.found_via} onChange={(e) => setData('found_via', e.target.value)} />
                         </Field>
-                        <label className="flex items-center gap-2 text-sm">
+                        <label className={`flex cursor-pointer items-center gap-3 self-end rounded-lg border px-4 py-2.5 text-sm transition-colors ${data.consent_updates ? 'border-primary bg-primary/5 ring-1 ring-primary/30' : 'hover:bg-muted/50'}`}>
                             <input
                                 type="checkbox"
-                                className="h-4 w-4 accent-primary"
+                                className="h-4 w-4 rounded accent-primary"
                                 checked={data.consent_updates}
                                 onChange={(e) => setData('consent_updates', e.target.checked)}
                             />
@@ -220,8 +225,9 @@ export default function Edit({ booking, services, instructors, bookingStatuses, 
                         </label>
                     </Section>
 
-                    <div className="flex justify-end">
+                    <div className="flex justify-end gap-2">
                         <Button type="submit" disabled={processing}>
+                            <Save className="h-4 w-4" />
                             {processing ? 'Saving...' : 'Save Changes'}
                         </Button>
                     </div>

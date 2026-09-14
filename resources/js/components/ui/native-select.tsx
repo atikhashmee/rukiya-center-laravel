@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils"
 function NativeSelect({ className, ...props }: React.ComponentProps<"select">) {
   return (
     <div
-      className="group/native-select relative w-fit has-[select:disabled]:opacity-50"
+      // The select itself is always w-full, so only a caller-passed w-full widens the wrapper
+      className={cn("group/native-select relative has-[select:disabled]:opacity-50", className?.split(" ").includes("w-full") ? "w-full" : "w-fit")}
       data-slot="native-select-wrapper"
     >
       <select

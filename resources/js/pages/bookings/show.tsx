@@ -6,6 +6,8 @@ import { index as bookingIndex, edit } from '@/actions/App/Http/Controllers/Book
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Pencil } from 'lucide-react';
 import { dashboard } from '@/routes';
+import PageHeader from '@/components/page-header';
+import { statusClasses, statusLabel } from '@/lib/status';
 
 type Value = string | number | boolean | string[] | null | undefined;
 
@@ -68,8 +70,6 @@ interface Booking {
     } | null;
 }
 
-const label = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).replaceAll('_', ' ');
-
 const format = (value: Value): string => {
     if (value === null || value === undefined || value === '') return '—';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
@@ -85,16 +85,18 @@ const formatDate = (value: string | null, withTime = false) =>
         : '—';
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-    <div className="border rounded-xl bg-card text-card-foreground shadow-sm">
-        <h3 className="px-5 py-3 border-b bg-muted/50 rounded-t-xl font-semibold">{title}</h3>
-        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 p-5">{children}</dl>
+    <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+        <div className="flex items-center justify-between border-b px-5 py-4">
+            <h2 className="font-semibold">{title}</h2>
+        </div>
+        <dl className="grid grid-cols-1 gap-x-6 gap-y-5 p-5 sm:grid-cols-2">{children}</dl>
     </div>
 );
 
-const Field: React.FC<{ name: string; value: Value; wide?: boolean }> = ({ name, value, wide }) => (
+const Field: React.FC<{ name: string; value: Value; wide?: boolean; children?: React.ReactNode }> = ({ name, value, wide, children }) => (
     <div className={wide ? 'sm:col-span-2' : ''}>
         <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{name}</dt>
-        <dd className="mt-1 text-sm whitespace-pre-line break-words">{format(value)}</dd>
+        <dd className="mt-1 text-sm whitespace-pre-line break-words">{children ?? format(value)}</dd>
     </div>
 );
 
@@ -111,26 +113,36 @@ export default function Show({ booking, payments }: { booking: Booking; payments
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Booking ${booking.booking_id}`} />
-            <div className="container py-4 px-4 max-w-5xl">
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                    <div>
-                        <h2 className="text-2xl font-bold">Booking {booking.booking_id}</h2>
-                        <p className="text-sm text-muted-foreground mt-1">Created {formatDate(booking.created_at, true)}</p>
-                    </div>
-                    <div className="flex gap-2">
-                        <Link href={bookingIndex().url}>
-                            <Button variant="outline"><ArrowLeft className="h-4 w-4" /> Back</Button>
-                        </Link>
-                        <Link href={edit(booking.id).url}>
-                            <Button><Pencil className="h-4 w-4" /> Edit</Button>
-                        </Link>
-                    </div>
-                </div>
+            <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title={
+                        <span className="flex flex-wrap items-center gap-3">
+                            Booking {booking.booking_id}
+                            <span className={statusClasses(booking.booking_status)}>{statusLabel(booking.booking_status)}</span>
+                            <span className={statusClasses(booking.payment_status)}>{statusLabel(booking.payment_status)}</span>
+                        </span>
+                    }
+                    description={`Created ${formatDate(booking.created_at, true)}`}
+                    actions={
+                        <>
+                            <Button variant="outline" asChild>
+                                <Link href={bookingIndex().url}><ArrowLeft className="h-4 w-4" /> Back</Link>
+                            </Button>
+                            <Button asChild>
+                                <Link href={edit(booking.id).url}><Pencil className="h-4 w-4" /> Edit</Link>
+                            </Button>
+                        </>
+                    }
+                />
 
                 <div className="flex flex-col gap-6">
                     <Section title="Booking">
-                        <Field name="Booking status" value={label(booking.booking_status)} />
-                        <Field name="Payment status" value={label(booking.payment_status)} />
+                        <Field name="Booking status" value={booking.booking_status}>
+                            <span className={statusClasses(booking.booking_status)}>{statusLabel(booking.booking_status)}</span>
+                        </Field>
+                        <Field name="Payment status" value={booking.payment_status}>
+                            <span className={statusClasses(booking.payment_status)}>{statusLabel(booking.payment_status)}</span>
+                        </Field>
                         <Field name="Service" value={booking.service ? `${booking.service.title} (${booking.service.id_code})` : booking.service_id} />
                         <Field name="Appointment type" value={booking.service?.appointment_type} />
                         <Field name="Date" value={formatDate(booking.booking_date)} />
@@ -173,7 +185,9 @@ export default function Show({ booking, payments }: { booking: Booking; payments
                         <Field name="Price type" value={booking.price_type} />
                         <Field name="Service price" value={`£${Number(booking.service_price).toFixed(2)}`} />
                         <Field name="Donation add-on" value={`£${Number(booking.donation_addon ?? 0).toFixed(2)}`} />
-                        <Field name="Total" value={`£${total.toFixed(2)}`} />
+                        <Field name="Total" value={null}>
+                            <span className="text-base font-semibold">£{total.toFixed(2)}</span>
+                        </Field>
                     </Section>
 
                     <Section title="Marketing">
@@ -198,25 +212,27 @@ export default function Show({ booking, payments }: { booking: Booking; payments
                         )}
                     </Section>
 
-                    <div className="border rounded-xl bg-card text-card-foreground shadow-sm">
-                        <h3 className="px-5 py-3 border-b bg-muted/50 rounded-t-xl font-semibold">Payments</h3>
+                    <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm">
+                        <div className="flex items-center justify-between border-b px-5 py-4">
+                            <h2 className="font-semibold">Payments</h2>
+                        </div>
                         {payments.length > 0 ? (
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm">
-                                    <thead className="text-left text-xs uppercase text-muted-foreground">
+                                    <thead className="bg-muted/50 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
                                         <tr>
-                                            <th className="px-5 py-2">Date</th>
-                                            <th className="px-5 py-2">Amount</th>
-                                            <th className="px-5 py-2">Status</th>
-                                            <th className="px-5 py-2">Stripe payment ID</th>
+                                            <th className="px-5 py-2.5">Date</th>
+                                            <th className="px-5 py-2.5">Amount</th>
+                                            <th className="px-5 py-2.5">Status</th>
+                                            <th className="px-5 py-2.5">Stripe payment ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {payments.map((p) => (
-                                            <tr key={p.id} className="border-t">
-                                                <td className="px-5 py-2">{formatDate(p.created_at, true)}</td>
-                                                <td className="px-5 py-2">{(p.amount / 100).toFixed(2)} {p.currency.toUpperCase()}</td>
-                                                <td className="px-5 py-2">{label(p.status)}</td>
+                                            <tr key={p.id} className="border-t hover:bg-muted/40">
+                                                <td className="px-5 py-2.5">{formatDate(p.created_at, true)}</td>
+                                                <td className="px-5 py-2.5">{(p.amount / 100).toFixed(2)} {p.currency.toUpperCase()}</td>
+                                                <td className="px-5 py-2.5"><span className={statusClasses(p.status)}>{statusLabel(p.status)}</span></td>
                                                 <td className="px-5 py-2 font-mono text-xs">{format(p.payment_intent_id)}</td>
                                             </tr>
                                         ))}
@@ -224,7 +240,7 @@ export default function Show({ booking, payments }: { booking: Booking; payments
                                 </table>
                             </div>
                         ) : (
-                            <p className="p-5 text-sm text-muted-foreground">No payment records for this booking.</p>
+                            <p className="py-12 text-center text-sm text-muted-foreground">No payment records for this booking.</p>
                         )}
                     </div>
                 </div>

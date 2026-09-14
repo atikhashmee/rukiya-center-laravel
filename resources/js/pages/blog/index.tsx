@@ -5,9 +5,11 @@ import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index, create, destroy } from "@/actions/App/Http/Controllers/BlogController";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { Pencil, Trash2, PlusCircle, Eye } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pencil, Trash2, Plus, Eye, FileText } from 'lucide-react';
 import { show } from "@/actions/App/Http/Controllers/BlogController";
+import PageHeader from '@/components/page-header';
+import { statusClasses, statusLabel } from '@/lib/status';
 
 interface BlogPost {
     id: number;
@@ -27,6 +29,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Blog', href: index().url },
 ];
 
+const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
+
 export default function BlogIndex() {
     const { posts } = usePage().props as PostsIndexPageProps;
 
@@ -39,59 +43,55 @@ export default function BlogIndex() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Blog" />
-            <div className="container py-4 pl-4">
-                <div className="flex flex-col gap-6 w-full">
-                    <div className="flex justify-between items-center mb-4">
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">Blog Posts</h2>
-                            <p className="text-sm text-gray-500 mt-1">Manage your blog content and articles</p>
-                        </div>
-                        <Button onClick={() => window.location.href = create().url} className="bg-blue-600 hover:bg-blue-700 text-white">
-                            <PlusCircle className="mr-2 h-4 w-4" /> New Post
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title="Blog Posts"
+                    description="Manage your blog content and articles"
+                    actions={
+                        <Button onClick={() => window.location.href = create().url}>
+                            <Plus className="h-4 w-4" /> New Post
                         </Button>
-                    </div>
+                    }
+                />
 
-                    <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">
-                        <Table className="min-w-full">
-                            <TableCaption>A list of all blog posts.</TableCaption>
-                            <TableHeader className="bg-gray-100/70">
-                                <TableRow>
-                                    <TableHead className="font-bold text-gray-700">Title</TableHead>
-                                    <TableHead className="font-bold text-gray-700">Slug</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Status</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Content</TableHead>
-                                    <TableHead className="text-center w-[150px] font-bold text-gray-700">Actions</TableHead>
+                <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow className="hover:bg-transparent">
+                                    <TableHead className={th}>Title</TableHead>
+                                    <TableHead className={th}>Slug</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Status</TableHead>
+                                    <TableHead className={th}>Content</TableHead>
+                                    <TableHead className={`w-[150px] text-right ${th}`}>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {posts.length > 0 ? (
                                     posts.map((post) => (
-                                        <TableRow key={post.id} className="hover:bg-indigo-50/50 transition-colors">
-                                            <TableCell className="font-semibold text-gray-800">{post.title}</TableCell>
-                                            <TableCell className="text-sm text-gray-500 font-mono">{post.slug}</TableCell>
+                                        <TableRow key={post.id} className="hover:bg-muted/40">
+                                            <TableCell className="font-medium">{post.title}</TableCell>
+                                            <TableCell className="font-mono text-xs text-muted-foreground">{post.slug}</TableCell>
                                             <TableCell className="text-center">
-                                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                                    post.status === 'published' ? 'bg-green-100 text-green-800' :
-                                                    post.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-gray-100 text-gray-800'
-                                                }`}>
-                                                    {post.status}
+                                                <span className={statusClasses(post.status)}>
+                                                    {statusLabel(post.status)}
                                                 </span>
                                             </TableCell>
-                                            <TableCell className="text-center text-sm text-gray-500 max-w-[200px] truncate">
+                                            <TableCell className="max-w-[240px] truncate text-xs text-muted-foreground">
                                                 {post.content?.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 80)}...
                                             </TableCell>
-                                            <TableCell className="text-center">
-                                                <div className="flex gap-2 justify-center">
-                                                    <Button variant="outline" size="icon" className="h-8 w-8"
+                                            <TableCell>
+                                                <div className="flex justify-end gap-1">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="View"
                                                         onClick={() => window.location.href = show(post.id).url}>
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant="outline" size="icon" className="h-8 w-8"
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
                                                         onClick={() => window.location.href = `/admin/blog/${post.id}/edit`}>
                                                         <Pencil className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant="destructive" size="icon" className="h-8 w-8"
+                                                    <Button variant="ghost" size="icon" title="Delete"
+                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                         onClick={() => handleDelete(post)}>
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
@@ -100,9 +100,12 @@ export default function BlogIndex() {
                                         </TableRow>
                                     ))
                                 ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={5} className="h-24 text-center text-gray-500">
-                                            No blog posts found. Create your first post.
+                                    <TableRow className="hover:bg-transparent">
+                                        <TableCell colSpan={5}>
+                                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                                <FileText className="h-8 w-8 opacity-40" />
+                                                <p className="text-sm">No blog posts found. Create your first post.</p>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 )}

@@ -5,27 +5,29 @@ import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index, create, edit, destroy, verifyEmail } from "@/actions/App/Http/Controllers/UserController";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { Pencil, Trash2, PlusCircle, CheckCircle, XCircle, Mail, MailCheck, Shield, UserX } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pencil, Trash2, Plus, CheckCircle, XCircle, Mail, MailCheck, Shield, UserX } from 'lucide-react';
 import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
+import PageHeader from '@/components/page-header';
+import { badgeClasses, tones } from '@/lib/status';
 
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
 
 interface PaginationLink {
-    url: string | null; 
-    label: string;      
-    active: boolean;    
+    url: string | null;
+    label: string;
+    active: boolean;
 }
 
 interface PaginatedData<T> {
     current_page: number;
-    data: T[]; 
+    data: T[];
     first_page_url: string;
     from: number;
     last_page: number;
     last_page_url: string;
-    links: PaginationLink[]; 
+    links: PaginationLink[];
     next_page_url: string | null;
     path: string;
     per_page: number;
@@ -46,6 +48,8 @@ interface UsersIndexProps {
     users: PaginatedData<User>;
     filters: Record<string, string>;
 }
+
+const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Index({ users, filters }: UsersIndexProps) {
     const { flash, auth } = usePage().props as any;
@@ -101,144 +105,130 @@ export default function Index({ users, filters }: UsersIndexProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Users Management" />
-            <div className="container py-4 pl-4">
-                <div className="flex flex-col gap-6 w-full">
-                    
-                    {/* Flash Messages */}
-                    {flash?.success && (
-                        <div className="flex items-center gap-3 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm animate-fade-in">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                            <p className="text-sm font-medium text-green-800">{flash.success}</p>
-                        </div>
-                    )}
-                    
-                    {flash?.error && (
-                        <div className="flex items-center gap-3 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-sm animate-fade-in">
-                            <XCircle className="h-5 w-5 text-red-600" />
-                            <p className="text-sm font-medium text-red-800">{flash.error}</p>
-                        </div>
-                    )}
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
 
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-4">
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">User Management</h2>
-                            <p className="text-sm text-gray-500 mt-1">Manage admin users and their verification status</p>
-                        </div>
-                        <Link 
-                            href={create().url}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center shadow-sm"
-                        >
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Add New User
-                        </Link>
+                {/* Flash Messages */}
+                {flash?.success && (
+                    <div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                        <CheckCircle className="h-4 w-4" />
+                        {flash.success}
                     </div>
+                )}
 
-                    <FilterBar
-                        filters={filters}
-                        placeholder="Search by name or email..."
-                        baseUrl={index().url}
-                        filterConfigs={[
-                            {
-                                key: 'verified',
-                                label: 'All Verification',
-                                options: [
-                                    { label: 'Verified', value: 'yes' },
-                                    { label: 'Not Verified', value: 'no' },
-                                ],
-                            },
-                        ]}
-                    />
+                {flash?.error && (
+                    <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm font-medium text-rose-700 dark:text-rose-300">
+                        <XCircle className="h-4 w-4" />
+                        {flash.error}
+                    </div>
+                )}
 
-                    {/* Users Table */}
-                    <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">
-                        <Table className="min-w-full">
-                            <TableCaption>List of all admin users</TableCaption>
-                            <TableHeader className="bg-gray-100/70">
-                                <TableRow className="hover:bg-gray-100/70">
-                                    <TableHead className="w-[50px] font-bold text-gray-700">#</TableHead>
-                                    <TableHead className="font-bold text-gray-700">User Info</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Email Status</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Registered</TableHead>
-                                    <TableHead className="text-center w-[180px] font-bold text-gray-700">Actions</TableHead>
+                <PageHeader
+                    title="User Management"
+                    description="Manage admin users and their verification status"
+                    actions={
+                        <Button asChild>
+                            <Link href={create().url}>
+                                <Plus className="h-4 w-4" /> Add New User
+                            </Link>
+                        </Button>
+                    }
+                />
+
+                <FilterBar
+                    filters={filters}
+                    placeholder="Search by name or email..."
+                    baseUrl={index().url}
+                    filterConfigs={[
+                        {
+                            key: 'verified',
+                            label: 'All Verification',
+                            options: [
+                                { label: 'Verified', value: 'yes' },
+                                { label: 'Not Verified', value: 'no' },
+                            ],
+                        },
+                    ]}
+                />
+
+                {/* Users Table */}
+                <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow className="hover:bg-transparent">
+                                    <TableHead className={`w-[50px] ${th}`}>#</TableHead>
+                                    <TableHead className={th}>User Info</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Email Status</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Registered</TableHead>
+                                    <TableHead className={`w-[140px] text-center ${th}`}>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {users.data.length > 0 ? (
                                     users.data.map((user, index) => (
-                                        <TableRow 
-                                            key={user.id} 
-                                            className={`hover:bg-indigo-50/50 transition-colors ${user.id === currentUserId ? 'bg-blue-50/30' : ''}`}
+                                        <TableRow
+                                            key={user.id}
+                                            className={`hover:bg-muted/40 ${user.id === currentUserId ? 'bg-primary/5' : ''}`}
                                         >
-                                            {/* Index */}
-                                            <TableCell className="font-semibold text-gray-600">
+                                            <TableCell className="text-muted-foreground tabular-nums">
                                                 {users.from + index}
                                             </TableCell>
 
-                                            {/* User Info */}
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
-                                                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold shadow-md">
+                                                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
                                                         {user.name.charAt(0).toUpperCase()}
                                                     </div>
                                                     <div>
                                                         <div className="flex items-center gap-2">
-                                                            <span className="font-semibold text-gray-800">{user.name}</span>
+                                                            <span className="font-medium">{user.name}</span>
                                                             {user.id === currentUserId && (
-                                                                <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
-                                                                    <Shield className="h-3 w-3 mr-1" /> You
+                                                                <span className={`gap-1 ${badgeClasses('info')}`}>
+                                                                    <Shield className="h-3 w-3" /> You
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <div className="text-xs text-gray-500">{user.email}</div>
+                                                        <div className="text-xs text-muted-foreground">{user.email}</div>
                                                     </div>
                                                 </div>
                                             </TableCell>
 
-                                            {/* Email Verified */}
                                             <TableCell className="text-center">
                                                 {user.email_verified_at ? (
                                                     <div className="flex flex-col items-center">
-                                                        <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                                                            <MailCheck className="h-3 w-3 mr-1" /> Verified
+                                                        <span className={`gap-1 ${badgeClasses('success')}`}>
+                                                            <MailCheck className="h-3 w-3" /> Verified
                                                         </span>
-                                                        <span className="text-xs text-gray-400 mt-1">
+                                                        <span className="mt-1 text-xs text-muted-foreground">
                                                             {formatDate(user.email_verified_at)}
                                                         </span>
                                                     </div>
                                                 ) : (
-                                                    <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
-                                                        <Mail className="h-3 w-3 mr-1" /> Not Verified
+                                                    <span className={`gap-1 ${badgeClasses('warning')}`}>
+                                                        <Mail className="h-3 w-3" /> Not Verified
                                                     </span>
                                                 )}
                                             </TableCell>
 
-                                            {/* Registered Date */}
-                                            <TableCell className="text-center text-sm text-gray-600">
+                                            <TableCell className="text-center text-sm text-muted-foreground">
                                                 {formatDate(user.created_at)}
                                             </TableCell>
-                                            
-                                            {/* Action Buttons */}
+
                                             <TableCell className="text-center">
-                                                <div className="flex space-x-2 justify-center">
-                                                    
-                                                    
-                                                    {/* Edit Button */}
-                                                    <Button 
-                                                        variant="outline" 
-                                                        size="icon" 
-                                                        className="h-8 w-8 hover:bg-indigo-100 border-indigo-300 text-indigo-600 transition-transform hover:scale-105"
+                                                <div className="flex justify-center gap-1">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8"
                                                         onClick={() => router.visit(edit(user.id).url)}
                                                         title="Edit User"
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </Button>
-                                                    
-                                                    {/* Delete Button */}
                                                     <Button
-                                                        variant="destructive"
+                                                        variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 bg-red-600 hover:bg-red-700 transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                         onClick={() => handleDelete(user.id, user.name)}
                                                         disabled={user.id === currentUserId}
                                                         title={user.id === currentUserId ? "Cannot delete yourself" : "Delete User"}
@@ -250,31 +240,31 @@ export default function Index({ users, filters }: UsersIndexProps) {
                                         </TableRow>
                                     ))
                                 ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={5} className="h-24 text-center text-muted-foreground bg-gray-50/50">
-                                            <div className="flex flex-col items-center justify-center">
-                                                <UserX className="h-8 w-8 text-gray-400 mb-2" />
-                                                <p>No users found. Click "Add New User" to begin.</p>
+                                    <TableRow className="hover:bg-transparent">
+                                        <TableCell colSpan={5}>
+                                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                                <UserX className="h-8 w-8 opacity-40" />
+                                                <p className="text-sm">No users found. Click "Add New User" to begin.</p>
                                             </div>
                                         </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
-                        <Pagination links={users.links} />
                     </div>
+                    <Pagination links={users.links} />
+                </div>
 
-                    {/* Info Box */}
-                    <div className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
-                        <div className="flex items-start">
-                            <Shield className="h-5 w-5 text-blue-600 mt-0.5 mr-3" />
-                            <div>
-                                <h3 className="text-sm font-semibold text-blue-900">Admin User Management</h3>
-                                <p className="text-sm text-blue-700 mt-1">
-                                    These are administrative users with access to the admin panel. You cannot delete your own account for security reasons.
-                                </p>
-                            </div>
-                        </div>
+                {/* Info Box */}
+                <div className="flex items-start gap-3 rounded-xl border bg-card p-4 text-card-foreground shadow-sm">
+                    <div className={`rounded-lg p-2 ${tones.info}`}>
+                        <Shield className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-semibold">Admin User Management</h3>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                            These are administrative users with access to the admin panel. You cannot delete your own account for security reasons.
+                        </p>
                     </div>
                 </div>
             </div>

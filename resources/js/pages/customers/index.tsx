@@ -5,10 +5,12 @@ import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index, create, edit, destroy, verifyEmail } from "@/actions/App/Http/Controllers/CustomerController";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { Pencil, Trash2, PlusCircle, CheckCircle, XCircle, Mail, MailCheck, Power, UserX, UserCheck } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pencil, Trash2, Plus, CheckCircle, XCircle, Mail, MailCheck, Users } from 'lucide-react';
 import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
+import PageHeader from '@/components/page-header';
+import { badgeClasses } from '@/lib/status';
 
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
 
@@ -37,6 +39,8 @@ interface CustomersIndexProps {
     customers: PaginatedCustomers;
     filters: Record<string, string>;
 }
+
+const TH = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Index({ customers, filters }: CustomersIndexProps) {
     const { flash } = usePage().props as any;
@@ -74,71 +78,69 @@ export default function Index({ customers, filters }: CustomersIndexProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Customers Management" />
-            <div className="container py-4 pl-4">
-                <div className="flex flex-col gap-6 w-full">
-                    {flash?.success && (
-                        <div className="flex items-center gap-3 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
-                            <p className="text-sm font-medium text-green-800">{flash.success}</p>
-                        </div>
-                    )}
-
-                    {flash?.error && (
-                        <div className="flex items-center gap-3 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-sm">
-                            <XCircle className="h-5 w-5 text-red-600" />
-                            <p className="text-sm font-medium text-red-800">{flash.error}</p>
-                        </div>
-                    )}
-
-                    <div className="flex justify-between items-center mb-4">
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">Customer Management</h2>
-                            <p className="text-sm text-gray-500 mt-1">{customers.total} total customers</p>
-                        </div>
-                        <Link
-                            href={create().url}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center shadow-sm"
-                        >
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Add New Customer
-                        </Link>
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+                {flash?.success && (
+                    <div className="flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                        <CheckCircle className="h-4 w-4 shrink-0" />
+                        <p>{flash.success}</p>
                     </div>
+                )}
 
-                    <FilterBar
-                        filters={filters}
-                        placeholder="Search by name or email..."
-                        baseUrl={index().url}
-                        filterConfigs={[
-                            {
-                                key: 'status',
-                                label: 'All Status',
-                                options: [
-                                    { label: 'Active', value: 'active' },
-                                    { label: 'Inactive', value: 'inactive' },
-                                ],
-                            },
-                            {
-                                key: 'verified',
-                                label: 'All Verification',
-                                options: [
-                                    { label: 'Verified', value: 'yes' },
-                                    { label: 'Not Verified', value: 'no' },
-                                ],
-                            },
-                        ]}
-                    />
+                {flash?.error && (
+                    <div className="flex items-center gap-3 rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm font-medium text-rose-700 dark:text-rose-300">
+                        <XCircle className="h-4 w-4 shrink-0" />
+                        <p>{flash.error}</p>
+                    </div>
+                )}
 
-                    <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">
+                <PageHeader
+                    title="Customer Management"
+                    description={`${customers.total} total customers`}
+                    actions={
+                        <Button asChild>
+                            <Link href={create().url}>
+                                <Plus className="h-4 w-4" />
+                                Add New Customer
+                            </Link>
+                        </Button>
+                    }
+                />
+
+                <FilterBar
+                    filters={filters}
+                    placeholder="Search by name or email..."
+                    baseUrl={index().url}
+                    filterConfigs={[
+                        {
+                            key: 'status',
+                            label: 'All Status',
+                            options: [
+                                { label: 'Active', value: 'active' },
+                                { label: 'Inactive', value: 'inactive' },
+                            ],
+                        },
+                        {
+                            key: 'verified',
+                            label: 'All Verification',
+                            options: [
+                                { label: 'Verified', value: 'yes' },
+                                { label: 'Not Verified', value: 'no' },
+                            ],
+                        },
+                    ]}
+                />
+
+                <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                    <div className="overflow-x-auto">
                         <Table className="min-w-full">
-                            <TableCaption>List of all registered customers</TableCaption>
-                            <TableHeader className="bg-gray-100/70">
-                                <TableRow className="hover:bg-gray-100/70">
-                                    <TableHead className="font-bold text-gray-700">Customer Info</TableHead>
-                                    <TableHead className="font-bold text-gray-700">Contact</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Status</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Email Verified</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Joined</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700 w-[200px]">Actions</TableHead>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow className="hover:bg-transparent">
+                                    <TableHead className={TH}>Customer Info</TableHead>
+                                    <TableHead className={TH}>Contact</TableHead>
+                                    <TableHead className={`text-center ${TH}`}>Status</TableHead>
+                                    <TableHead className={`text-center ${TH}`}>Email Verified</TableHead>
+                                    <TableHead className={`text-center ${TH}`}>Joined</TableHead>
+                                    <TableHead className={`w-[200px] text-center ${TH}`}>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -146,60 +148,60 @@ export default function Index({ customers, filters }: CustomersIndexProps) {
                                     customers.data.map((customer) => (
                                         <TableRow
                                             key={customer.id}
-                                            className={`hover:bg-gray-50 transition-colors ${!customer.is_active ? 'opacity-60' : ''}`}
+                                            className={`transition-colors hover:bg-muted/40 ${!customer.is_active ? 'opacity-60' : ''}`}
                                         >
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-semibold ${customer.is_active ? 'bg-teal-600' : 'bg-gray-400'}`}>
+                                                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-semibold ${customer.is_active ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
                                                         {customer.name.charAt(0).toUpperCase()}
                                                     </div>
                                                     <div>
-                                                        <div className="font-semibold text-gray-800">{customer.name}</div>
-                                                        <div className="text-xs text-gray-500">{customer.email}</div>
+                                                        <div className="font-medium">{customer.name}</div>
+                                                        <div className="text-xs text-muted-foreground">{customer.email}</div>
                                                     </div>
                                                 </div>
                                             </TableCell>
                                             <TableCell>
                                                 {customer.phone ? (
-                                                    <div className="text-sm text-gray-700">{customer.phone_prefix} {customer.phone}</div>
+                                                    <div className="text-sm">{customer.phone_prefix} {customer.phone}</div>
                                                 ) : (
-                                                    <span className="text-xs text-gray-400 italic">No phone</span>
+                                                    <span className="text-xs italic text-muted-foreground">No phone</span>
                                                 )}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${customer.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                                <span className={badgeClasses(customer.is_active ? 'success' : 'danger')}>
                                                     {customer.is_active ? 'Active' : 'Inactive'}
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 {customer.email_verified_at ? (
-                                                    <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
-                                                        <MailCheck className="h-3 w-3 mr-1" /> Verified
+                                                    <span className={`gap-1 ${badgeClasses('info')}`}>
+                                                        <MailCheck className="h-3 w-3" /> Verified
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
-                                                        <Mail className="h-3 w-3 mr-1" /> Pending
+                                                    <span className={`gap-1 ${badgeClasses('warning')}`}>
+                                                        <Mail className="h-3 w-3" /> Pending
                                                     </span>
                                                 )}
                                             </TableCell>
-                                            <TableCell className="text-center text-sm text-gray-600">
+                                            <TableCell className="text-center text-sm text-muted-foreground">
                                                 {formatDate(customer.created_at)}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <div className="flex space-x-1 justify-center">
+                                                <div className="flex justify-center gap-1">
                                                     <Button
-                                                        variant="outline"
+                                                        variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 hover:bg-indigo-100 border-indigo-300 text-indigo-600 transition-transform hover:scale-105"
+                                                        className="h-8 w-8"
                                                         onClick={() => router.visit(edit(customer.id).url)}
                                                         title="Edit"
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </Button>
                                                     <Button
-                                                        variant="destructive"
+                                                        variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 bg-red-600 hover:bg-red-700 transition-transform hover:scale-105"
+                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                         onClick={() => handleDelete(customer.id, customer.name)}
                                                         title="Delete"
                                                     >
@@ -210,16 +212,19 @@ export default function Index({ customers, filters }: CustomersIndexProps) {
                                         </TableRow>
                                     ))
                                 ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={6} className="h-24 text-center text-gray-400">
-                                            No customers found matching your filters.
+                                    <TableRow className="hover:bg-transparent">
+                                        <TableCell colSpan={6}>
+                                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                                <Users className="h-8 w-8 opacity-40" />
+                                                <p className="text-sm">No customers found matching your filters.</p>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
-                        <Pagination links={customers.links} />
                     </div>
+                    <Pagination links={customers.links} />
                 </div>
             </div>
         </AppLayout>

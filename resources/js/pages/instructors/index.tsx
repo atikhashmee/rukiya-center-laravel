@@ -4,10 +4,12 @@ import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { Pencil, Trash2, PlusCircle } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pencil, Trash2, Plus, CheckCircle, GraduationCap } from 'lucide-react';
 import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
+import PageHeader from '@/components/page-header';
+import { badgeClasses } from '@/lib/status';
 
 interface Instructor {
     id: number;
@@ -37,6 +39,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Instructors', href: '/admin/instructors' },
 ];
 
+const TH = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
+
 export default function Index({ instructors, filters }: InstructorsIndexProps) {
     const { flash } = usePage().props as any;
 
@@ -49,73 +53,81 @@ export default function Index({ instructors, filters }: InstructorsIndexProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Instructors" />
-            <div className="container py-4 pl-4">
-                <div className="flex flex-col gap-6 w-full">
-                    {flash?.success && (
-                        <div className="p-4 bg-green-50 border-l-4 border-green-500 rounded-lg">
-                            <p className="text-sm font-medium text-green-800">{flash.success}</p>
-                        </div>
-                    )}
-
-                    <div className="flex justify-between items-center mb-4">
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">Instructors</h2>
-                            <p className="text-sm text-gray-500 mt-1">{instructors.total} total instructors</p>
-                        </div>
-                        <Button onClick={() => window.location.href = '/admin/instructors/create'} className="bg-blue-600 hover:bg-blue-700 text-white">
-                            <PlusCircle className="mr-2 h-4 w-4" /> Add Instructor
-                        </Button>
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+                {flash?.success && (
+                    <div className="flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                        <CheckCircle className="h-4 w-4 shrink-0" />
+                        <p>{flash.success}</p>
                     </div>
+                )}
 
-                    <FilterBar
-                        filters={filters}
-                        placeholder="Search by name or email..."
-                        baseUrl="/admin/instructors"
-                        filterConfigs={[
-                            { key: 'status', label: 'Status', options: [
-                                { value: 'active', label: 'Active' },
-                                { value: 'inactive', label: 'Inactive' },
-                            ]},
-                        ]}
-                    />
+                <PageHeader
+                    title="Instructors"
+                    description={`${instructors.total} total instructors`}
+                    actions={
+                        <Button onClick={() => window.location.href = '/admin/instructors/create'}>
+                            <Plus className="h-4 w-4" /> Add Instructor
+                        </Button>
+                    }
+                />
 
-                    <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">
+                <FilterBar
+                    filters={filters}
+                    placeholder="Search by name or email..."
+                    baseUrl="/admin/instructors"
+                    filterConfigs={[
+                        { key: 'status', label: 'Status', options: [
+                            { value: 'active', label: 'Active' },
+                            { value: 'inactive', label: 'Inactive' },
+                        ]},
+                    ]}
+                />
+
+                <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                    <div className="overflow-x-auto">
                         <Table className="min-w-full">
-                            <TableCaption>A list of all instructors.</TableCaption>
-                            <TableHeader className="bg-gray-100/70">
-                                <TableRow>
-                                    <TableHead className="font-bold text-gray-700">Name</TableHead>
-                                    <TableHead className="font-bold text-gray-700">Email</TableHead>
-                                    <TableHead className="font-bold text-gray-700">Phone</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Status</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Services</TableHead>
-                                    <TableHead className="text-center w-[150px] font-bold text-gray-700">Actions</TableHead>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow className="hover:bg-transparent">
+                                    <TableHead className={TH}>Name</TableHead>
+                                    <TableHead className={TH}>Email</TableHead>
+                                    <TableHead className={TH}>Phone</TableHead>
+                                    <TableHead className={`text-center ${TH}`}>Status</TableHead>
+                                    <TableHead className={`text-center ${TH}`}>Services</TableHead>
+                                    <TableHead className={`w-[150px] text-center ${TH}`}>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {instructors.data.length > 0 ? (
                                     instructors.data.map((instructor) => (
-                                        <TableRow key={instructor.id} className="hover:bg-gray-50 transition-colors">
-                                            <TableCell className="font-semibold text-gray-800">{instructor.name}</TableCell>
-                                            <TableCell className="text-sm text-gray-500">{instructor.email || '—'}</TableCell>
-                                            <TableCell className="text-sm text-gray-500">{instructor.phone || '—'}</TableCell>
+                                        <TableRow key={instructor.id} className="transition-colors hover:bg-muted/40">
+                                            <TableCell>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                                                        {instructor.name.charAt(0).toUpperCase()}
+                                                    </div>
+                                                    <span className="font-medium">{instructor.name}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="text-sm text-muted-foreground">{instructor.email || '—'}</TableCell>
+                                            <TableCell className="text-sm text-muted-foreground">{instructor.phone || '—'}</TableCell>
                                             <TableCell className="text-center">
-                                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${instructor.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                                <span className={badgeClasses(instructor.is_active ? 'success' : 'danger')}>
                                                     {instructor.is_active ? 'Active' : 'Inactive'}
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800">
+                                                <span className={badgeClasses('info')}>
                                                     {instructor.services_count}
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <div className="flex gap-2 justify-center">
-                                                    <Button variant="outline" size="icon" className="h-8 w-8"
+                                                <div className="flex justify-center gap-1">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
                                                         onClick={() => window.location.href = `/admin/instructors/${instructor.id}/edit`}>
                                                         <Pencil className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant="destructive" size="icon" className="h-8 w-8"
+                                                    <Button variant="ghost" size="icon" title="Delete"
+                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                         onClick={() => handleDelete(instructor.id)}>
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
@@ -124,16 +136,19 @@ export default function Index({ instructors, filters }: InstructorsIndexProps) {
                                         </TableRow>
                                     ))
                                 ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={6} className="h-24 text-center text-gray-400">
-                                            No instructors found.
+                                    <TableRow className="hover:bg-transparent">
+                                        <TableCell colSpan={6}>
+                                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                                <GraduationCap className="h-8 w-8 opacity-40" />
+                                                <p className="text-sm">No instructors found.</p>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
-                        <Pagination links={instructors.links} />
                     </div>
+                    <Pagination links={instructors.links} />
                 </div>
             </div>
         </AppLayout>

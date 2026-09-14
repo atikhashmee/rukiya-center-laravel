@@ -3,9 +3,12 @@ import { Head, Link } from '@inertiajs/react';
 import AppLayout from "@/layouts/app-layout";
 import { Product, InertiaProps } from '@/types/product';
 import { index, edit } from '@/routes/products';
-import { CornerUpLeft } from 'lucide-react';
+import { ArrowLeft, ImageOff, Pencil } from 'lucide-react';
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
+import { Button } from '@/components/ui/button';
+import PageHeader from '@/components/page-header';
+import { badgeClasses } from '@/lib/status';
 
 interface ProductShowProps extends InertiaProps {
     product: Product;
@@ -18,68 +21,70 @@ export default function Show({ product }: ProductShowProps) {
         { title: product.name, href: '#' },
     ];
 
+    const details = [
+        { label: 'SKU', value: <span className="font-mono">{product.sku}</span> },
+        { label: 'Category', value: product.category?.name || 'N/A' },
+        { label: 'Price', value: <span className="font-semibold tabular-nums">£{product.price.toFixed(2)}</span> },
+        { label: 'Stock', value: <span className="tabular-nums">{product.stock_quantity}</span> },
+    ];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={product.name} />
-            <div className="container py-4 pl-4 max-w-4xl mx-auto">
-                <div className="flex flex-col gap-6 w-full">
-                    <div className="flex justify-between items-center mb-4">
-                        <Link
-                            href={index().url}
-                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
-                        >
-                            <CornerUpLeft className="mr-2 h-4 w-4" />
-                            Back to Products
-                        </Link>
-                        <Link
-                            href={edit(product.id)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center shadow-sm"
-                        >
-                            Edit Product
-                        </Link>
-                    </div>
-
-                    <div className="p-6 border rounded-xl bg-white shadow-xl">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
-                            <div>
-                                <span className="font-medium text-gray-500">SKU</span>
-                                <p className="text-gray-900 font-mono">{product.sku}</p>
-                            </div>
-                            <div>
-                                <span className="font-medium text-gray-500">Category</span>
-                                <p className="text-gray-900">{product.category?.name || 'N/A'}</p>
-                            </div>
-                            <div>
-                                <span className="font-medium text-gray-500">Price</span>
-                                <p className="text-gray-900 font-semibold">£{product.price.toFixed(2)}</p>
-                            </div>
-                            <div>
-                                <span className="font-medium text-gray-500">Stock</span>
-                                <p className="text-gray-900">{product.stock_quantity}</p>
-                            </div>
-                        </div>
-
-                        <div className="mb-6">
-                            <span className="font-medium text-gray-500 text-sm">Status: </span>
-                            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                product.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                            }`}>
+            <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title={
+                        <span className="flex flex-wrap items-center gap-3">
+                            {product.name}
+                            <span className={badgeClasses(product.is_active ? 'success' : 'danger')}>
                                 {product.is_active ? 'Active' : 'Inactive'}
                             </span>
-                        </div>
+                        </span>
+                    }
+                    actions={
+                        <>
+                            <Button variant="outline" asChild>
+                                <Link href={index().url}>
+                                    <ArrowLeft className="h-4 w-4" /> Back to Products
+                                </Link>
+                            </Button>
+                            <Button asChild>
+                                <Link href={edit(product.id)}>
+                                    <Pencil className="h-4 w-4" /> Edit Product
+                                </Link>
+                            </Button>
+                        </>
+                    }
+                />
+
+                <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+                    <div className="border-b px-5 py-4">
+                        <h2 className="font-semibold">Details</h2>
+                    </div>
+                    <div className="p-5">
+                        <dl className="grid grid-cols-2 gap-5 text-sm md:grid-cols-4">
+                            {details.map((d) => (
+                                <div key={d.label}>
+                                    <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{d.label}</dt>
+                                    <dd className="mt-1">{d.value}</dd>
+                                </div>
+                            ))}
+                        </dl>
 
                         {product.description && (
-                            <div className="mb-6">
-                                <h2 className="text-lg font-semibold text-gray-900 mb-2">Description</h2>
-                                <p className="text-gray-700">{product.description}</p>
+                            <div className="mt-6 border-t pt-5">
+                                <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">Description</h3>
+                                <p className="text-sm leading-relaxed">{product.description}</p>
                             </div>
                         )}
                     </div>
+                </div>
 
-                    <div className="p-6 border rounded-xl bg-white shadow-xl">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-4">Images</h2>
+                <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+                    <div className="border-b px-5 py-4">
+                        <h2 className="font-semibold">Images</h2>
+                    </div>
+                    <div className="p-5">
                         {product.images && product.images.length > 0 ? (
                             <div className="flex flex-wrap gap-4">
                                 {product.images.map((image) => (
@@ -87,12 +92,15 @@ export default function Show({ product }: ProductShowProps) {
                                         key={image.id}
                                         src={image.path}
                                         alt={product.name}
-                                        className="w-40 h-40 object-cover rounded-lg shadow"
+                                        className="h-40 w-40 rounded-lg border object-cover"
                                     />
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-gray-500 text-sm">No images available.</p>
+                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                <ImageOff className="h-8 w-8 opacity-40" />
+                                <p className="text-sm">No images available.</p>
+                            </div>
                         )}
                     </div>
                 </div>

@@ -5,9 +5,12 @@ import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index, update } from "@/actions/App/Http/Controllers/CustomerController";
 import { Button } from "@/components/ui/button";
-import { CornerUpLeft } from 'lucide-react';
-
-// --- Interfaces (Kept for clarity) ---
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import InputError from "@/components/input-error";
+import PageHeader from "@/components/page-header";
+import { ArrowLeft } from 'lucide-react';
 
 interface Customer {
     id: number;
@@ -23,7 +26,7 @@ interface Customer {
 }
 
 interface CustomerEditProps {
-    customer: Customer; 
+    customer: Customer;
     errors: { [key: string]: string };
 }
 
@@ -50,146 +53,125 @@ export default function Edit({ customer, errors }: CustomerEditProps) {
             preserveScroll: true,
         });
     };
-    
+
     const handleInterestChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const interestArray = e.target.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
         setData('interests', interestArray);
     };
 
-    const INPUT_CLASSES = "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2";
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit Customer: ${customer.name}`} />
-            <div className="container py-4 pl-4 max-w-4xl mx-auto">
-                <div className="flex flex-col gap-6 w-full ">
-                    <div className="flex justify-between items-center mb-4">
-                        <Link 
-                            href={index().url}
-                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
-                        >
-                            <CornerUpLeft className="mr-2 h-4 w-4" />
-                            Back to Customers
-                        </Link>
+            <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title={<>Editing Customer: <span className="text-muted-foreground">{customer.name}</span></>}
+                    actions={
+                        <Button variant="outline" asChild>
+                            <Link href={index().url}>
+                                <ArrowLeft className="h-4 w-4" />
+                                Back to Customers
+                            </Link>
+                        </Button>
+                    }
+                />
+
+                <form onSubmit={handleSubmit} className="rounded-xl border bg-card text-card-foreground shadow-sm">
+                    <div className="border-b px-5 py-4">
+                        <h2 className="font-semibold">Customer details</h2>
                     </div>
-
-                    <div className="p-6 border rounded-xl bg-white shadow-xl max-w-3xl mx-auto w-full">
-                        <h2 className="text-2xl font-bold mb-6 text-indigo-700">
-                            Editing Customer: <span className="text-gray-900">{customer.name}</span>
-                        </h2>
-                        
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Name */}
-                                <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
-                                    <input
-                                        id="name"
-                                        type="text"
-                                        value={data.name}
-                                        onChange={(e) => setData('name', e.target.value)}
-                                        className={INPUT_CLASSES} // <- APPLIED PADDING
-                                    />
-                                    {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
-                                </div>
-
-                                {/* Email */}
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-                                    <input
-                                        id="email"
-                                        type="email"
-                                        value={data.email}
-                                        onChange={(e) => setData('email', e.target.value)}
-                                        className={INPUT_CLASSES} // <- APPLIED PADDING
-                                    />
-                                    {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-6">
-                                {/* Phone Prefix */}
-                                <div>
-                                    <label htmlFor="phone_prefix" className="block text-sm font-medium text-gray-700">Prefix</label>
-                                    <input
-                                        id="phone_prefix"
-                                        type="text"
-                                        value={data.phone_prefix || ''}
-                                        onChange={(e) => setData('phone_prefix', e.target.value)}
-                                        className={INPUT_CLASSES} // <- APPLIED PADDING
-                                        placeholder="+44"
-                                    />
-                                    {errors.phone_prefix && <p className="mt-1 text-xs text-red-500">{errors.phone_prefix}</p>}
-                                </div>
-                                {/* Phone */}
-                                <div className="col-span-2">
-                                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
-                                    <input
-                                        id="phone"
-                                        type="text"
-                                        value={data.phone || ''}
-                                        onChange={(e) => setData('phone', e.target.value)}
-                                        className={INPUT_CLASSES} // <- APPLIED PADDING
-                                    />
-                                    {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
-                                </div>
-                            </div>
-                            
-                            {/* About */}
-                            <div>
-                                <label htmlFor="about" className="block text-sm font-medium text-gray-700">About Customer</label>
-                                <textarea
-                                    id="about"
-                                    rows={3}
-                                    value={data.about || ''}
-                                    onChange={(e) => setData('about', e.target.value)}
-                                    className={INPUT_CLASSES} // <- APPLIED PADDING
-                                />
-                                {errors.about && <p className="mt-1 text-xs text-red-500">{errors.about}</p>}
-                            </div>
-
-                            {/* Interests (Using a simple comma-separated input) */}
-                            <div>
-                                <label htmlFor="interests" className="block text-sm font-medium text-gray-700">Interests (Comma-Separated)</label>
-                                <input
-                                    id="interests"
+                    <div className="grid gap-5 p-5">
+                        <div className="grid gap-5 sm:grid-cols-2">
+                            <div className="grid gap-2">
+                                <Label htmlFor="name">Full Name</Label>
+                                <Input
+                                    id="name"
                                     type="text"
-                                    value={data.interests?.join(', ') || ''}
-                                    onChange={handleInterestChange}
-                                    className={INPUT_CLASSES} // <- APPLIED PADDING
-                                    placeholder="e.g., Hiking, Cooking, Tech"
+                                    value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
                                 />
-                                {errors.interests && <p className="mt-1 text-xs text-red-500">{errors.interests}</p>}
+                                <InputError message={errors.name} />
                             </div>
 
-                            {/* Is Active Toggle */}
-                            <div className="flex items-center pt-2">
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Email Address</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    value={data.email}
+                                    onChange={(e) => setData('email', e.target.value)}
+                                />
+                                <InputError message={errors.email} />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-5">
+                            <div className="grid gap-2">
+                                <Label htmlFor="phone_prefix">Prefix</Label>
+                                <Input
+                                    id="phone_prefix"
+                                    type="text"
+                                    value={data.phone_prefix || ''}
+                                    onChange={(e) => setData('phone_prefix', e.target.value)}
+                                    placeholder="+44"
+                                />
+                                <InputError message={errors.phone_prefix} />
+                            </div>
+                            <div className="col-span-2 grid gap-2">
+                                <Label htmlFor="phone">Phone Number</Label>
+                                <Input
+                                    id="phone"
+                                    type="text"
+                                    value={data.phone || ''}
+                                    onChange={(e) => setData('phone', e.target.value)}
+                                />
+                                <InputError message={errors.phone} />
+                            </div>
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="about">About Customer</Label>
+                            <Textarea
+                                id="about"
+                                rows={3}
+                                value={data.about || ''}
+                                onChange={(e) => setData('about', e.target.value)}
+                            />
+                            <InputError message={errors.about} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="interests">Interests (Comma-Separated)</Label>
+                            <Input
+                                id="interests"
+                                type="text"
+                                value={data.interests?.join(', ') || ''}
+                                onChange={handleInterestChange}
+                                placeholder="e.g., Hiking, Cooking, Tech"
+                            />
+                            <InputError message={errors.interests} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <div className="flex items-center gap-2">
                                 <input
                                     id="is_active"
                                     type="checkbox"
                                     checked={data.is_active}
                                     onChange={(e) => setData('is_active', e.target.checked)}
-                                    className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                    className="h-4 w-4 rounded accent-primary"
                                 />
-                                <label htmlFor="is_active" className="ml-2 block text-sm font-medium text-gray-700">
-                                    Customer is Active
-                                </label>
-                                {errors.is_active && <p className="mt-1 text-xs text-red-500">{errors.is_active}</p>}
+                                <Label htmlFor="is_active">Customer is Active</Label>
                             </div>
-
-                            <div className="flex justify-end pt-4 border-t border-gray-200">
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50"
-                                >
-                                    {processing ? 'Updating...' : 'Save Changes'}
-                                </button>
-                            </div>
-                        </form>
+                            <InputError message={errors.is_active} />
+                        </div>
                     </div>
-                </div>
+
+                    <div className="flex justify-end gap-2 border-t px-5 py-4">
+                        <Button type="submit" disabled={processing}>
+                            {processing ? 'Updating...' : 'Save Changes'}
+                        </Button>
+                    </div>
+                </form>
             </div>
         </AppLayout>
     );

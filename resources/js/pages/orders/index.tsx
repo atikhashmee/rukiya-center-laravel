@@ -4,9 +4,11 @@ import { Head, router, Link } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Eye } from 'lucide-react';
+import { Eye, ShoppingBag } from 'lucide-react';
 import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
+import PageHeader from '@/components/page-header';
+import { statusClasses, statusLabel } from '@/lib/status';
 
 type OrderStatus = 'pending' | 'paid' | 'processing' | 'completed' | 'cancelled';
 type PaymentStatus = 'pending' | 'paid' | 'failed';
@@ -38,17 +40,9 @@ interface Props {
     filters: Record<string, string>;
 }
 
-const getStatusColor = (status: string) => {
-    switch (status) {
-        case 'completed': return 'bg-green-100 text-green-800 border-green-300';
-        case 'processing':
-        case 'paid': return 'bg-indigo-100 text-indigo-800 border-indigo-300';
-        case 'cancelled':
-        case 'failed': return 'bg-red-100 text-red-800 border-red-300';
-        case 'pending':
-        default: return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-    }
-};
+const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
+const selectClasses = (status: string) =>
+    `${statusClasses(status)} cursor-pointer appearance-none pr-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`;
 
 export default function Index({ orders, orderStatuses, paymentStatuses, filters }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -67,71 +61,70 @@ export default function Index({ orders, orderStatuses, paymentStatuses, filters 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Orders Management" />
-            <div className="container py-4 pl-4">
-                <div className="flex flex-col gap-6 w-full">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800">Order Management</h2>
-                        <p className="text-sm text-gray-500 mt-1">{orders.total} total orders</p>
-                    </div>
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader title="Order Management" description={`${orders.total} total orders`} />
 
-                    <FilterBar
-                        filters={filters}
-                        placeholder="Search by order #, email, or name..."
-                        baseUrl="/admin/orders"
-                        filterConfigs={[
-                            {
-                                key: 'status',
-                                label: 'All Order Status',
-                                options: orderStatuses.map(s => ({
-                                    label: s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' '),
-                                    value: s,
-                                })),
-                            },
-                            {
-                                key: 'payment_status',
-                                label: 'All Payment Status',
-                                options: paymentStatuses.map(s => ({
-                                    label: s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' '),
-                                    value: s,
-                                })),
-                            },
-                        ]}
-                    />
+                <FilterBar
+                    filters={filters}
+                    placeholder="Search by order #, email, or name..."
+                    baseUrl="/admin/orders"
+                    filterConfigs={[
+                        {
+                            key: 'status',
+                            label: 'All Order Status',
+                            options: orderStatuses.map(s => ({
+                                label: s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' '),
+                                value: s,
+                            })),
+                        },
+                        {
+                            key: 'payment_status',
+                            label: 'All Payment Status',
+                            options: paymentStatuses.map(s => ({
+                                label: s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' '),
+                                value: s,
+                            })),
+                        },
+                    ]}
+                />
 
-                    <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">
+                <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                    <div className="overflow-x-auto">
                         <Table>
-                            <TableHeader className="bg-gray-100/70">
-                                <TableRow>
-                                    <TableHead className="w-[160px]">Order #</TableHead>
-                                    <TableHead>Customer</TableHead>
-                                    <TableHead className="text-center">Items</TableHead>
-                                    <TableHead className="text-center">Status</TableHead>
-                                    <TableHead className="text-center">Payment</TableHead>
-                                    <TableHead className="text-right">Total</TableHead>
-                                    <TableHead className="text-center">Actions</TableHead>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow className="hover:bg-transparent">
+                                    <TableHead className={`w-[160px] ${th}`}>Order #</TableHead>
+                                    <TableHead className={th}>Customer</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Items</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Status</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Payment</TableHead>
+                                    <TableHead className={`text-right ${th}`}>Total</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {orders.data.length > 0 ? (
                                     orders.data.map((order) => (
-                                        <TableRow key={order.id} className="hover:bg-gray-50">
+                                        <TableRow key={order.id} className="hover:bg-muted/40">
                                             <TableCell>
-                                                <span className="font-semibold text-blue-700">{order.order_number}</span>
+                                                <Link href={`/admin/orders/${order.id}`} className="font-medium text-primary hover:underline">
+                                                    {order.order_number}
+                                                </Link>
                                             </TableCell>
                                             <TableCell>
-                                                <div className="font-medium text-gray-800">{order.full_name}</div>
-                                                <div className="text-xs text-gray-500">{order.email}</div>
+                                                <div className="font-medium">{order.full_name}</div>
+                                                <div className="text-xs text-muted-foreground">{order.email}</div>
                                             </TableCell>
-                                            <TableCell className="text-center text-sm text-gray-600">{order.items_count}</TableCell>
+                                            <TableCell className="text-center text-sm text-muted-foreground tabular-nums">{order.items_count}</TableCell>
                                             <TableCell className="text-center">
                                                 <select
                                                     value={order.status}
                                                     onChange={(e) => handleStatusUpdate(order, 'status', e.target.value)}
-                                                    className={`rounded-md text-xs font-medium border p-1 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 ${getStatusColor(order.status)}`}
+                                                    className={selectClasses(order.status)}
                                                 >
                                                     {orderStatuses.map(s => (
-                                                        <option key={s} value={s} className="bg-white text-gray-900">
-                                                            {s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}
+                                                        <option key={s} value={s} className="bg-background text-foreground">
+                                                            {statusLabel(s)}
                                                         </option>
                                                     ))}
                                                 </select>
@@ -140,36 +133,39 @@ export default function Index({ orders, orderStatuses, paymentStatuses, filters 
                                                 <select
                                                     value={order.payment_status}
                                                     onChange={(e) => handleStatusUpdate(order, 'payment_status', e.target.value)}
-                                                    className={`rounded-md text-xs font-medium border p-1 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 ${getStatusColor(order.payment_status)}`}
+                                                    className={selectClasses(order.payment_status)}
                                                 >
                                                     {paymentStatuses.map(s => (
-                                                        <option key={s} value={s} className="bg-white text-gray-900">
-                                                            {s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}
+                                                        <option key={s} value={s} className="bg-background text-foreground">
+                                                            {statusLabel(s)}
                                                         </option>
                                                     ))}
                                                 </select>
                                             </TableCell>
-                                            <TableCell className="text-right font-semibold text-sm">£{Number(order.total).toFixed(2)}</TableCell>
+                                            <TableCell className="text-right text-sm font-semibold tabular-nums">£{Number(order.total).toFixed(2)}</TableCell>
                                             <TableCell className="text-center">
-                                                <Link href={`/admin/orders/${order.id}`}>
-                                                    <Button variant="outline" size="icon" className="h-8 w-8 text-blue-600 border-blue-300" title="View Order">
+                                                <Button variant="ghost" size="icon" className="h-8 w-8" title="View Order" asChild>
+                                                    <Link href={`/admin/orders/${order.id}`}>
                                                         <Eye className="h-4 w-4" />
-                                                    </Button>
-                                                </Link>
+                                                    </Link>
+                                                </Button>
                                             </TableCell>
                                         </TableRow>
                                     ))
                                 ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={7} className="h-24 text-center text-gray-400">
-                                            No orders found matching your filters.
+                                    <TableRow className="hover:bg-transparent">
+                                        <TableCell colSpan={7}>
+                                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                                <ShoppingBag className="h-8 w-8 opacity-40" />
+                                                <p className="text-sm">No orders found matching your filters.</p>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
-                        <Pagination links={orders.links} />
                     </div>
+                    <Pagination links={orders.links} />
                 </div>
             </div>
         </AppLayout>

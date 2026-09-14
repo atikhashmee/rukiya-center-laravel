@@ -4,7 +4,10 @@ import { Head, Link, router } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index } from "@/actions/App/Http/Controllers/BlogController";
-import { CornerUpLeft, Check, Trash2 } from 'lucide-react';
+import { ArrowLeft, Check, Trash2, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import PageHeader from '@/components/page-header';
+import { badgeClasses, statusClasses, statusLabel } from '@/lib/status';
 
 interface BlogComment {
     id: number;
@@ -51,95 +54,90 @@ export default function BlogShow({ post }: BlogShowProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={post.title} />
-            <div className="container py-4 pl-4 max-w-4xl mx-auto">
-                <div className="flex flex-col gap-6 w-full">
-                    <div className="flex justify-between items-center mb-4">
-                        <Link
-                            href={index().url}
-                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
-                        >
-                            <CornerUpLeft className="mr-2 h-4 w-4" />
-                            Back to Blog
-                        </Link>
+            <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title={post.title}
+                    description={
+                        <span className="flex flex-wrap items-center gap-2">
+                            <span className={statusClasses(post.status)}>{statusLabel(post.status)}</span>
+                            <span>Slug: <span className="font-mono">{post.slug}</span> &middot; Created: {new Date(post.created_at).toLocaleDateString()}</span>
+                        </span>
+                    }
+                    actions={
+                        <Button variant="outline" asChild>
+                            <Link href={index().url}>
+                                <ArrowLeft className="h-4 w-4" /> Back to Blog
+                            </Link>
+                        </Button>
+                    }
+                />
+
+                <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm">
+                    {post.featured_image && (
+                        <img
+                            src={post.featured_image}
+                            alt={post.title}
+                            className="max-h-96 w-full border-b object-cover"
+                        />
+                    )}
+                    <div className="tiptap-content p-5 text-sm md:p-6">
+                        <div dangerouslySetInnerHTML={{ __html: post.content }} />
                     </div>
+                </div>
 
-                    <div className="p-6 border rounded-xl bg-white shadow-xl">
-                        <div className="mb-4">
-                            <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${
-                                post.status === 'published' ? 'bg-green-100 text-green-800' :
-                                post.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-gray-100 text-gray-800'
-                            }`}>
-                                {post.status}
-                            </span>
-                        </div>
-
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">{post.title}</h1>
-                        <p className="text-sm text-gray-500 mb-6">
-                            Slug: {post.slug} &middot; Created: {new Date(post.created_at).toLocaleDateString()}
-                        </p>
-
-                        {post.featured_image && (
-                            <div className="mb-6">
-                                <img
-                                    src={post.featured_image}
-                                    alt={post.title}
-                                    className="w-full max-h-96 object-cover rounded-lg"
-                                />
-                            </div>
-                        )}
-
-                        <div className="prose max-w-none mb-8">
-                            <div dangerouslySetInnerHTML={{ __html: post.content }} />
-                        </div>
-                    </div>
-
-                    <div className="p-6 border rounded-xl bg-white shadow-xl">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">
+                <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+                    <div className="border-b px-5 py-4">
+                        <h2 className="font-semibold">
                             Comments ({post.comments?.length || 0})
                         </h2>
+                    </div>
+                    <div className="p-5">
                         {post.comments && post.comments.length > 0 ? (
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {post.comments.map((comment) => (
-                                    <div key={comment.id} className={`p-4 border rounded-lg ${comment.approved ? 'bg-gray-50' : 'bg-yellow-50 border-yellow-200'}`}>
-                                        <div className="flex justify-between items-center mb-2">
+                                    <div key={comment.id} className={`rounded-lg border p-4 ${comment.approved ? 'bg-muted/40' : 'border-amber-500/30 bg-amber-500/5'}`}>
+                                        <div className="mb-2 flex items-center justify-between gap-2">
                                             <div className="flex items-center gap-2">
-                                                <span className="font-medium text-gray-900">{comment.name}</span>
-                                                {!comment.approved && (
-                                                    <span className="inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
-                                                        Pending approval
-                                                    </span>
-                                                )}
+                                                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold uppercase text-primary">
+                                                    {comment.name.charAt(0)}
+                                                </span>
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-sm font-medium">{comment.name}</span>
+                                                        {!comment.approved && (
+                                                            <span className={badgeClasses('warning')}>Pending approval</span>
+                                                        )}
+                                                    </div>
+                                                    {comment.email && (
+                                                        <p className="text-xs text-muted-foreground">{comment.email}</p>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <span className="text-xs text-gray-500">
+                                            <span className="text-xs text-muted-foreground">
                                                 {new Date(comment.created_at).toLocaleDateString()}
                                             </span>
                                         </div>
-                                        {comment.email && (
-                                            <p className="text-xs text-gray-500 mb-1">{comment.email}</p>
-                                        )}
-                                        <p className="text-sm text-gray-700 mb-3">{comment.comment}</p>
+                                        <p className="mb-3 text-sm leading-relaxed">{comment.comment}</p>
                                         <div className="flex gap-2">
                                             {!comment.approved && (
-                                                <button
-                                                    onClick={() => approveComment(comment.id)}
-                                                    className="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-100 hover:bg-green-200 px-2.5 py-1 rounded-full transition-colors"
-                                                >
+                                                <Button size="sm" variant="outline" className="h-7 gap-1 text-xs" onClick={() => approveComment(comment.id)}>
                                                     <Check className="h-3 w-3" /> Approve
-                                                </button>
+                                                </Button>
                                             )}
-                                            <button
-                                                onClick={() => deleteComment(comment.id)}
-                                                className="inline-flex items-center gap-1 text-xs font-medium text-red-700 bg-red-100 hover:bg-red-200 px-2.5 py-1 rounded-full transition-colors"
-                                            >
+                                            <Button size="sm" variant="ghost"
+                                                className="h-7 gap-1 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                onClick={() => deleteComment(comment.id)}>
                                                 <Trash2 className="h-3 w-3" /> Remove
-                                            </button>
+                                            </Button>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-gray-500 text-sm">No comments yet.</p>
+                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                <MessageSquare className="h-8 w-8 opacity-40" />
+                                <p className="text-sm">No comments yet.</p>
+                            </div>
                         )}
                     </div>
                 </div>

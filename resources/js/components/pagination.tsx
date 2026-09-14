@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
+import { cn } from '@/lib/utils';
 
 interface PaginationLink {
     url: string | null;
@@ -17,37 +18,31 @@ const Pagination: React.FC<PaginationProps> = ({ links }) => {
     }
 
     return (
-        <div className="flex flex-wrap items-center justify-center mt-6">
-            <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm">
-                {links.map((link, index) => {
-                    const isDisabled = link.url === null;
-                    
-                    return (
-                        <Link
-                            key={index}
-                            href={link.url || '#'} // Fallback if url is null
-                            disabled={isDisabled}
-                            className={`
-                                relative inline-flex items-center px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out
-                                ${link.active 
-                                    ? 'z-10 bg-indigo-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-                                    : isDisabled 
-                                        ? 'text-gray-400 bg-gray-50 border border-gray-300 cursor-default'
-                                        : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
-                                }
-                                ${index === 0 ? 'rounded-l-md' : ''}
-                                ${index === links.length - 1 ? 'rounded-r-md' : ''}
-                            `}
-                            // This attribute is vital for Inertia navigation
-                            preserveScroll 
-                            preserveState
-                            // Dangerously setting inner HTML to display the &laquo; and &raquo; entities
-                            dangerouslySetInnerHTML={{ __html: link.label }}
-                        />
-                    );
-                })}
-            </nav>
-        </div>
+        <nav className="flex flex-wrap items-center justify-center gap-1 px-4 py-4">
+            {links.map((link, index) => {
+                const isDisabled = link.url === null;
+
+                return (
+                    <Link
+                        key={index}
+                        href={link.url || '#'}
+                        disabled={isDisabled}
+                        className={cn(
+                            'inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-3 text-sm font-medium transition-colors',
+                            link.active
+                                ? 'bg-primary text-primary-foreground shadow-sm'
+                                : isDisabled
+                                    ? 'cursor-default text-muted-foreground/50'
+                                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                        )}
+                        preserveScroll
+                        preserveState
+                        // Laravel labels contain &laquo; / &raquo; entities
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                );
+            })}
+        </nav>
     );
 };
 

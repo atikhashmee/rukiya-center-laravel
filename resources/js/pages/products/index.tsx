@@ -6,10 +6,12 @@ import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index, create, show, destroy, edit } from '@/routes/products';
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
-import { Pencil, Trash2, PlusCircle, Eye } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pencil, Trash2, Plus, Eye, Package } from 'lucide-react';
 import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
+import PageHeader from '@/components/page-header';
+import { badgeClasses } from '@/lib/status';
 
 interface Category {
     id: number;
@@ -36,6 +38,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Products', href: index().url },
 ];
 
+const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
+
 export default function Index({ products, categories, filters }: ProductsIndexProps) {
     const { flash } = usePage().props as any;
 
@@ -48,100 +52,99 @@ export default function Index({ products, categories, filters }: ProductsIndexPr
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Products" />
-            <div className="container py-4 pl-4">
-                <div className="flex flex-col gap-6 w-full">
-                    {flash?.success && (
-                        <div className="p-4 bg-green-50 border-l-4 border-green-500 rounded-lg">
-                            <p className="text-sm font-medium text-green-800">{flash.success}</p>
-                        </div>
-                    )}
-
-                    <div className="flex justify-between items-center mb-4">
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">Products</h2>
-                            <p className="text-sm text-gray-500 mt-1">{products.total} total products</p>
-                        </div>
-                        <Button onClick={() => window.location.href = create().url} className="bg-blue-600 hover:bg-blue-700 text-white">
-                            <PlusCircle className="mr-2 h-4 w-4" /> Add Product
-                        </Button>
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+                {flash?.success && (
+                    <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                        {flash.success}
                     </div>
+                )}
 
-                    <FilterBar
-                        filters={filters}
-                        placeholder="Search by name or SKU..."
-                        baseUrl={index().url}
-                        filterConfigs={[
-                            {
-                                key: 'category_id',
-                                label: 'All Categories',
-                                options: categories.map(c => ({ label: c.name, value: String(c.id) })),
-                            },
-                            {
-                                key: 'stock',
-                                label: 'All Stock',
-                                options: [
-                                    { label: 'In Stock', value: 'in_stock' },
-                                    { label: 'Out of Stock', value: 'out_of_stock' },
-                                ],
-                            },
-                            {
-                                key: 'status',
-                                label: 'All Status',
-                                options: [
-                                    { label: 'Active', value: 'active' },
-                                    { label: 'Inactive', value: 'inactive' },
-                                ],
-                            },
-                        ]}
-                    />
+                <PageHeader
+                    title="Products"
+                    description={`${products.total} total products`}
+                    actions={
+                        <Button onClick={() => window.location.href = create().url}>
+                            <Plus className="h-4 w-4" /> Add Product
+                        </Button>
+                    }
+                />
 
-                    <div className="p-3 border rounded-xl bg-white shadow-xl overflow-x-auto">
-                        <Table className="min-w-full">
-                            <TableCaption>A list of all products.</TableCaption>
-                            <TableHeader className="bg-gray-100/70">
-                                <TableRow>
-                                    <TableHead className="font-bold text-gray-700">Name</TableHead>
-                                    <TableHead className="font-bold text-gray-700">SKU</TableHead>
-                                    <TableHead className="font-bold text-gray-700">Category</TableHead>
-                                    <TableHead className="text-right font-bold text-gray-700">Price</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Stock</TableHead>
-                                    <TableHead className="text-center font-bold text-gray-700">Status</TableHead>
-                                    <TableHead className="text-center w-[150px] font-bold text-gray-700">Actions</TableHead>
+                <FilterBar
+                    filters={filters}
+                    placeholder="Search by name or SKU..."
+                    baseUrl={index().url}
+                    filterConfigs={[
+                        {
+                            key: 'category_id',
+                            label: 'All Categories',
+                            options: categories.map(c => ({ label: c.name, value: String(c.id) })),
+                        },
+                        {
+                            key: 'stock',
+                            label: 'All Stock',
+                            options: [
+                                { label: 'In Stock', value: 'in_stock' },
+                                { label: 'Out of Stock', value: 'out_of_stock' },
+                            ],
+                        },
+                        {
+                            key: 'status',
+                            label: 'All Status',
+                            options: [
+                                { label: 'Active', value: 'active' },
+                                { label: 'Inactive', value: 'inactive' },
+                            ],
+                        },
+                    ]}
+                />
+
+                <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow className="hover:bg-transparent">
+                                    <TableHead className={th}>Name</TableHead>
+                                    <TableHead className={th}>SKU</TableHead>
+                                    <TableHead className={th}>Category</TableHead>
+                                    <TableHead className={`text-right ${th}`}>Price</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Stock</TableHead>
+                                    <TableHead className={`text-center ${th}`}>Status</TableHead>
+                                    <TableHead className={`w-[150px] text-right ${th}`}>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {products.data.length > 0 ? (
                                     products.data.map((product: Product) => (
-                                        <TableRow key={product.id} className="hover:bg-gray-50 transition-colors">
-                                            <TableCell className="font-semibold text-gray-800">{product.name}</TableCell>
-                                            <TableCell className="text-sm text-gray-500 font-mono">{product.sku}</TableCell>
-                                            <TableCell className="text-sm text-gray-600">{product.category?.name || '-'}</TableCell>
-                                            <TableCell className="text-right font-semibold text-gray-800">£{product.price.toFixed(2)}</TableCell>
+                                        <TableRow key={product.id} className="hover:bg-muted/40">
+                                            <TableCell className="font-medium">{product.name}</TableCell>
+                                            <TableCell className="font-mono text-xs text-muted-foreground">{product.sku}</TableCell>
+                                            <TableCell className="text-muted-foreground">{product.category?.name || '-'}</TableCell>
+                                            <TableCell className="text-right font-medium tabular-nums">£{product.price.toFixed(2)}</TableCell>
                                             <TableCell className="text-center">
-                                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                                                    product.stock_quantity > 10 ? 'bg-green-100 text-green-800' :
-                                                    product.stock_quantity > 0 ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-red-100 text-red-800'
-                                                }`}>
+                                                <span className={badgeClasses(
+                                                    product.stock_quantity > 10 ? 'success' :
+                                                    product.stock_quantity > 0 ? 'warning' : 'danger'
+                                                )}>
                                                     {product.stock_quantity}
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${product.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
+                                                <span className={badgeClasses(product.is_active ? 'success' : 'neutral')}>
                                                     {product.is_active ? 'Active' : 'Inactive'}
                                                 </span>
                                             </TableCell>
-                                            <TableCell className="text-center">
-                                                <div className="flex gap-2 justify-center">
-                                                    <Button variant="outline" size="icon" className="h-8 w-8"
+                                            <TableCell>
+                                                <div className="flex justify-end gap-1">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="View"
                                                         onClick={() => window.location.href = show(product.id).url}>
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant="outline" size="icon" className="h-8 w-8"
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
                                                         onClick={() => window.location.href = edit(product.id).url}>
                                                         <Pencil className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant="destructive" size="icon" className="h-8 w-8"
+                                                    <Button variant="ghost" size="icon" title="Delete"
+                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                                         onClick={() => handleDelete(product.id)}>
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
@@ -150,16 +153,19 @@ export default function Index({ products, categories, filters }: ProductsIndexPr
                                         </TableRow>
                                     ))
                                 ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={7} className="h-24 text-center text-gray-400">
-                                            No products found matching your filters.
+                                    <TableRow className="hover:bg-transparent">
+                                        <TableCell colSpan={7}>
+                                            <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
+                                                <Package className="h-8 w-8 opacity-40" />
+                                                <p className="text-sm">No products found matching your filters.</p>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
-                        <Pagination links={products.links} />
                     </div>
+                    <Pagination links={products.links} />
                 </div>
             </div>
         </AppLayout>

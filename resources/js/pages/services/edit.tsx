@@ -1,34 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, type ReactNode } from 'react';
 import AppLayout from "@/layouts/app-layout";
 import { Head, router, useForm } from '@inertiajs/react';
 import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
-import { index, create, update } from "@/actions/App/Http/Controllers/ServiceController";
-import { CornerUpLeft, Save, Trash2, PlusCircle } from 'lucide-react';
+import { index, update } from "@/actions/App/Http/Controllers/ServiceController";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
+import InputError from '@/components/input-error';
+import PageHeader from '@/components/page-header';
+import { ArrowLeft, Save, Trash2, Plus, CalendarClock } from 'lucide-react';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
-const Button: React.FC<any> = ({ children, className = '', ...props }) => <button {...props} className={`px-4 py-2 rounded-lg font-medium transition-colors ${className}`}>{children}</button>;
-const Input: React.FC<any> = (props) => <input {...props} className="border border-gray-300 p-2 rounded-lg w-full focus:ring-indigo-500 focus:border-indigo-500" />;
-const Label: React.FC<any> = ({ children, ...props }) => <label {...props} className="block text-sm font-medium text-gray-700 mb-1">{children}</label>;
-const Textarea: React.FC<any> = (props) => <textarea {...props} className="border border-gray-300 p-2 rounded-lg w-full focus:ring-indigo-500 focus:border-indigo-500"></textarea>;
-const Select: React.FC<any> = ({ children, onValueChange, value, ...props }) => (
-    <div className="relative">
-        <select onChange={(e) => onValueChange(e.target.value)} value={value} className="appearance-none border border-gray-300 p-2 pr-8 rounded-lg w-full bg-white focus:ring-indigo-500 focus:border-indigo-500">
-            {children}
-        </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-        </div>
-    </div>
-);
-const SelectContent: React.FC<any> = ({ children }) => <>{children}</>;
-const SelectItem: React.FC<any> = ({ value, children }) => <option value={value}>{children}</option>;
-const SelectTrigger: React.FC<any> = ({ children }) => <>{children}</>;
-const SelectValue: React.FC<any> = ({ placeholder }) => <option disabled value="">{placeholder}</option>;
-const Checkbox: React.FC<any> = (props) => <input type="checkbox" {...props} className="rounded text-indigo-600 h-4 w-4 border-gray-300 focus:ring-indigo-500" />;
-
 
 type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
 type AppointmentType = 'online' | 'in_person' | 'both';
@@ -65,6 +50,18 @@ interface EditServiceOptionProps {
     serviceCategories: { id: number; name: string; slug: string }[];
 }
 
+function Section({ title, description, children }: { title: string; description: string; children: ReactNode }) {
+    return (
+        <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+            <div className="border-b px-5 py-4">
+                <h2 className="font-semibold">{title}</h2>
+                <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
+            </div>
+            <div className="grid gap-5 p-5 sm:grid-cols-2">{children}</div>
+        </div>
+    );
+}
+
 export default function Edit({ service, serviceCategories = [] }: EditServiceOptionProps) {
 
     const pageTitle = `Edit Service: ${service.title}`;
@@ -94,8 +91,8 @@ export default function Edit({ service, serviceCategories = [] }: EditServiceOpt
     const initialFormData = {
         ...service,
         features: Array.isArray(service.features) ? service.features.join(', ') : service.features,
-        required_form_fields: Array.isArray(service.required_form_fields) 
-            ? service.required_form_fields.join(', ') 
+        required_form_fields: Array.isArray(service.required_form_fields)
+            ? service.required_form_fields.join(', ')
             : service.required_form_fields
     };
 
@@ -105,7 +102,7 @@ export default function Edit({ service, serviceCategories = [] }: EditServiceOpt
         e.preventDefault();
 
         // Convert comma-separated strings back to arrays
-        const processedFeatures = typeof data.features === 'string' 
+        const processedFeatures = typeof data.features === 'string'
             ? data.features.split(',').map((f: string) => f.trim()).filter((f: string) => f !== '')
             : Array.isArray(data.features) ? data.features : [];
 
@@ -139,370 +136,334 @@ export default function Edit({ service, serviceCategories = [] }: EditServiceOpt
         { title: 'Services', href: index().url },
         { title: `Edit: ${service.title}`, href: '#' },
     ];
-    
+
     // Cleanup Effect for Price Fields on Type Change
     useEffect(() => {
         if (data.price_type === 'FREE' || data.price_type === 'RESERVATION') {
             setData({ ...data, price_value: null, min_donation: null });
         }
         if (data.price_type === 'FIXED' && data.price_value === null) {
-            setData('price_value', 50.00); 
+            setData('price_value', 50.00);
         }
         if (data.price_type === 'DONATION' && data.min_donation === null) {
-            setData('min_donation', 10.00); 
+            setData('min_donation', 10.00);
         }
     }, [data.price_type]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={pageTitle} />
-            <div className="container py-4 pl-4 max-w-4xl mx-auto">
-                <div className="flex flex-col gap-6 w-full ">
-                    
-                    {/* Header and Back Button */}
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-2xl font-bold text-gray-800">{pageTitle}</h2>
-                         <Link 
-                            href={index().url}
-                            className="text-gray-600 border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors inline-flex items-center shadow-sm"
+            <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title={pageTitle}
+                    actions={
+                        <Button variant="outline" asChild>
+                            <a href={index().url}>
+                                <ArrowLeft className="h-4 w-4" /> Back to Services
+                            </a>
+                        </Button>
+                    }
+                />
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+
+                    {/* 1. Core Identification and Ordering */}
+                    <Section title="Core Identity" description="Unique code, category, and display order.">
+                        <div className="grid gap-2">
+                            <Label htmlFor="id_code">ID Code (Unique)</Label>
+                            <Input
+                                id="id_code"
+                                value={data.id_code}
+                                onChange={(e) => setData('id_code', e.target.value.toUpperCase().replace(/\s/g, '_'))}
+                                aria-invalid={!!errors.id_code}
+                                className="font-mono"
+                                placeholder="E.g., ISTEKHARA_DEEP"
+                            />
+                            <InputError message={errors.id_code} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="order">Order</Label>
+                            <Input
+                                id="order"
+                                type="number"
+                                value={data.order}
+                                onChange={(e) => setData('order', parseInt(e.target.value) || 1)}
+                                aria-invalid={!!errors.order}
+                            />
+                            <InputError message={errors.order} />
+                        </div>
+
+                        <div className="grid gap-2 sm:col-span-2">
+                            <Label htmlFor="category_id">Category</Label>
+                            <NativeSelect
+                                id="category_id"
+                                className="w-full"
+                                value={data.category_id}
+                                onChange={(e) => setData('category_id', e.target.value ? Number(e.target.value) : '')}
+                                aria-invalid={!!errors.category_id}
+                            >
+                                <NativeSelectOption disabled value="">Select Category</NativeSelectOption>
+                                {serviceCategories.map((cat) => (
+                                    <NativeSelectOption key={cat.id} value={cat.id}>{cat.name}</NativeSelectOption>
+                                ))}
+                            </NativeSelect>
+                            <InputError message={errors.category_id} />
+                        </div>
+                    </Section>
+
+                    {/* 2. Content & Presentation */}
+                    <Section title="Content & Design" description="Titles, descriptions, icons, and visual styling.">
+                        <div className="grid gap-2 sm:col-span-2">
+                            <Label htmlFor="title">Title</Label>
+                            <Input
+                                id="title"
+                                value={data.title}
+                                onChange={(e) => setData('title', e.target.value)}
+                                aria-invalid={!!errors.title}
+                                placeholder="E.g., Full Istekhara Assessment"
+                            />
+                            <InputError message={errors.title} />
+                        </div>
+
+                        <div className="grid gap-2 sm:col-span-2">
+                            <Label htmlFor="tagline">Tagline</Label>
+                            <Input
+                                id="tagline"
+                                value={data.tagline}
+                                onChange={(e) => setData('tagline', e.target.value)}
+                                aria-invalid={!!errors.tagline}
+                                placeholder="Brief, punchy description."
+                            />
+                            <InputError message={errors.tagline} />
+                        </div>
+
+                        <div className="grid gap-2 sm:col-span-2">
+                            <Label htmlFor="description">Full Description</Label>
+                            <Textarea
+                                id="description"
+                                value={data.description}
+                                onChange={(e) => setData('description', e.target.value)}
+                                aria-invalid={!!errors.description}
+                                placeholder="Detailed explanation of the service option."
+                            />
+                            <InputError message={errors.description} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="icon">Lucide Icon Name</Label>
+                            <Input
+                                id="icon"
+                                value={data.icon}
+                                onChange={(e) => setData('icon', e.target.value)}
+                                aria-invalid={!!errors.icon}
+                                placeholder="E.g., Zap, Heart, Sunrise"
+                            />
+                            <InputError message={errors.icon} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="card_color">Card Highlight Color (Tailwind Class)</Label>
+                            <Input
+                                id="card_color"
+                                value={data.card_color}
+                                onChange={(e) => setData('card_color', e.target.value)}
+                                aria-invalid={!!errors.card_color}
+                                className="font-mono"
+                                placeholder="E.g., border-l-red-500"
+                            />
+                            <InputError message={errors.card_color} />
+                        </div>
+
+                        <div className="grid gap-2 sm:col-span-2">
+                            <Label htmlFor="features">Features (comma separated)</Label>
+                            <Textarea
+                                id="features"
+                                value={data.features}
+                                onChange={(e) => setData('features', e.target.value)}
+                                aria-invalid={!!errors.features}
+                                className="font-mono"
+                                placeholder='Feature 1, Feature 2, Feature 3'
+                                rows={3}
+                            />
+                            <InputError message={errors.features} />
+                        </div>
+                    </Section>
+
+                    {/* 3. Booking and Payment Logic */}
+                    <Section title="Pricing & Logic" description="Payment type, values, and assessment requirement.">
+                        <div className="grid gap-2">
+                            <Label htmlFor="price_type">Price Type</Label>
+                            <NativeSelect
+                                id="price_type"
+                                className="w-full"
+                                value={data.price_type}
+                                onChange={(e) => setData('price_type', e.target.value as PriceType)}
+                                aria-invalid={!!errors.price_type}
+                            >
+                                <NativeSelectOption disabled value="">Select Price Type</NativeSelectOption>
+                                <NativeSelectOption value="FIXED">FIXED (Set Price)</NativeSelectOption>
+                                <NativeSelectOption value="DONATION">DONATION (Minimum Contribution)</NativeSelectOption>
+                                <NativeSelectOption value="FREE">FREE</NativeSelectOption>
+                                <NativeSelectOption value="RESERVATION">RESERVATION (Assessment Required)</NativeSelectOption>
+                            </NativeSelect>
+                            <InputError message={errors.price_type} />
+                        </div>
+
+                        {/* Dynamic Price Inputs */}
+                        {data.price_type === 'FIXED' && (
+                            <div className="grid gap-2">
+                                <Label htmlFor="price_value">Fixed Price (£)</Label>
+                                <Input
+                                    id="price_value"
+                                    type="number"
+                                    step="0.01"
+                                    value={data.price_value || ''}
+                                    onChange={(e) => setData('price_value', parseFloat(e.target.value))}
+                                    aria-invalid={!!errors.price_value}
+                                    placeholder="e.g., 120.00"
+                                />
+                                <InputError message={errors.price_value} />
+                            </div>
+                        )}
+
+                        {data.price_type === 'DONATION' && (
+                            <div className="grid gap-2">
+                                <Label htmlFor="min_donation">Minimum Donation (£)</Label>
+                                <Input
+                                    id="min_donation"
+                                    type="number"
+                                    step="0.01"
+                                    value={data.min_donation || ''}
+                                    onChange={(e) => setData('min_donation', parseFloat(e.target.value))}
+                                    aria-invalid={!!errors.min_donation}
+                                    placeholder="e.g., 10.00"
+                                />
+                                <InputError message={errors.min_donation} />
+                            </div>
+                        )}
+
+                        <div className="grid gap-2 sm:col-span-2">
+                            <Label htmlFor="appointment_type">Appointment Type</Label>
+                            <NativeSelect
+                                id="appointment_type"
+                                className="w-full"
+                                value={data.appointment_type}
+                                onChange={(e) => setData('appointment_type', e.target.value as AppointmentType)}
+                                aria-invalid={!!errors.appointment_type}
+                            >
+                                <NativeSelectOption disabled value="">Select Appointment Type</NativeSelectOption>
+                                <NativeSelectOption value="online">Online only</NativeSelectOption>
+                                <NativeSelectOption value="in_person">In-person only</NativeSelectOption>
+                                <NativeSelectOption value="both">Both (customer chooses)</NativeSelectOption>
+                            </NativeSelect>
+                            <p className="text-xs text-muted-foreground">Controls which consultation formats are offered on the booking form.</p>
+                            <InputError message={errors.appointment_type} />
+                        </div>
+
+                        <label
+                            htmlFor="requires_custom_assessment"
+                            className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm font-medium transition sm:col-span-2 ${data.requires_custom_assessment ? 'border-primary bg-primary/5 ring-1 ring-primary/30' : 'hover:bg-muted/50'}`}
                         >
-                            <CornerUpLeft className="mr-2 h-4 w-4" />
-                            Back to Services
-                        </Link>
+                            <input
+                                type="checkbox"
+                                id="requires_custom_assessment"
+                                className="h-4 w-4 rounded accent-primary"
+                                checked={data.requires_custom_assessment}
+                                onChange={(e) => setData('requires_custom_assessment', e.target.checked)}
+                            />
+                            Requires Custom Assessment (Reservation-style booking)
+                        </label>
+
+                        <div className="grid gap-2 sm:col-span-2">
+                            <Label htmlFor="required_form_fields">Required Form Fields (comma separated)</Label>
+                            <Textarea
+                                id="required_form_fields"
+                                value={data.required_form_fields}
+                                onChange={(e) => setData('required_form_fields', e.target.value)}
+                                aria-invalid={!!errors.required_form_fields}
+                                className="font-mono"
+                                placeholder='motherName, age, symptoms'
+                                rows={3}
+                            />
+                            <p className="text-xs text-muted-foreground">These fields are collected during booking (e.g., motherName, phone).</p>
+                            <InputError message={errors.required_form_fields} />
+                        </div>
+
+                        <div className="grid gap-2 sm:col-span-2">
+                            <Label htmlFor="submit_button_text">Submit Button Text</Label>
+                            <Input
+                                id="submit_button_text"
+                                value={data.submit_button_text}
+                                onChange={(e) => setData('submit_button_text', e.target.value)}
+                                aria-invalid={!!errors.submit_button_text}
+                                placeholder="E.g., Book Now, Request Assessment"
+                            />
+                            <InputError message={errors.submit_button_text} />
+                        </div>
+                    </Section>
+
+                    <div className="flex justify-end gap-2">
+                        <Button variant="outline" asChild>
+                            <a href={index().url}>Cancel</a>
+                        </Button>
+                        <Button type="submit" disabled={processing}>
+                            <Save className="h-4 w-4" />
+                            {processing ? 'Updating.....' : 'Update Service'}
+                        </Button>
+                    </div>
+                </form>
+
+                {/* Schedule Management */}
+                <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+                    <div className="border-b px-5 py-4">
+                        <h2 className="font-semibold">Weekly Availability</h2>
+                        <p className="mt-0.5 text-sm text-muted-foreground">Days and times customers can book this service, regardless of practitioner.</p>
                     </div>
 
-                    {/* FULL FORM CARD */}
-                    <form onSubmit={handleSubmit} className="p-6 border rounded-xl bg-white shadow-2xl space-y-8">
-                        
-                        {/* 1. Core Identification and Ordering */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-b pb-6">
-                            <div>
-                                <h3 className="text-lg font-semibold text-indigo-700 mb-1">Core Identity</h3>
-                                <p className="text-sm text-gray-500">Unique code, category, and display order.</p>
-                            </div>
-                            <div className="md:col-span-2 space-y-4">
-                                
-                                <div className='flex space-x-4'>
-                                    {/* ID Code */}
-                                    <div className='flex-1'>
-                                        <Label htmlFor="id_code">ID Code (Unique)</Label>
-                                        <Input
-                                            id="id_code"
-                                            value={data.id_code}
-                                            onChange={(e: any) => setData('id_code', e.target.value.toUpperCase().replace(/\s/g, '_'))}
-                                            className={errors.id_code ? 'border-red-500' : ''}
-                                            placeholder="E.g., ISTEKHARA_DEEP"
-                                        />
-                                        {errors.id_code && <p className="text-xs text-red-500 mt-1">{errors.id_code}</p>}
-                                    </div>
-
-                                    {/* Order */}
-                                    <div className='w-20'>
-                                        <Label htmlFor="order">Order</Label>
-                                        <Input
-                                            id="order"
-                                            type="number"
-                                            value={data.order}
-                                            onChange={(e: any) => setData('order', parseInt(e.target.value) || 1)}
-                                            className={errors.order ? 'border-red-500' : ''}
-                                        />
-                                        {errors.order && <p className="text-xs text-red-500 mt-1">{errors.order}</p>}
-                                    </div>
-                                </div>
-
-                                {/* Category */}
-                                <div>
-                                    <Label htmlFor="category_id">Category</Label>
-                                    <Select
-                                        value={data.category_id}
-                                        onValueChange={(value: string) => setData('category_id', value ? Number(value) : '')}
-                                    >
-                                        <SelectTrigger className={errors.category_id ? 'border-red-500' : ''}>
-                                            <SelectValue placeholder="Select Category" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {serviceCategories.map((cat) => (
-                                                <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    {errors.category_id && <p className="text-xs text-red-500 mt-1">{errors.category_id}</p>}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* 2. Content & Presentation */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-b pb-6">
-                            <div>
-                                <h3 className="text-lg font-semibold text-indigo-700 mb-1">Content & Design</h3>
-                                <p className="text-sm text-gray-500">Titles, descriptions, icons, and visual styling.</p>
-                            </div>
-                            <div className="md:col-span-2 space-y-4">
-                                {/* Title */}
-                                <div>
-                                    <Label htmlFor="title">Title</Label>
-                                    <Input
-                                        id="title"
-                                        value={data.title}
-                                        onChange={(e: any) => setData('title', e.target.value)}
-                                        className={errors.title ? 'border-red-500' : ''}
-                                        placeholder="E.g., Full Istekhara Assessment"
-                                    />
-                                    {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
-                                </div>
-
-                                {/* Tagline */}
-                                <div>
-                                    <Label htmlFor="tagline">Tagline</Label>
-                                    <Input
-                                        id="tagline"
-                                        value={data.tagline}
-                                        onChange={(e: any) => setData('tagline', e.target.value)}
-                                        className={errors.tagline ? 'border-red-500' : ''}
-                                        placeholder="Brief, punchy description."
-                                    />
-                                    {errors.tagline && <p className="text-xs text-red-500 mt-1">{errors.tagline}</p>}
-                                </div>
-
-                                {/* Description */}
-                                <div>
-                                    <Label htmlFor="description">Full Description</Label>
-                                    <Textarea
-                                        id="description"
-                                        value={data.description}
-                                        onChange={(e: any) => setData('description', e.target.value)}
-                                        className={errors.description ? 'border-red-500' : ''}
-                                        placeholder="Detailed explanation of the service option."
-                                    />
-                                    {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description}</p>}
-                                </div>
-
-                                {/* Icon and Color */}
-                                <div className='grid grid-cols-2 gap-4'>
-                                    <div>
-                                        <Label htmlFor="icon">Lucide Icon Name</Label>
-                                        <Input
-                                            id="icon"
-                                            value={data.icon}
-                                            onChange={(e: any) => setData('icon', e.target.value)}
-                                            className={errors.icon ? 'border-red-500' : ''}
-                                            placeholder="E.g., Zap, Heart, Sunrise"
-                                        />
-                                        {errors.icon && <p className="text-xs text-red-500 mt-1">{errors.icon}</p>}
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="card_color">Card Highlight Color (Tailwind Class)</Label>
-                                        <Input
-                                            id="card_color"
-                                            value={data.card_color}
-                                            onChange={(e: any) => setData('card_color', e.target.value)}
-                                            className={errors.card_color ? 'border-red-500' : ''}
-                                            placeholder="E.g., border-l-red-500"
-                                        />
-                                        {errors.card_color && <p className="text-xs text-red-500 mt-1">{errors.card_color}</p>}
-                                    </div>
-                                </div>
-
-                                {/* Features (Comma Separated) */}
-                                <div>
-                                    <Label htmlFor="features">Features (comma separated)</Label>
-                                    <Textarea
-                                        id="features"
-                                        value={data.features}
-                                        onChange={(e: any) => setData('features', e.target.value)}
-                                        className={errors.features ? 'border-red-500 font-mono' : 'font-mono'}
-                                        placeholder='Feature 1, Feature 2, Feature 3'
-                                        rows={3}
-                                    />
-                                    {errors.features && <p className="text-xs text-red-500 mt-1">{errors.features}</p>}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* 3. Booking and Payment Logic */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                                <h3 className="text-lg font-semibold text-indigo-700 mb-1">Pricing & Logic</h3>
-                                <p className="text-sm text-gray-500">Payment type, values, and assessment requirement.</p>
-                            </div>
-                            <div className="md:col-span-2 space-y-4">
-                                {/* Price Type */}
-                                <div>
-                                    <Label htmlFor="price_type">Price Type</Label>
-                                    <Select 
-                                        value={data.price_type} 
-                                        onValueChange={(value: PriceType) => setData('price_type', value)}
-                                    >
-                                        <SelectTrigger className={errors.price_type ? 'border-red-500' : ''}>
-                                            <SelectValue placeholder="Select Price Type" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="FIXED">FIXED (Set Price)</SelectItem>
-                                            <SelectItem value="DONATION">DONATION (Minimum Contribution)</SelectItem>
-                                            <SelectItem value="FREE">FREE</SelectItem>
-                                            <SelectItem value="RESERVATION">RESERVATION (Assessment Required)</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    {errors.price_type && <p className="text-xs text-red-500 mt-1">{errors.price_type}</p>}
-                                </div>
-
-                                {/* Dynamic Price Inputs */}
-                                <div className='grid grid-cols-2 gap-4 transition-all duration-300'>
-                                    {data.price_type === 'FIXED' && (
-                                        <div>
-                                            <Label htmlFor="price_value">Fixed Price (£)</Label>
-                                            <Input
-                                                id="price_value"
-                                                type="number"
-                                                step="0.01"
-                                                value={data.price_value || ''}
-                                                onChange={(e: any) => setData('price_value', parseFloat(e.target.value))}
-                                                className={errors.price_value ? 'border-red-500' : ''}
-                                                placeholder="e.g., 120.00"
-                                            />
-                                            {errors.price_value && <p className="text-xs text-red-500 mt-1">{errors.price_value}</p>}
-                                        </div>
-                                    )}
-
-                                    {data.price_type === 'DONATION' && (
-                                        <div>
-                                            <Label htmlFor="min_donation">Minimum Donation (£)</Label>
-                                            <Input
-                                                id="min_donation"
-                                                type="number"
-                                                step="0.01"
-                                                value={data.min_donation || ''}
-                                                onChange={(e: any) => setData('min_donation', parseFloat(e.target.value))}
-                                                className={errors.min_donation ? 'border-red-500' : ''}
-                                                placeholder="e.g., 10.00"
-                                            />
-                                            {errors.min_donation && <p className="text-xs text-red-500 mt-1">{errors.min_donation}</p>}
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Custom Assessment */}
-                                <div className="flex items-center space-x-2 pt-2">
-                                    <Checkbox
-                                        id="requires_custom_assessment"
-                                        checked={data.requires_custom_assessment}
-                                        onChange={(e: any) => setData('requires_custom_assessment', e.target.checked)}
-                                    />
-                                    <label
-                                        htmlFor="requires_custom_assessment"
-                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                    >
-                                        Requires Custom Assessment (Reservation-style booking)
-                                    </label>
-                                </div>
-                                
-                                {/* Appointment Type */}
-                                <div>
-                                    <Label htmlFor="appointment_type">Appointment Type</Label>
-                                    <Select
-                                        value={data.appointment_type}
-                                        onValueChange={(value: AppointmentType) => setData('appointment_type', value)}
-                                    >
-                                        <SelectTrigger className={errors.appointment_type ? 'border-red-500' : ''}>
-                                            <SelectValue placeholder="Select Appointment Type" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="online">Online only</SelectItem>
-                                            <SelectItem value="in_person">In-person only</SelectItem>
-                                            <SelectItem value="both">Both (customer chooses)</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <p className="text-xs text-gray-500 mt-1">Controls which consultation formats are offered on the booking form.</p>
-                                    {errors.appointment_type && <p className="text-xs text-red-500 mt-1">{errors.appointment_type}</p>}
-                                </div>
-
-                                {/* Required Form Fields (Comma Separated) */}
-                                <div>
-                                    <Label htmlFor="required_form_fields">Required Form Fields (comma separated)</Label>
-                                    <Textarea
-                                        id="required_form_fields"
-                                        value={data.required_form_fields}
-                                        onChange={(e : any) => setData('required_form_fields', e.target.value)}
-                                        className={errors.required_form_fields ? 'border-red-500 font-mono' : 'font-mono'}
-                                        placeholder='motherName, age, symptoms'
-                                        rows={3}
-                                    />
-                                    <p className="text-xs text-gray-500 mt-1">These fields are collected during booking (e.g., motherName, phone).</p>
-                                    {errors.required_form_fields && <p className="text-xs text-red-500 mt-1">{errors.required_form_fields}</p>}
-                                </div>
-
-                                {/* Submit Button Text */}
-                                <div>
-                                    <Label htmlFor="submit_button_text">Submit Button Text</Label>
-                                    <Input
-                                        id="submit_button_text"
-                                        value={data.submit_button_text}
-                                        onChange={(e: any) => setData('submit_button_text', e.target.value)}
-                                        className={errors.submit_button_text ? 'border-red-500' : ''}
-                                        placeholder="E.g., Book Now, Request Assessment"
-                                    />
-                                    {errors.submit_button_text && <p className="text-xs text-red-500 mt-1">{errors.submit_button_text}</p>}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Form Submission */}
-                        <div className="flex justify-end pt-4 border-t">
-                            <Button 
-                                type="submit" 
-                                disabled={processing} 
-                                className="bg-blue-600 hover:bg-blue-700 transition duration-150 shadow-md hover:shadow-lg text-white"
-                            >
-                                <Save className="mr-2 h-4 w-4" />
-                                {processing ? 'Updating.....' : 'Update Service'}
-                            </Button>
-                        </div>
-                    </form>
-
-                    {/* Schedule Management */}
-                    <div className="p-6 border rounded-xl bg-white shadow-2xl">
-                        <h3 className="text-lg font-semibold text-indigo-700 mb-1">Weekly Availability</h3>
-                        <p className="text-sm text-gray-500 mb-4">Days and times customers can book this service, regardless of practitioner.</p>
-
+                    <div className="space-y-5 p-5">
                         {service.schedules.length > 0 ? (
-                            <div className="space-y-3 mb-6">
+                            <div className="divide-y overflow-hidden rounded-lg border">
                                 {service.schedules.map(schedule => (
-                                    <div key={schedule.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                    <div key={schedule.id} className="flex items-center justify-between px-4 py-3 hover:bg-muted/40">
                                         <div className="flex items-center gap-4">
-                                            <span className="font-medium text-sm text-gray-800">{DAYS[schedule.day_of_week]}</span>
-                                            <span className="text-sm text-gray-500">{schedule.start_time} — {schedule.end_time}</span>
+                                            <span className="w-24 text-sm font-medium">{DAYS[schedule.day_of_week]}</span>
+                                            <span className="text-sm tabular-nums text-muted-foreground">{schedule.start_time} — {schedule.end_time}</span>
                                         </div>
-                                        <button type="button" onClick={() => handleDeleteSchedule(schedule.id)}
-                                            className="h-8 w-8 flex items-center justify-center rounded-lg text-white bg-red-600 hover:bg-red-700">
+                                        <Button type="button" variant="ghost" size="icon"
+                                            className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                            onClick={() => handleDeleteSchedule(schedule.id)}>
                                             <Trash2 className="h-4 w-4" />
-                                        </button>
+                                        </Button>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-sm text-gray-400 mb-6">No schedules set. Add availability below.</p>
+                            <div className="flex flex-col items-center gap-2 py-8 text-center text-muted-foreground">
+                                <CalendarClock className="h-8 w-8 opacity-40" />
+                                <p className="text-sm">No schedules set. Add availability below.</p>
+                            </div>
                         )}
 
-                        <form onSubmit={handleAddSchedule} className="flex flex-wrap items-end gap-4 p-4 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
-                            <div>
+                        <form onSubmit={handleAddSchedule} className="flex flex-wrap items-end gap-4 rounded-lg border border-dashed bg-muted/50 p-4">
+                            <div className="grid gap-2">
                                 <Label htmlFor="schedule_day">Day</Label>
-                                <select id="schedule_day" value={scheduleData.day_of_week} onChange={e => setScheduleData({ ...scheduleData, day_of_week: Number(e.target.value) })}
-                                    className="appearance-none border border-gray-300 p-2 rounded-lg bg-white focus:ring-indigo-500 focus:border-indigo-500">
+                                <NativeSelect id="schedule_day" value={scheduleData.day_of_week} onChange={e => setScheduleData({ ...scheduleData, day_of_week: Number(e.target.value) })}>
                                     {DAYS.map((day, i) => (
-                                        <option key={i} value={i}>{day}</option>
+                                        <NativeSelectOption key={i} value={i}>{day}</NativeSelectOption>
                                     ))}
-                                </select>
+                                </NativeSelect>
                             </div>
-                            <div>
+                            <div className="grid gap-2">
                                 <Label htmlFor="schedule_start">Start Time</Label>
-                                <Input id="schedule_start" type="time" value={scheduleData.start_time} onChange={(e: any) => setScheduleData({ ...scheduleData, start_time: e.target.value })} />
+                                <Input id="schedule_start" type="time" value={scheduleData.start_time} onChange={(e) => setScheduleData({ ...scheduleData, start_time: e.target.value })} />
                             </div>
-                            <div>
+                            <div className="grid gap-2">
                                 <Label htmlFor="schedule_end">End Time</Label>
-                                <Input id="schedule_end" type="time" value={scheduleData.end_time} onChange={(e: any) => setScheduleData({ ...scheduleData, end_time: e.target.value })} />
+                                <Input id="schedule_end" type="time" value={scheduleData.end_time} onChange={(e) => setScheduleData({ ...scheduleData, end_time: e.target.value })} />
                             </div>
-                            <Button type="submit" disabled={addingSchedule} className="bg-blue-600 hover:bg-blue-700 text-white">
-                                <PlusCircle className="mr-2 h-4 w-4 inline" /> {addingSchedule ? 'Adding...' : 'Add'}
+                            <Button type="submit" disabled={addingSchedule}>
+                                <Plus className="h-4 w-4" /> {addingSchedule ? 'Adding...' : 'Add'}
                             </Button>
                         </form>
                     </div>

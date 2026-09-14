@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { router } from '@inertiajs/react';
 import { Search, X } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 
 export interface FilterOption {
     label: string;
@@ -54,44 +57,37 @@ export default function FilterBar({ filters, filterConfigs, placeholder = 'Searc
     };
 
     return (
-        <div className="p-4 border rounded-xl bg-white shadow-sm mb-4">
+        <div className="rounded-xl border bg-card p-3 shadow-sm">
             <div className="flex flex-wrap items-center gap-3">
-                {/* Search */}
                 <div className="relative flex-1 min-w-[200px]">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <input
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={placeholder}
-                        className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="pl-9"
                     />
                 </div>
 
-                {/* Filter dropdowns */}
                 {filterConfigs.map((config) => (
-                    <select
+                    <NativeSelect
                         key={config.key}
                         value={filters[config.key] || ''}
                         onChange={(e) => handleFilterChange(config.key, e.target.value)}
-                        className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-blue-500 focus:border-blue-500"
                     >
-                        <option value="">{config.label}</option>
+                        <NativeSelectOption value="">{config.label}</NativeSelectOption>
                         {config.options.map((opt) => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            <NativeSelectOption key={opt.value} value={opt.value}>{opt.label}</NativeSelectOption>
                         ))}
-                    </select>
+                    </NativeSelect>
                 ))}
 
-                {/* Clear button */}
                 {hasActiveFilters && (
-                    <button
-                        onClick={clearAll}
-                        className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors"
-                    >
-                        <X className="h-3 w-3" />
+                    <Button variant="ghost" onClick={clearAll} className="text-destructive hover:bg-destructive/10 hover:text-destructive">
+                        <X className="h-4 w-4" />
                         Clear
-                    </button>
+                    </Button>
                 )}
             </div>
         </div>

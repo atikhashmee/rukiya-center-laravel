@@ -3,6 +3,7 @@ import { useForm } from '@inertiajs/react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import InputError from '@/components/input-error';
 import { store, update } from '@/routes/productCategories';
 
 interface CategoryFormProps {
@@ -28,31 +29,28 @@ export default function CategoryForm({ category }: CategoryFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-                <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                    Category Name
-                </Label>
+        <form onSubmit={handleSubmit} className="grid gap-6">
+            <div className="grid gap-2">
+                <Label htmlFor="name">Category Name</Label>
                 <Input
                     id="name"
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}
-                    className="mt-1 block w-full"
                     placeholder="e.g. Essential Oils"
                 />
-                {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+                <InputError message={errors.name} />
             </div>
 
             {category && (
-                <div>
-                    <Label className="text-sm font-medium text-gray-700">Slug</Label>
-                    <p className="mt-1 text-sm text-gray-500 font-mono">{category.slug}</p>
-                    <p className="text-xs text-gray-400 mt-1">Auto-generated from name on save.</p>
+                <div className="grid gap-1.5 rounded-lg border bg-muted/50 px-4 py-3">
+                    <Label>Slug</Label>
+                    <p className="font-mono text-sm">{category.slug}</p>
+                    <p className="text-xs text-muted-foreground">Auto-generated from name on save.</p>
                 </div>
             )}
 
-            <div className="flex justify-end">
-                <Button type="submit" disabled={processing} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <div className="flex justify-end gap-2 border-t pt-5">
+                <Button type="submit" disabled={processing}>
                     {processing ? 'Saving...' : category ? 'Update Category' : 'Create Category'}
                 </Button>
             </div>

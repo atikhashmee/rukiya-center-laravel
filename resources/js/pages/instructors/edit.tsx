@@ -6,7 +6,10 @@ import { dashboard } from '@/routes';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CornerUpLeft } from 'lucide-react';
+import { Textarea } from "@/components/ui/textarea";
+import InputError from "@/components/input-error";
+import PageHeader from "@/components/page-header";
+import { ArrowLeft } from 'lucide-react';
 
 interface Service {
     id: number;
@@ -75,99 +78,114 @@ export default function EditInstructor({ instructor, services }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit ${instructor.name}`} />
-            <div className="container py-4 pl-4">
-                <div className="max-w-4xl mx-auto">
-                    <button onClick={() => router.get('/admin/instructors')}
-                        className="flex items-center gap-2 text-sm text-gray-600 border border-gray-300 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 mb-6">
-                        <CornerUpLeft className="h-4 w-4" /> Back to Instructors
-                    </button>
+            <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 p-4 md:p-6">
+                <PageHeader
+                    title="Edit Instructor"
+                    description={instructor.name}
+                    actions={
+                        <Button variant="outline" onClick={() => router.get('/admin/instructors')}>
+                            <ArrowLeft className="h-4 w-4" /> Back to Instructors
+                        </Button>
+                    }
+                />
 
-                    <div className="bg-white border rounded-xl shadow-xl p-6 mb-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-6">Edit Instructor</h2>
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <Label className="text-sm font-medium text-gray-700">Full Name *</Label>
-                                    <Input value={data.name} onChange={e => setData('name', e.target.value)} className="mt-1" />
-                                    {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+                        <div className="border-b px-5 py-4">
+                            <h2 className="font-semibold">Profile</h2>
+                        </div>
+                        <div className="grid gap-5 p-5">
+                            <div className="grid gap-5 sm:grid-cols-2">
+                                <div className="grid gap-2">
+                                    <Label>Full Name *</Label>
+                                    <Input value={data.name} onChange={e => setData('name', e.target.value)} />
+                                    <InputError message={errors.name} />
                                 </div>
-                                <div>
-                                    <Label className="text-sm font-medium text-gray-700">Title</Label>
-                                    <Input value={data.title} onChange={e => setData('title', e.target.value)} className="mt-1" placeholder="e.g. Senior Imam & Ruqyah Practitioner" />
-                                    {errors.title && <p className="text-xs text-red-500 mt-1">{errors.title}</p>}
+                                <div className="grid gap-2">
+                                    <Label>Title</Label>
+                                    <Input value={data.title} onChange={e => setData('title', e.target.value)} placeholder="e.g. Senior Imam & Ruqyah Practitioner" />
+                                    <InputError message={errors.title} />
                                 </div>
-                                <div>
-                                    <Label className="text-sm font-medium text-gray-700">Email</Label>
-                                    <Input type="email" value={data.email} onChange={e => setData('email', e.target.value)} className="mt-1" />
-                                    {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+                                <div className="grid gap-2">
+                                    <Label>Email</Label>
+                                    <Input type="email" value={data.email} onChange={e => setData('email', e.target.value)} />
+                                    <InputError message={errors.email} />
                                 </div>
-                                <div>
-                                    <Label className="text-sm font-medium text-gray-700">Phone</Label>
-                                    <Input value={data.phone} onChange={e => setData('phone', e.target.value)} className="mt-1" />
-                                    {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
+                                <div className="grid gap-2">
+                                    <Label>Phone</Label>
+                                    <Input value={data.phone} onChange={e => setData('phone', e.target.value)} />
+                                    <InputError message={errors.phone} />
                                 </div>
-                                <div className="flex items-center gap-2 pt-6">
-                                    <input type="checkbox" id="is_active" checked={data.is_active} onChange={e => setData('is_active', e.target.checked)} className="h-4 w-4 rounded border-gray-300" />
-                                    <Label htmlFor="is_active" className="text-sm font-medium text-gray-700">Active</Label>
+                                <div className="flex items-center gap-2">
+                                    <input type="checkbox" id="is_active" checked={data.is_active} onChange={e => setData('is_active', e.target.checked)} className="h-4 w-4 rounded accent-primary" />
+                                    <Label htmlFor="is_active">Active</Label>
                                 </div>
                             </div>
 
-                            <div>
-                                <Label className="text-sm font-medium text-gray-700">Bio</Label>
-                                <textarea value={data.bio} onChange={e => setData('bio', e.target.value)} rows={3} className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                                {errors.bio && <p className="text-xs text-red-500 mt-1">{errors.bio}</p>}
+                            <div className="grid gap-2">
+                                <Label>Bio</Label>
+                                <Textarea value={data.bio} onChange={e => setData('bio', e.target.value)} rows={3} />
+                                <InputError message={errors.bio} />
                             </div>
-                            <div>
-                                <Label className="text-sm font-medium text-gray-700">Languages (comma-separated)</Label>
-                                <Input value={data.languages} onChange={e => setData('languages', e.target.value)} className="mt-1" placeholder="English, Arabic, Bengali, Urdu" />
-                                {errors.languages && <p className="text-xs text-red-500 mt-1">{errors.languages}</p>}
+                            <div className="grid gap-2">
+                                <Label>Languages (comma-separated)</Label>
+                                <Input value={data.languages} onChange={e => setData('languages', e.target.value)} placeholder="English, Arabic, Bengali, Urdu" />
+                                <InputError message={errors.languages} />
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <Label className="text-sm font-medium text-gray-700">Experience</Label>
-                                    <Input value={data.experience} onChange={e => setData('experience', e.target.value)} className="mt-1" placeholder="30+ Years Experience" />
-                                    {errors.experience && <p className="text-xs text-red-500 mt-1">{errors.experience}</p>}
-                                </div>
-                                <div>
-                                    <Label className="text-sm font-medium text-gray-700">Location</Label>
-                                    <Input value={data.location} onChange={e => setData('location', e.target.value)} className="mt-1" placeholder="UK Based" />
-                                    {errors.location && <p className="text-xs text-red-500 mt-1">{errors.location}</p>}
-                                </div>
-                                <div>
-                                    <Label className="text-sm font-medium text-gray-700">Appointment Type</Label>
-                                    <Input value={data.appointment_type} onChange={e => setData('appointment_type', e.target.value)} className="mt-1" placeholder="Online & In Person" />
-                                    {errors.appointment_type && <p className="text-xs text-red-500 mt-1">{errors.appointment_type}</p>}
-                                </div>
-                            </div>
-                            <p className="text-xs text-gray-400 -mt-4">These three show as small badges on the booking page. Leave any blank to hide that badge.</p>
-
-                            <div>
-                                <Label className="text-sm font-medium text-gray-700 mb-3 block">Assigned Services *</Label>
-                                {Object.entries(grouped).map(([category, items]) => (
-                                    <div key={category} className="mb-4">
-                                        <p className="text-xs font-semibold text-gray-500 uppercase mb-2">{category}</p>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                            {items.map(service => (
-                                                <label key={service.id} className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition ${data.service_ids.includes(service.id) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}>
-                                                    <input type="checkbox" checked={data.service_ids.includes(service.id)} onChange={() => toggleService(service.id)} className="h-4 w-4 rounded border-gray-300" />
-                                                    <span className="text-sm text-gray-700">{service.title}</span>
-                                                </label>
-                                            ))}
-                                        </div>
+                            <div className="grid gap-2">
+                                <div className="grid gap-5 md:grid-cols-3">
+                                    <div className="grid gap-2">
+                                        <Label>Experience</Label>
+                                        <Input value={data.experience} onChange={e => setData('experience', e.target.value)} placeholder="30+ Years Experience" />
+                                        <InputError message={errors.experience} />
                                     </div>
-                                ))}
-                                {errors.service_ids && <p className="text-xs text-red-500 mt-1">{errors.service_ids}</p>}
+                                    <div className="grid gap-2">
+                                        <Label>Location</Label>
+                                        <Input value={data.location} onChange={e => setData('location', e.target.value)} placeholder="UK Based" />
+                                        <InputError message={errors.location} />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label>Appointment Type</Label>
+                                        <Input value={data.appointment_type} onChange={e => setData('appointment_type', e.target.value)} placeholder="Online & In Person" />
+                                        <InputError message={errors.appointment_type} />
+                                    </div>
+                                </div>
+                                <p className="text-xs text-muted-foreground">These three show as small badges on the booking page. Leave any blank to hide that badge.</p>
                             </div>
-
-                            <div className="flex justify-end pt-4 border-t">
-                                <Button type="submit" disabled={processing} className="bg-blue-600 hover:bg-blue-700 text-white">
-                                    {processing ? 'Saving...' : 'Update Instructor'}
-                                </Button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+
+                    <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
+                        <div className="border-b px-5 py-4">
+                            <h2 className="font-semibold">Assigned Services *</h2>
+                        </div>
+                        <div className="grid gap-5 p-5">
+                            {Object.entries(grouped).map(([category, items]) => (
+                                <div key={category}>
+                                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{category}</p>
+                                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                        {items.map(service => {
+                                            const selected = data.service_ids.includes(service.id);
+                                            return (
+                                                <label key={service.id} className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition ${selected ? 'border-primary bg-primary/5 ring-1 ring-primary/30' : 'hover:bg-muted/50'}`}>
+                                                    <input type="checkbox" checked={selected} onChange={() => toggleService(service.id)} className="h-4 w-4 rounded accent-primary" />
+                                                    <span className="text-sm">{service.title}</span>
+                                                </label>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            ))}
+                            <InputError message={errors.service_ids} />
+                        </div>
+                    </div>
+
+                    <div className="flex justify-end gap-2">
+                        <Button type="submit" disabled={processing}>
+                            {processing ? 'Saving...' : 'Update Instructor'}
+                        </Button>
+                    </div>
+                </form>
             </div>
         </AppLayout>
     );
