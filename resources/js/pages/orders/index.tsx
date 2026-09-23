@@ -9,6 +9,7 @@ import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
 import PageHeader from '@/components/page-header';
 import { statusClasses, statusLabel } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 type OrderStatus = 'pending' | 'paid' | 'processing' | 'completed' | 'cancelled';
 type PaymentStatus = 'pending' | 'paid' | 'failed';
@@ -45,6 +46,7 @@ const selectClasses = (status: string) =>
     `${statusClasses(status)} cursor-pointer appearance-none pr-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`;
 
 export default function Index({ orders, orderStatuses, paymentStatuses, filters }: Props) {
+    const canManage = useCan('orders.manage');
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin/dashboard' },
         { title: 'Orders', href: '/admin/orders' },
@@ -117,30 +119,38 @@ export default function Index({ orders, orderStatuses, paymentStatuses, filters 
                                             </TableCell>
                                             <TableCell className="text-center text-sm text-muted-foreground tabular-nums">{order.items_count}</TableCell>
                                             <TableCell className="text-center">
-                                                <select
-                                                    value={order.status}
-                                                    onChange={(e) => handleStatusUpdate(order, 'status', e.target.value)}
-                                                    className={selectClasses(order.status)}
-                                                >
-                                                    {orderStatuses.map(s => (
-                                                        <option key={s} value={s} className="bg-background text-foreground">
-                                                            {statusLabel(s)}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                {canManage ? (
+                                                    <select
+                                                        value={order.status}
+                                                        onChange={(e) => handleStatusUpdate(order, 'status', e.target.value)}
+                                                        className={selectClasses(order.status)}
+                                                    >
+                                                        {orderStatuses.map(s => (
+                                                            <option key={s} value={s} className="bg-background text-foreground">
+                                                                {statusLabel(s)}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                ) : (
+                                                    <span className={statusClasses(order.status)}>{statusLabel(order.status)}</span>
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <select
-                                                    value={order.payment_status}
-                                                    onChange={(e) => handleStatusUpdate(order, 'payment_status', e.target.value)}
-                                                    className={selectClasses(order.payment_status)}
-                                                >
-                                                    {paymentStatuses.map(s => (
-                                                        <option key={s} value={s} className="bg-background text-foreground">
-                                                            {statusLabel(s)}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                {canManage ? (
+                                                    <select
+                                                        value={order.payment_status}
+                                                        onChange={(e) => handleStatusUpdate(order, 'payment_status', e.target.value)}
+                                                        className={selectClasses(order.payment_status)}
+                                                    >
+                                                        {paymentStatuses.map(s => (
+                                                            <option key={s} value={s} className="bg-background text-foreground">
+                                                                {statusLabel(s)}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                ) : (
+                                                    <span className={statusClasses(order.payment_status)}>{statusLabel(order.payment_status)}</span>
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-right text-sm font-semibold tabular-nums">£{Number(order.total).toFixed(2)}</TableCell>
                                             <TableCell className="text-center">

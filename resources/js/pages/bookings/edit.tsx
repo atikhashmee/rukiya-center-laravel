@@ -12,6 +12,7 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import InputError from "@/components/input-error";
 import { ArrowLeft, Eye, Save } from 'lucide-react';
 import PageHeader from '@/components/page-header';
+import { useCan } from '@/lib/permissions';
 
 type BookingStatus = 'new' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
 type PaymentStatus = 'pending' | 'paid' | 'failed' | 'assessment_required';
@@ -81,6 +82,7 @@ const Field: React.FC<{ id: string; name: string; error?: string; wide?: boolean
 );
 
 export default function Edit({ booking, services, instructors, bookingStatuses, paymentStatuses }: BookingsEditProps) {
+    const canManage = useCan('bookings.manage');
     const { data, setData, transform, patch, processing, errors } = useForm({
         service_id: String(booking.service_id ?? ''),
         instructor_id: booking.instructor_id ? String(booking.instructor_id) : '',
@@ -225,12 +227,14 @@ export default function Edit({ booking, services, instructors, bookingStatuses, 
                         </label>
                     </Section>
 
-                    <div className="flex justify-end gap-2">
-                        <Button type="submit" disabled={processing}>
-                            <Save className="h-4 w-4" />
-                            {processing ? 'Saving...' : 'Save Changes'}
-                        </Button>
-                    </div>
+                    {canManage && (
+                        <div className="flex justify-end gap-2">
+                            <Button type="submit" disabled={processing}>
+                                <Save className="h-4 w-4" />
+                                {processing ? 'Saving...' : 'Save Changes'}
+                            </Button>
+                        </div>
+                    )}
                 </form>
             </div>
         </AppLayout>

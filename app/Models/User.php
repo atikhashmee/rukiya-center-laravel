@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -22,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'instructor_id',
     ];
 
     /**
@@ -48,5 +51,38 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /** Set when this account belongs to an instructor; their records are scoped to it. */
+    public function instructor(): BelongsTo
+    {
+        return $this->belongsTo(Instructor::class);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return (bool) $this->role?->isSuperAdmin();
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return (bool) $this->role?->hasPermission($permission);
+    }
+
+    /** Permission keys this user holds, for the frontend. */
+    public function permissions(): array
+    {
+        if (! $this->role) {
+            return [];
+        }
+
+        return $this->role->isSuperAdmin()
+            ? \App\Support\Permissions::all()
+            : array_values($this->role->permissions ?? []);
     }
 }

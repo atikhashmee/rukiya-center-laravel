@@ -10,6 +10,7 @@ import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
 import PageHeader from '@/components/page-header';
 import { badgeClasses } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 interface Instructor {
     id: number;
@@ -43,6 +44,7 @@ const TH = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Index({ instructors, filters }: InstructorsIndexProps) {
     const { flash } = usePage().props as any;
+    const canManage = useCan('instructors.manage');
 
     const handleDelete = (id: number) => {
         if (confirm("Are you sure you want to delete this instructor?")) {
@@ -64,11 +66,11 @@ export default function Index({ instructors, filters }: InstructorsIndexProps) {
                 <PageHeader
                     title="Instructors"
                     description={`${instructors.total} total instructors`}
-                    actions={
+                    actions={canManage && (
                         <Button onClick={() => window.location.href = '/admin/instructors/create'}>
                             <Plus className="h-4 w-4" /> Add Instructor
                         </Button>
-                    }
+                    )}
                 />
 
                 <FilterBar
@@ -122,15 +124,19 @@ export default function Index({ instructors, filters }: InstructorsIndexProps) {
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 <div className="flex justify-center gap-1">
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
-                                                        onClick={() => window.location.href = `/admin/instructors/${instructor.id}/edit`}>
-                                                        <Pencil className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant="ghost" size="icon" title="Delete"
-                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                        onClick={() => handleDelete(instructor.id)}>
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
+                                                    {canManage && (
+                                                        <>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
+                                                                onClick={() => window.location.href = `/admin/instructors/${instructor.id}/edit`}>
+                                                                <Pencil className="h-4 w-4" />
+                                                            </Button>
+                                                            <Button variant="ghost" size="icon" title="Delete"
+                                                                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                onClick={() => handleDelete(instructor.id)}>
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>

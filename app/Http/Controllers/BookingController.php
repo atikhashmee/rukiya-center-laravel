@@ -25,6 +25,11 @@ class BookingController extends Controller
     {
         $query = Booking::with(['customer', 'service:id,title', 'instructor:id,name']);
 
+        // Instructor accounts only ever see their own bookings.
+        if ($instructorId = $request->user()?->instructor_id) {
+            $query->where('instructor_id', $instructorId);
+        }
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -53,11 +58,21 @@ class BookingController extends Controller
         ]);
     }
 
+    /** An instructor account may only touch bookings assigned to its own instructor record. */
+    private function authorizeBooking(Booking $booking): void
+    {
+        $instructorId = auth()->user()?->instructor_id;
+
+        abort_if($instructorId && $booking->instructor_id !== $instructorId, 403);
+    }
+
     /**
      * Display every detail of a booking: client, guardian, customer account and payments.
      */
     public function show(Booking $booking)
     {
+        $this->authorizeBooking($booking);
+
         // order_type has been stored both as "App\Models\Booking" and with its backslashes stripped.
         $payments = Payment::where('order_id', $booking->id)
             ->where('order_type', 'like', '%Booking')
@@ -75,6 +90,8 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking)
     {
+        $this->authorizeBooking($booking);
+
         return Inertia::render('bookings/edit', [
             'booking' => $booking,
             'services' => Service::orderBy('title')->get(['id', 'title']),
@@ -90,6 +107,8 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
+        $this->authorizeBooking($booking);
+
         $validated = $request->validate([
             'service_id' => 'required|exists:services,id',
             'instructor_id' => 'nullable|exists:instructors,id',
@@ -138,6 +157,8 @@ class BookingController extends Controller
      */
     public function updateStatus(Request $request, Booking $booking)
     {
+        $this->authorizeBooking($booking);
+
         $request->validate(['booking_status' => 'required|in:' . implode(',', $this->bookingStatuses)]);
 
         $booking->update(['booking_status' => $request->booking_status]);
@@ -151,6 +172,8 @@ class BookingController extends Controller
      */
     public function sendOrderEmail(Booking $booking)
     {
+        $this->authorizeBooking($booking);
+
         $recipient = $booking->email;
 
         if (!$recipient) {

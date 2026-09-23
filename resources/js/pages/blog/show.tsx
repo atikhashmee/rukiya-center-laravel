@@ -8,6 +8,7 @@ import { ArrowLeft, Check, Trash2, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/page-header';
 import { badgeClasses, statusClasses, statusLabel } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 interface BlogComment {
     id: number;
@@ -35,6 +36,7 @@ interface BlogShowProps {
 }
 
 export default function BlogShow({ post }: BlogShowProps) {
+    const canManage = useCan('blog.manage');
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: dashboard().url },
         { title: 'Blog', href: index().url },
@@ -117,19 +119,21 @@ export default function BlogShow({ post }: BlogShowProps) {
                                                 {new Date(comment.created_at).toLocaleDateString()}
                                             </span>
                                         </div>
-                                        <p className="mb-3 text-sm leading-relaxed">{comment.comment}</p>
-                                        <div className="flex gap-2">
-                                            {!comment.approved && (
-                                                <Button size="sm" variant="outline" className="h-7 gap-1 text-xs" onClick={() => approveComment(comment.id)}>
-                                                    <Check className="h-3 w-3" /> Approve
+                                        <p className="text-sm leading-relaxed">{comment.comment}</p>
+                                        {canManage && (
+                                            <div className="mt-3 flex gap-2">
+                                                {!comment.approved && (
+                                                    <Button size="sm" variant="outline" className="h-7 gap-1 text-xs" onClick={() => approveComment(comment.id)}>
+                                                        <Check className="h-3 w-3" /> Approve
+                                                    </Button>
+                                                )}
+                                                <Button size="sm" variant="ghost"
+                                                    className="h-7 gap-1 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                    onClick={() => deleteComment(comment.id)}>
+                                                    <Trash2 className="h-3 w-3" /> Remove
                                                 </Button>
-                                            )}
-                                            <Button size="sm" variant="ghost"
-                                                className="h-7 gap-1 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                onClick={() => deleteComment(comment.id)}>
-                                                <Trash2 className="h-3 w-3" /> Remove
-                                            </Button>
-                                        </div>
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>

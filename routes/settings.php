@@ -27,6 +27,8 @@ Route::prefix('admin')->middleware('auth:web')->group(function () {
     Route::get('settings/two-factor', [TwoFactorAuthenticationController::class, 'show'])
         ->name('two-factor.show');
 
-    Route::get('settings/whatsapp', [WhatsAppController::class, 'edit'])->name('whatsapp.edit');
-    Route::put('settings/whatsapp', [WhatsAppController::class, 'update'])->name('whatsapp.update');
+    Route::middleware('can:settings.manage')->group(function () {
+        Route::get('settings/whatsapp', [WhatsAppController::class, 'edit'])->name('whatsapp.edit');
+        Route::put('settings/whatsapp', [WhatsAppController::class, 'update'])->name('whatsapp.update');
+    });
 });

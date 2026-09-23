@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import InputError from "@/components/input-error";
 import PageHeader from '@/components/page-header';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { badgeClasses, tones } from '@/lib/status';
 
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
@@ -19,10 +20,28 @@ interface UserFormData {
     email: string;
     password: string;
     password_confirmation: string;
+    role_id: string;
+    instructor_id: string;
+}
+
+interface Option {
+    id: number;
+    name?: string;
+    label?: string;
 }
 
 interface EditUserProps {
-    user: UserFormData & { id: number; email_verified_at: string | null; created_at: string };
+    user: {
+        id: number;
+        name: string;
+        email: string;
+        email_verified_at: string | null;
+        created_at: string;
+        role_id: number | null;
+        instructor_id: number | null;
+    };
+    roles: Option[];
+    instructors: Option[];
 }
 
 const Section: React.FC<{ title: string; description: string; children: React.ReactNode }> = ({ title, description, children }) => (
@@ -35,7 +54,7 @@ const Section: React.FC<{ title: string; description: string; children: React.Re
     </div>
 );
 
-export default function Edit({ user }: EditUserProps) {
+export default function Edit({ user, roles, instructors }: EditUserProps) {
     const pageTitle = `Edit User: ${user.name}`;
 
     const { data, setData, errors, processing, put } = useForm<UserFormData>({
@@ -43,6 +62,8 @@ export default function Edit({ user }: EditUserProps) {
         email: user.email,
         password: '',
         password_confirmation: '',
+        role_id: user.role_id ? String(user.role_id) : '',
+        instructor_id: user.instructor_id ? String(user.instructor_id) : '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -145,6 +166,45 @@ export default function Edit({ user }: EditUserProps) {
                                     placeholder="user@example.com"
                                 />
                                 <InputError message={errors.email} />
+                            </div>
+                        </div>
+                    </Section>
+
+                    <Section title="Access" description="Which role this account gets, and whether it belongs to an instructor">
+                        <div className="grid gap-5 sm:grid-cols-2">
+                            <div className="grid gap-2">
+                                <Label htmlFor="role_id">Role *</Label>
+                                <NativeSelect
+                                    id="role_id"
+                                    className="w-full"
+                                    value={data.role_id}
+                                    onChange={(e) => setData('role_id', e.target.value)}
+                                    aria-invalid={!!errors.role_id}
+                                >
+                                    <NativeSelectOption value="">Select a role</NativeSelectOption>
+                                    {roles.map((role) => (
+                                        <NativeSelectOption key={role.id} value={String(role.id)}>{role.label}</NativeSelectOption>
+                                    ))}
+                                </NativeSelect>
+                                <InputError message={errors.role_id} />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="instructor_id">Linked instructor</Label>
+                                <NativeSelect
+                                    id="instructor_id"
+                                    className="w-full"
+                                    value={data.instructor_id}
+                                    onChange={(e) => setData('instructor_id', e.target.value)}
+                                    aria-invalid={!!errors.instructor_id}
+                                >
+                                    <NativeSelectOption value="">Not an instructor</NativeSelectOption>
+                                    {instructors.map((instructor) => (
+                                        <NativeSelectOption key={instructor.id} value={String(instructor.id)}>{instructor.name}</NativeSelectOption>
+                                    ))}
+                                </NativeSelect>
+                                <InputError message={errors.instructor_id} />
+                                <p className="text-xs text-muted-foreground">Linking an instructor limits this account to that instructor's own bookings.</p>
                             </div>
                         </div>
                     </Section>

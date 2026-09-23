@@ -12,6 +12,7 @@ import { edit } from '@/routes/services';
 import FilterBar from '@/components/filter-bar';
 import PageHeader from '@/components/page-header';
 import { badgeClasses } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 type PriceType = 'FREE' | 'DONATION' | 'FIXED' | 'RESERVATION';
 
@@ -66,6 +67,7 @@ const getPriceDisplay = (option: ServiceOption) => {
 
 export default function Index({ services, categories, filters }: ServiceOptionsIndexProps) {
     const { flash } = usePage().props as any;
+    const canManage = useCan('services.manage');
 
     const handleDelete = (optionId: number, title: string) => {
         if (window.confirm(`Are you sure you want to delete the option: "${title}"? This is permanent.`)) {
@@ -99,13 +101,13 @@ export default function Index({ services, categories, filters }: ServiceOptionsI
                 <PageHeader
                     title="Service Management"
                     description={`${services.total} total services`}
-                    actions={
+                    actions={canManage && (
                         <Button asChild>
                             <a href={create().url}>
                                 <Plus className="h-4 w-4" /> Create New Option
                             </a>
                         </Button>
-                    }
+                    )}
                 />
 
                 <FilterBar
@@ -185,22 +187,26 @@ export default function Index({ services, categories, filters }: ServiceOptionsI
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex justify-end gap-1">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8"
-                                                        onClick={() => router.visit(edit(option.id).url)}
-                                                    >
-                                                        <Pencil className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                        onClick={() => handleDelete(option.id, option.title)}
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
+                                                    {canManage && (
+                                                        <>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8"
+                                                                onClick={() => router.visit(edit(option.id).url)}
+                                                            >
+                                                                <Pencil className="h-4 w-4" />
+                                                            </Button>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                onClick={() => handleDelete(option.id, option.title)}
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>

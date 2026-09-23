@@ -3,6 +3,10 @@ import { LucideIcon } from 'lucide-react';
 
 export interface Auth {
     user: User;
+    /** Role of the signed-in admin user, null for customers. */
+    role?: { id: number; name: string; label: string } | null;
+    /** Permission keys such as "bookings.view" / "bookings.manage". */
+    permissions?: string[];
 }
 
 export interface BreadcrumbItem {
@@ -35,6 +39,8 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    role_id?: number | null;
+    instructor_id?: number | null;
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;

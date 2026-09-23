@@ -19,6 +19,7 @@ import {
     CalendarDays,
 } from 'lucide-react';
 import { badgeClasses, statusClasses, statusLabel, tones, type Tone } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 import { index as blogIndex } from '@/actions/App/Http/Controllers/BlogController';
 import productIndex from '@/actions/App/Http/Controllers/ProductController';
@@ -31,13 +32,14 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard().url },
 ];
 
+// The server only sends the sections this user may view, so every key is optional.
 interface Stats {
-    products: { total: number; active: number; out_of_stock: number };
-    services: { total: number; free: number; paid: number };
-    blogs: { total: number; published: number; drafts: number };
-    customers: { total: number; active: number; verified: number };
-    users: { total: number; verified: number };
-    bookings: { total: number; new: number; pending: number; completed: number; revenue: number };
+    products?: { total: number; active: number; out_of_stock: number };
+    services?: { total: number; free: number; paid: number };
+    blogs?: { total: number; published: number; drafts: number };
+    customers?: { total: number; active: number; verified: number };
+    users?: { total: number; verified: number };
+    bookings?: { total: number; new: number; pending: number; completed: number; revenue: number };
 }
 
 interface RecentBooking {
@@ -74,69 +76,77 @@ export default function Dashboard({ stats, recentBookings, recentCustomers }: Da
     const { auth } = usePage<SharedData>().props;
     const firstName = auth?.user?.name?.split(' ')[0];
 
+    const canViewBookings = useCan('bookings.view');
+    const canViewCustomers = useCan('customers.view');
+
+    // Only the sections present in `stats` get a card.
     const cards: { title: string; total: number; subtitle: string; alert: string | null; icon: typeof Book; href: string; tone: Tone }[] = [
-        {
+        stats.products && {
             title: 'Products',
             total: stats.products.total,
             subtitle: `${stats.products.active} active`,
             alert: stats.products.out_of_stock > 0 ? `${stats.products.out_of_stock} out of stock` : null,
             icon: PackageSearch,
             href: productIndex.index().url,
-            tone: 'info',
+            tone: 'info' as Tone,
         },
-        {
+        stats.services && {
             title: 'Services',
             total: stats.services.total,
             subtitle: `${stats.services.free} free, ${stats.services.paid} paid`,
             alert: null,
             icon: Kanban,
             href: serviceIndex.index().url,
-            tone: 'accent',
+            tone: 'accent' as Tone,
         },
-        {
+        stats.blogs && {
             title: 'Blog Posts',
             total: stats.blogs.total,
             subtitle: `${stats.blogs.published} published`,
             alert: stats.blogs.drafts > 0 ? `${stats.blogs.drafts} drafts` : null,
             icon: Rss,
             href: blogIndex().url,
-            tone: 'warning',
+            tone: 'warning' as Tone,
         },
-        {
+        stats.customers && {
             title: 'Customers',
             total: stats.customers.total,
             subtitle: `${stats.customers.active} active`,
             alert: null,
             icon: User,
             href: customerIndex.index().url,
-            tone: 'success',
+            tone: 'success' as Tone,
         },
-        {
+        stats.users && {
             title: 'Admin Users',
             total: stats.users.total,
             subtitle: `${stats.users.verified} verified`,
             alert: null,
             icon: Users,
             href: userIndex.index().url,
-            tone: 'neutral',
+            tone: 'neutral' as Tone,
         },
-        {
+        stats.bookings && {
             title: 'Bookings',
             total: stats.bookings.total,
             subtitle: `${stats.bookings.completed} completed`,
             alert: stats.bookings.pending > 0 ? `${stats.bookings.pending} pending payment` : null,
             icon: Book,
             href: bookingIndex.index().url,
-            tone: 'danger',
+            tone: 'danger' as Tone,
         },
-    ];
+    ].filter((card) => card !== undefined);
 
-    const summary: { label: string; value: React.ReactNode; icon: typeof Book; tone: Tone }[] = [
-        { label: 'Completed', value: stats.bookings.completed, icon: CheckCircle, tone: 'success' },
-        { label: 'Pending Payment', value: stats.bookings.pending, icon: Clock, tone: 'warning' },
-        { label: 'New Bookings', value: stats.bookings.new, icon: TrendingUp, tone: 'info' },
-        { label: 'Total Revenue', value: `£${Number(stats.bookings.revenue).toFixed(2)}`, icon: DollarSign, tone: 'accent' },
-    ];
+    const bookingStats = stats.bookings;
+
+    const summary: { label: string; value: React.ReactNode; icon: typeof Book; tone: Tone }[] = bookingStats
+        ? [
+              { label: 'Completed', value: bookingStats.completed, icon: CheckCircle, tone: 'success' },
+              { label: 'Pending Payment', value: bookingStats.pending, icon: Clock, tone: 'warning' },
+              { label: 'New Bookings', value: bookingStats.new, icon: TrendingUp, tone: 'info' },
+              { label: 'Total Revenue', value: `£${Number(bookingStats.revenue).toFixed(2)}`, icon: DollarSign, tone: 'accent' },
+          ]
+        : [];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -158,20 +168,23 @@ export default function Dashboard({ stats, recentBookings, recentCustomers }: Da
                             </h1>
                             <p className="mt-1 text-sm opacity-80">Overview of your platform at a glance</p>
                         </div>
-                        <div className="flex gap-3">
-                            <div className="rounded-xl bg-primary-foreground/10 px-4 py-3 ring-1 ring-primary-foreground/15 backdrop-blur-sm">
-                                <p className="text-xs opacity-80">Bookings</p>
-                                <p className="text-xl font-semibold">{stats.bookings.total}</p>
+                        {bookingStats && (
+                            <div className="flex gap-3">
+                                <div className="rounded-xl bg-primary-foreground/10 px-4 py-3 ring-1 ring-primary-foreground/15 backdrop-blur-sm">
+                                    <p className="text-xs opacity-80">Bookings</p>
+                                    <p className="text-xl font-semibold">{bookingStats.total}</p>
+                                </div>
+                                <div className="rounded-xl bg-primary-foreground/10 px-4 py-3 ring-1 ring-primary-foreground/15 backdrop-blur-sm">
+                                    <p className="text-xs opacity-80">Revenue</p>
+                                    <p className="text-xl font-semibold">£{Number(bookingStats.revenue).toFixed(2)}</p>
+                                </div>
                             </div>
-                            <div className="rounded-xl bg-primary-foreground/10 px-4 py-3 ring-1 ring-primary-foreground/15 backdrop-blur-sm">
-                                <p className="text-xs opacity-80">Revenue</p>
-                                <p className="text-xl font-semibold">£{Number(stats.bookings.revenue).toFixed(2)}</p>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Stats Cards */}
+                {cards.length > 0 && (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {cards.map((card) => {
                         const Icon = card.icon;
@@ -205,8 +218,10 @@ export default function Dashboard({ stats, recentBookings, recentCustomers }: Da
                         );
                     })}
                 </div>
+                )}
 
                 {/* Quick Summary Bar */}
+                {summary.length > 0 && (
                 <div className="grid grid-cols-2 divide-border rounded-xl border bg-card text-card-foreground shadow-sm md:grid-cols-4 md:divide-x">
                     {summary.map(({ label, value, icon: Icon, tone }) => (
                         <div key={label} className="flex items-center gap-3 p-4">
@@ -220,11 +235,13 @@ export default function Dashboard({ stats, recentBookings, recentCustomers }: Da
                         </div>
                     ))}
                 </div>
+                )}
 
                 {/* Recent Activity */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 
                     {/* Recent Bookings */}
+                    {(canViewBookings || recentBookings.length > 0) && (
                     <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
                         <div className="flex items-center justify-between border-b px-5 py-4">
                             <h2 className="font-semibold">Recent Bookings</h2>
@@ -259,8 +276,10 @@ export default function Dashboard({ stats, recentBookings, recentCustomers }: Da
                             </div>
                         )}
                     </div>
+                    )}
 
                     {/* Recent Customers */}
+                    {(canViewCustomers || recentCustomers.length > 0) && (
                     <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
                         <div className="flex items-center justify-between border-b px-5 py-4">
                             <h2 className="font-semibold">Recent Customers</h2>
@@ -300,6 +319,7 @@ export default function Dashboard({ stats, recentBookings, recentCustomers }: Da
                             </div>
                         )}
                     </div>
+                    )}
 
                 </div>
             </div>

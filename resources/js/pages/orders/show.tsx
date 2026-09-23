@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft, ShoppingBag, Mail, Phone, User } from 'lucide-react';
 import PageHeader from '@/components/page-header';
 import { statusClasses, statusLabel } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 interface OrderItem {
     id: number;
@@ -41,6 +42,7 @@ interface Props {
 const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Show({ order, orderStatuses, paymentStatuses }: Props) {
+    const canManage = useCan('orders.manage');
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin/dashboard' },
         { title: 'Orders', href: '/admin/orders' },
@@ -74,7 +76,7 @@ export default function Show({ order, orderStatuses, paymentStatuses }: Props) {
                     }
                 />
 
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className={`grid gap-6 ${canManage ? 'md:grid-cols-2' : ''}`}>
                     <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
                         <div className="border-b px-5 py-4">
                             <h2 className="font-semibold">Customer Details</h2>
@@ -85,6 +87,7 @@ export default function Show({ order, orderStatuses, paymentStatuses }: Props) {
                             {order.phone && <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-muted-foreground" /> {order.phone}</p>}
                         </div>
                     </div>
+                    {canManage && (
                     <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
                         <div className="border-b px-5 py-4">
                             <h2 className="font-semibold">Status</h2>
@@ -108,6 +111,7 @@ export default function Show({ order, orderStatuses, paymentStatuses }: Props) {
                             </div>
                         </div>
                     </div>
+                    )}
                 </div>
 
                 <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm">

@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerController as AdminCustomerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ThemeController;
@@ -98,35 +99,90 @@ Route::prefix('customer')->name('customer.')->group(function () {
 
 Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function () {
     Route::redirect('/', 'admin/dashboard', 301);
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
-    Route::resource('blog', BlogController::class);
-    Route::post('blog-comments/{comment}/approve', [BlogController::class, 'approveComment'])->name('blog.comments.approve');
-    Route::delete('blog-comments/{comment}', [BlogController::class, 'destroyComment'])->name('blog.comments.destroy');
-    Route::resource('products', ProductController::class)->names('products');
-    Route::resource('product-categories', ProductCategoryController::class)->names('productCategories');
-    Route::resource('service-categories', ServiceCategoryController::class)->names('serviceCategories');
-    Route::resource('services', ServiceController::class)->names('services');
-    Route::post('services/{service}/schedules', [ServiceController::class, 'storeSchedule'])->name('services.schedules.store');
-    Route::delete('services/{service}/schedules/{schedule}', [ServiceController::class, 'destroySchedule'])->name('services.schedules.destroy');
-    Route::post('verify-customer-email/{id}', [AdminCustomerController::class, 'verifyEmail'])->name('customers.verifyEmail');
-    Route::resource('customers', AdminCustomerController::class)->names('customers');
+    Route::get('dashboard', DashboardController::class)->middleware('can:dashboard.view')->name('dashboard');
 
-    Route::post('bookings/{booking}/send-email', [BookingController::class, 'sendOrderEmail'])->name('bookings.sendOrderEmail');
-    Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
-    Route::resource('bookings', BookingController::class)->names('bookings');
-    Route::resource('users', UserController::class)->names('users');
+    /*
+     * Each section is guarded by "<section>.view" (read) and "<section>.manage" (write).
+     * The manage group is registered first so routes like /products/create are matched
+     * before the /products/{product} show route would swallow them.
+     * Sections whose controller has no show() only register index.
+     */
 
-    Route::get('orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
-    Route::get('orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
-    Route::put('orders/{order}', [\App\Http\Controllers\OrderController::class, 'update'])->name('orders.update');
-    Route::resource('instructors', InstructorController::class)->names('instructors');
+    // Blog
+    Route::middleware('can:blog.manage')->group(function () {
+        Route::resource('blog', BlogController::class)->except(['index', 'show']);
+        Route::post('blog-comments/{comment}/approve', [BlogController::class, 'approveComment'])->name('blog.comments.approve');
+        Route::delete('blog-comments/{comment}', [BlogController::class, 'destroyComment'])->name('blog.comments.destroy');
+    });
+    Route::resource('blog', BlogController::class)->only(['index', 'show'])->middleware('can:blog.view');
+
+    // Products & categories
+    Route::middleware('can:products.manage')->group(function () {
+        Route::resource('products', ProductController::class)->except(['index', 'show'])->names('products');
+        Route::resource('product-categories', ProductCategoryController::class)->except(['index', 'show'])->names('productCategories');
+    });
+    Route::middleware('can:products.view')->group(function () {
+        Route::resource('products', ProductController::class)->only(['index', 'show'])->names('products');
+        Route::resource('product-categories', ProductCategoryController::class)->only(['index', 'show'])->names('productCategories');
+    });
+
+    // Services & categories
+    Route::middleware('can:services.manage')->group(function () {
+        Route::resource('services', ServiceController::class)->except(['index', 'show'])->names('services');
+        Route::resource('service-categories', ServiceCategoryController::class)->except(['index', 'show'])->names('serviceCategories');
+        Route::post('services/{service}/schedules', [ServiceController::class, 'storeSchedule'])->name('services.schedules.store');
+        Route::delete('services/{service}/schedules/{schedule}', [ServiceController::class, 'destroySchedule'])->name('services.schedules.destroy');
+    });
+    Route::middleware('can:services.view')->group(function () {
+        Route::resource('services', ServiceController::class)->only(['index', 'show'])->names('services');
+        Route::resource('service-categories', ServiceCategoryController::class)->only(['index', 'show'])->names('serviceCategories');
+    });
+
+    // Customers (controller has no show)
+    Route::middleware('can:customers.manage')->group(function () {
+        Route::resource('customers', AdminCustomerController::class)->except(['index', 'show'])->names('customers');
+        Route::post('verify-customer-email/{id}', [AdminCustomerController::class, 'verifyEmail'])->name('customers.verifyEmail');
+    });
+    Route::resource('customers', AdminCustomerController::class)->only(['index'])->middleware('can:customers.view')->names('customers');
+
+    // Bookings
+    Route::middleware('can:bookings.manage')->group(function () {
+        Route::resource('bookings', BookingController::class)->except(['index', 'show'])->names('bookings');
+        Route::post('bookings/{booking}/send-email', [BookingController::class, 'sendOrderEmail'])->name('bookings.sendOrderEmail');
+        Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+    });
+    Route::resource('bookings', BookingController::class)->only(['index', 'show'])->middleware('can:bookings.view')->names('bookings');
+
+    // Orders
+    Route::put('orders/{order}', [\App\Http\Controllers\OrderController::class, 'update'])->middleware('can:orders.manage')->name('orders.update');
+    Route::middleware('can:orders.view')->group(function () {
+        Route::get('orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+        Route::get('orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
+    });
+
+    // Instructors (controller has no show)
+    Route::resource('instructors', InstructorController::class)->except(['index', 'show'])->middleware('can:instructors.manage')->names('instructors');
+    Route::resource('instructors', InstructorController::class)->only(['index'])->middleware('can:instructors.view')->names('instructors');
+
+    // Admin users (controller has no show)
+    Route::resource('users', UserController::class)->except(['index', 'show'])->middleware('can:users.manage')->names('users');
+    Route::resource('users', UserController::class)->only(['index'])->middleware('can:users.view')->names('users');
+
+    // Roles & permissions
+    Route::resource('roles', RoleController::class)->except(['index', 'show'])->middleware('can:roles.manage')->names('roles');
+    Route::resource('roles', RoleController::class)->only(['index'])->middleware('can:roles.view')->names('roles');
 
     // Theme management
-    Route::resource('themes', ThemeController::class)->names('themes');
-    Route::post('themes/{theme}/activate', [ThemeController::class, 'activate'])->name('themes.activate');
-    Route::post('themes/{theme}/deactivate', [ThemeController::class, 'deactivate'])->name('themes.deactivate');
-    Route::get('themes/{theme}/file/{key}', [ThemeController::class, 'getFile'])->name('themes.file');
-    Route::put('themes/{theme}/file/{key}', [ThemeController::class, 'updateFile'])->name('themes.updateFile');
+    Route::middleware('can:themes.manage')->group(function () {
+        Route::resource('themes', ThemeController::class)->except(['index', 'show'])->names('themes');
+        Route::post('themes/{theme}/activate', [ThemeController::class, 'activate'])->name('themes.activate');
+        Route::post('themes/{theme}/deactivate', [ThemeController::class, 'deactivate'])->name('themes.deactivate');
+        Route::put('themes/{theme}/file/{key}', [ThemeController::class, 'updateFile'])->name('themes.updateFile');
+    });
+    Route::middleware('can:themes.view')->group(function () {
+        Route::resource('themes', ThemeController::class)->only(['index', 'show'])->names('themes');
+        Route::get('themes/{theme}/file/{key}', [ThemeController::class, 'getFile'])->name('themes.file');
+    });
 });
 
 require __DIR__.'/settings.php';

@@ -16,7 +16,12 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $stats = [
+        $user = $request->user();
+        // Instructor accounts only count their own bookings.
+        $instructorId = $user?->instructor_id;
+        $bookings = fn () => Booking::query()->when($instructorId, fn ($q) => $q->where('instructor_id', $instructorId));
+
+        $all = [
             'products' => [
                 'total'      => Product::count(),
                 'active'     => Product::where('is_active', true)->count(),
@@ -42,15 +47,24 @@ class DashboardController extends Controller
                 'verified' => User::whereNotNull('email_verified_at')->count(),
             ],
             'bookings' => [
-                'total'   => Booking::count(),
-                'new'     => Booking::where('booking_status', 'new')->count(),
-                'pending' => Booking::where('payment_status', 'pending')->count(),
-                'completed' => Booking::where('booking_status', 'completed')->count(),
-                'revenue' => Booking::where('payment_status', 'paid')->sum('service_price'),
+                'total'   => $bookings()->count(),
+                'new'     => $bookings()->where('booking_status', 'new')->count(),
+                'pending' => $bookings()->where('payment_status', 'pending')->count(),
+                'completed' => $bookings()->where('booking_status', 'completed')->count(),
+                'revenue' => $bookings()->where('payment_status', 'paid')->sum('service_price'),
             ],
         ];
 
-        $recentBookings = Booking::with('customer')
+        // Only send figures for sections this user is allowed to see.
+        // The "blogs" figures are guarded by the "blog" section's permission.
+        $permissionFor = ['blogs' => 'blog'];
+        $stats = array_filter(
+            $all,
+            fn ($section) => $user?->hasPermission(($permissionFor[$section] ?? $section).'.view'),
+            ARRAY_FILTER_USE_KEY,
+        );
+
+        $recentBookings = ! $user?->hasPermission('bookings.view') ? collect() : $bookings()->with('customer')
             ->latest()
             ->take(5)
             ->get()
@@ -65,7 +79,7 @@ class DashboardController extends Controller
                 'created_at'     => $b->created_at->format('d M Y'),
             ]);
 
-        $recentCustomers = Customer::latest()
+        $recentCustomers = ! $user?->hasPermission('customers.view') ? collect() : Customer::latest()
             ->take(5)
             ->get()
             ->map(fn ($c) => [

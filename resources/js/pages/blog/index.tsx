@@ -10,6 +10,7 @@ import { Pencil, Trash2, Plus, Eye, FileText } from 'lucide-react';
 import { show } from "@/actions/App/Http/Controllers/BlogController";
 import PageHeader from '@/components/page-header';
 import { statusClasses, statusLabel } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 interface BlogPost {
     id: number;
@@ -33,6 +34,7 @@ const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function BlogIndex() {
     const { posts } = usePage().props as PostsIndexPageProps;
+    const canManage = useCan('blog.manage');
 
     const handleDelete = (post: BlogPost) => {
         if (window.confirm(`Are you sure you want to delete "${post.title}"?`)) {
@@ -47,11 +49,11 @@ export default function BlogIndex() {
                 <PageHeader
                     title="Blog Posts"
                     description="Manage your blog content and articles"
-                    actions={
+                    actions={canManage && (
                         <Button onClick={() => window.location.href = create().url}>
                             <Plus className="h-4 w-4" /> New Post
                         </Button>
-                    }
+                    )}
                 />
 
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
@@ -86,15 +88,19 @@ export default function BlogIndex() {
                                                         onClick={() => window.location.href = show(post.id).url}>
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
-                                                        onClick={() => window.location.href = `/admin/blog/${post.id}/edit`}>
-                                                        <Pencil className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant="ghost" size="icon" title="Delete"
-                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                        onClick={() => handleDelete(post)}>
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
+                                                    {canManage && (
+                                                        <>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
+                                                                onClick={() => window.location.href = `/admin/blog/${post.id}/edit`}>
+                                                                <Pencil className="h-4 w-4" />
+                                                            </Button>
+                                                            <Button variant="ghost" size="icon" title="Delete"
+                                                                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                onClick={() => handleDelete(post)}>
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>

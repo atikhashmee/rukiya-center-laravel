@@ -9,12 +9,14 @@ import { dashboard } from '@/routes';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/page-header';
 import { badgeClasses } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 interface ProductShowProps extends InertiaProps {
     product: Product;
 }
 
 export default function Show({ product }: ProductShowProps) {
+    const canManage = useCan('products.manage');
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: dashboard().url },
         { title: 'Products', href: index().url },
@@ -48,11 +50,13 @@ export default function Show({ product }: ProductShowProps) {
                                     <ArrowLeft className="h-4 w-4" /> Back to Products
                                 </Link>
                             </Button>
-                            <Button asChild>
-                                <Link href={edit(product.id)}>
-                                    <Pencil className="h-4 w-4" /> Edit Product
-                                </Link>
-                            </Button>
+                            {canManage && (
+                                <Button asChild>
+                                    <Link href={edit(product.id)}>
+                                        <Pencil className="h-4 w-4" /> Edit Product
+                                    </Link>
+                                </Button>
+                            )}
                         </>
                     }
                 />

@@ -27,6 +27,7 @@ class BookingFactory extends Factory
         $bookingStatuses = ['new', 'confirmed', 'in_progress', 'completed'];
 
         return [
+            'booking_id' => 'BKG-'.fake()->unique()->numerify('##########'),
             // Link to a customer or keep null for guest bookings
             'customer_id' => null,
             'full_name' => fake()->name(),

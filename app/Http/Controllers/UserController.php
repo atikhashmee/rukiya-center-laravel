@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instructor;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +14,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::query()->with(['role', 'instructor']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -30,17 +32,31 @@ class UserController extends Controller
             }
         }
 
+        if ($request->filled('role_id')) {
+            $query->where('role_id', $request->role_id);
+        }
+
         $users = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
 
         return Inertia::render('users/index', [
             'users' => $users,
-            'filters' => $request->only(['search', 'verified']),
+            'roles' => Role::orderBy('label')->get(['id', 'label']),
+            'filters' => $request->only(['search', 'verified', 'role_id']),
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('users/create');
+        return Inertia::render('users/create', $this->formOptions());
+    }
+
+    /** Roles and instructor records offered by the create/edit forms. */
+    private function formOptions(): array
+    {
+        return [
+            'roles' => Role::orderBy('label')->get(['id', 'name', 'label']),
+            'instructors' => Instructor::orderBy('name')->get(['id', 'name']),
+        ];
     }
 
     public function store(Request $request)
@@ -50,6 +66,8 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => ['required', 'confirmed', Password::min(8)],
             'email_verified_at' => 'nullable|date',
+            'role_id' => 'required|exists:roles,id',
+            'instructor_id' => 'nullable|exists:instructors,id',
         ]);
 
         // Hash password
@@ -67,6 +85,7 @@ class UserController extends Controller
 
         return Inertia::render('users/edit', [
             'user' => $user,
+            ...$this->formOptions(),
         ]);
     }
 
@@ -78,7 +97,15 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => ['nullable', 'confirmed', Password::min(8)],
+            'role_id' => 'required|exists:roles,id',
+            'instructor_id' => 'nullable|exists:instructors,id',
         ]);
+
+        // Don't let the last super admin (or yourself) drop super admin rights and lock the panel.
+        if ($user->isSuperAdmin() && (int) $validated['role_id'] !== $user->role_id
+            && User::where('role_id', $user->role_id)->count() === 1) {
+            return back()->with('error', 'This is the last Super Admin. Assign another Super Admin first.');
+        }
 
         // Only update password if provided
         if (! empty($validated['password'])) {

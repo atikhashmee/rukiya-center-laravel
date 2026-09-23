@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Pencil, Trash2, Plus, CheckCircle, XCircle, Palette } from 'lucide-react';
 import PageHeader from '@/components/page-header';
 import { badgeClasses } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: dashboard().url },
@@ -23,6 +24,7 @@ const TH = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function ThemesIndex() {
     const { themes } = usePage().props as ThemesIndexPageProps;
+    const canManage = useCan('themes.manage');
 
     const handleActivate = (theme: Theme) => {
         router.post(activate(theme.id).url, {}, {
@@ -51,12 +53,12 @@ export default function ThemesIndex() {
                 <PageHeader
                     title="Theme Management"
                     description="Create and manage website themes. Activate a theme to apply it to the public site."
-                    actions={
+                    actions={canManage && (
                         <Button onClick={() => window.location.href = create().url}>
                             <Plus className="h-4 w-4" />
                             New Theme
                         </Button>
-                    }
+                    )}
                 />
                 <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
                     <div className="overflow-x-auto">
@@ -92,6 +94,8 @@ export default function ThemesIndex() {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex flex-row justify-end gap-1">
+                                                    {canManage && (
+                                                    <>
                                                     <Button
                                                         size="icon"
                                                         variant="ghost"
@@ -132,6 +136,8 @@ export default function ThemesIndex() {
                                                         >
                                                             <Trash2 className="h-4 w-4" />
                                                         </Button>
+                                                    )}
+                                                    </>
                                                     )}
                                                 </div>
                                             </TableCell>

@@ -3,10 +3,10 @@ import AppLayout from "@/layouts/app-layout";
 import { Head, router, usePage } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
-import { index, create, edit, destroy, verifyEmail } from "@/actions/App/Http/Controllers/UserController";
+import { index, create, edit, destroy } from "@/actions/App/Http/Controllers/UserController";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pencil, Trash2, Plus, CheckCircle, XCircle, Mail, MailCheck, Shield, UserX } from 'lucide-react';
+import { Pencil, Trash2, Plus, CheckCircle, XCircle, Mail, MailCheck, Shield, ShieldCheck, UserX, GraduationCap } from 'lucide-react';
 import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
 import PageHeader from '@/components/page-header';
@@ -36,22 +36,31 @@ interface PaginatedData<T> {
     total: number;
 }
 
+interface Role {
+    id: number;
+    name?: string;
+    label: string;
+}
+
 interface User {
     id: number;
     name: string;
     email: string;
     email_verified_at: string | null;
     created_at: string;
+    role: Role | null;
+    instructor: { id: number; name: string } | null;
 }
 
 interface UsersIndexProps {
     users: PaginatedData<User>;
+    roles: Role[];
     filters: Record<string, string>;
 }
 
 const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
-export default function Index({ users, filters }: UsersIndexProps) {
+export default function Index({ users, roles, filters }: UsersIndexProps) {
     const { flash, auth } = usePage().props as any;
     const currentUserId = auth?.user?.id;
 
@@ -73,20 +82,6 @@ export default function Index({ users, filters }: UsersIndexProps) {
                 },
                 onError: (errors: any) => {
                     console.error("Deletion failed:", errors);
-                }
-            });
-        }
-    };
-
-    const handleVerifyEmail = (userId: number, currentStatus: string | null, name: string) => {
-        const action = currentStatus ? 'unverify' : 'verify';
-        if (window.confirm(`Are you sure you want to ${action} email for user "${name}"?`)) {
-            router.patch(verifyEmail(userId).url, {}, {
-                onSuccess: () => {
-                    console.log(`User ${name} email ${action}ied successfully.`);
-                },
-                onError: (errors: any) => {
-                    console.error("Email verification toggle failed:", errors);
                 }
             });
         }
@@ -140,6 +135,11 @@ export default function Index({ users, filters }: UsersIndexProps) {
                     baseUrl={index().url}
                     filterConfigs={[
                         {
+                            key: 'role_id',
+                            label: 'All Roles',
+                            options: roles.map((role) => ({ label: role.label, value: String(role.id) })),
+                        },
+                        {
                             key: 'verified',
                             label: 'All Verification',
                             options: [
@@ -158,6 +158,7 @@ export default function Index({ users, filters }: UsersIndexProps) {
                                 <TableRow className="hover:bg-transparent">
                                     <TableHead className={`w-[50px] ${th}`}>#</TableHead>
                                     <TableHead className={th}>User Info</TableHead>
+                                    <TableHead className={th}>Role</TableHead>
                                     <TableHead className={`text-center ${th}`}>Email Status</TableHead>
                                     <TableHead className={`text-center ${th}`}>Registered</TableHead>
                                     <TableHead className={`w-[140px] text-center ${th}`}>Actions</TableHead>
@@ -190,6 +191,23 @@ export default function Index({ users, filters }: UsersIndexProps) {
                                                         </div>
                                                         <div className="text-xs text-muted-foreground">{user.email}</div>
                                                     </div>
+                                                </div>
+                                            </TableCell>
+
+                                            <TableCell>
+                                                <div className="flex flex-col items-start gap-1">
+                                                    {user.role ? (
+                                                        <span className={`gap-1 ${badgeClasses(user.role.name === 'super-admin' ? 'accent' : 'info')}`}>
+                                                            <ShieldCheck className="h-3 w-3" /> {user.role.label}
+                                                        </span>
+                                                    ) : (
+                                                        <span className={badgeClasses('neutral')}>No role</span>
+                                                    )}
+                                                    {user.instructor && (
+                                                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                                                            <GraduationCap className="h-3 w-3" /> {user.instructor.name}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </TableCell>
 
@@ -241,7 +259,7 @@ export default function Index({ users, filters }: UsersIndexProps) {
                                     ))
                                 ) : (
                                     <TableRow className="hover:bg-transparent">
-                                        <TableCell colSpan={5}>
+                                        <TableCell colSpan={6}>
                                             <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
                                                 <UserX className="h-8 w-8 opacity-40" />
                                                 <p className="text-sm">No users found. Click "Add New User" to begin.</p>

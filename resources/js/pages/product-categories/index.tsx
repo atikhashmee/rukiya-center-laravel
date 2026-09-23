@@ -11,6 +11,7 @@ import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
 import PageHeader from '@/components/page-header';
 import { badgeClasses } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 interface ProductCategory {
     id: number;
@@ -41,6 +42,7 @@ const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Index({ categories, filters }: CategoriesIndexProps) {
     const { flash } = usePage().props as any;
+    const canManage = useCan('products.manage');
 
     const handleDelete = (categoryId: number) => {
         if (confirm("Are you sure you want to delete this category? This action is irreversible.")) {
@@ -61,11 +63,11 @@ export default function Index({ categories, filters }: CategoriesIndexProps) {
                 <PageHeader
                     title="Categories"
                     description={`${categories.total} total categories`}
-                    actions={
+                    actions={canManage && (
                         <Button onClick={() => window.location.href = create().url}>
                             <Plus className="h-4 w-4" /> Add Category
                         </Button>
-                    }
+                    )}
                 />
 
                 <FilterBar
@@ -99,15 +101,19 @@ export default function Index({ categories, filters }: CategoriesIndexProps) {
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex justify-end gap-1">
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
-                                                        onClick={() => window.location.href = edit(category.id).url}>
-                                                        <Pencil className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button variant="ghost" size="icon" title="Delete"
-                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                        onClick={() => handleDelete(category.id)}>
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
+                                                    {canManage && (
+                                                        <>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit"
+                                                                onClick={() => window.location.href = edit(category.id).url}>
+                                                                <Pencil className="h-4 w-4" />
+                                                            </Button>
+                                                            <Button variant="ghost" size="icon" title="Delete"
+                                                                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                onClick={() => handleDelete(category.id)}>
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>

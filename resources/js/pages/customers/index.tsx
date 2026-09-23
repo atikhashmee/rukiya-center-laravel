@@ -11,6 +11,7 @@ import Pagination from '@/components/pagination';
 import FilterBar from '@/components/filter-bar';
 import PageHeader from '@/components/page-header';
 import { badgeClasses } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
 
@@ -44,6 +45,7 @@ const TH = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Index({ customers, filters }: CustomersIndexProps) {
     const { flash } = usePage().props as any;
+    const canManage = useCan('customers.manage');
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: dashboard().url },
@@ -96,14 +98,14 @@ export default function Index({ customers, filters }: CustomersIndexProps) {
                 <PageHeader
                     title="Customer Management"
                     description={`${customers.total} total customers`}
-                    actions={
+                    actions={canManage && (
                         <Button asChild>
                             <Link href={create().url}>
                                 <Plus className="h-4 w-4" />
                                 Add New Customer
                             </Link>
                         </Button>
-                    }
+                    )}
                 />
 
                 <FilterBar
@@ -189,24 +191,28 @@ export default function Index({ customers, filters }: CustomersIndexProps) {
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 <div className="flex justify-center gap-1">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8"
-                                                        onClick={() => router.visit(edit(customer.id).url)}
-                                                        title="Edit"
-                                                    >
-                                                        <Pencil className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                        onClick={() => handleDelete(customer.id, customer.name)}
-                                                        title="Delete"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
+                                                    {canManage && (
+                                                        <>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8"
+                                                                onClick={() => router.visit(edit(customer.id).url)}
+                                                                title="Edit"
+                                                            >
+                                                                <Pencil className="h-4 w-4" />
+                                                            </Button>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                onClick={() => handleDelete(customer.id, customer.name)}
+                                                                title="Delete"
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>

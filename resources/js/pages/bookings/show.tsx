@@ -8,6 +8,7 @@ import { ArrowLeft, Pencil } from 'lucide-react';
 import { dashboard } from '@/routes';
 import PageHeader from '@/components/page-header';
 import { statusClasses, statusLabel } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 type Value = string | number | boolean | string[] | null | undefined;
 
@@ -101,6 +102,7 @@ const Field: React.FC<{ name: string; value: Value; wide?: boolean; children?: R
 );
 
 export default function Show({ booking, payments }: { booking: Booking; payments: Payment[] }) {
+    const canManage = useCan('bookings.manage');
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: dashboard().url },
         { title: 'Bookings', href: bookingIndex().url },
@@ -128,9 +130,11 @@ export default function Show({ booking, payments }: { booking: Booking; payments
                             <Button variant="outline" asChild>
                                 <Link href={bookingIndex().url}><ArrowLeft className="h-4 w-4" /> Back</Link>
                             </Button>
-                            <Button asChild>
-                                <Link href={edit(booking.id).url}><Pencil className="h-4 w-4" /> Edit</Link>
-                            </Button>
+                            {canManage && (
+                                <Button asChild>
+                                    <Link href={edit(booking.id).url}><Pencil className="h-4 w-4" /> Edit</Link>
+                                </Button>
+                            )}
                         </>
                     }
                 />

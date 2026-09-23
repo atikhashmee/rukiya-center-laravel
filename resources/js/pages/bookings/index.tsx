@@ -11,6 +11,7 @@ import { dashboard } from '@/routes';
 import FilterBar from '@/components/filter-bar';
 import PageHeader from '@/components/page-header';
 import { statusClasses, statusLabel } from '@/lib/status';
+import { useCan } from '@/lib/permissions';
 
 interface Customer { id: number; name: string; }
 
@@ -55,6 +56,7 @@ interface BookingsIndexProps {
 const th = 'text-xs font-medium uppercase tracking-wide text-muted-foreground';
 
 export default function Index({ bookings, bookingStatuses, paymentStatuses, filters }: BookingsIndexProps) {
+    const canManage = useCan('bookings.manage');
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: dashboard().url },
         { title: 'Bookings', href: bookingIndex().url }
@@ -147,7 +149,13 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                                                 <div className="text-xs text-muted-foreground">{booking.price_type}</div>
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <StatusDropdown booking={booking} />
+                                                {canManage ? (
+                                                    <StatusDropdown booking={booking} />
+                                                ) : (
+                                                    <span className={statusClasses(booking.booking_status)}>
+                                                        {statusLabel(booking.booking_status)}
+                                                    </span>
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 <span className={statusClasses(booking.payment_status)}>
@@ -162,17 +170,21 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                                                     <Button variant="ghost" size="icon" className="h-8 w-8" title="View Details" asChild>
                                                         <Link href={show(booking.id).url}><Eye className="h-4 w-4" /></Link>
                                                     </Button>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit Booking" asChild>
-                                                        <Link href={edit(booking.id).url}><Pencil className="h-4 w-4" /></Link>
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost" size="icon"
-                                                        onClick={() => handleSendEmail(booking)}
-                                                        className="h-8 w-8"
-                                                        title="Send Confirmation Email"
-                                                    >
-                                                        <Mail className="h-4 w-4" />
-                                                    </Button>
+                                                    {canManage && (
+                                                        <>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8" title="Edit Booking" asChild>
+                                                                <Link href={edit(booking.id).url}><Pencil className="h-4 w-4" /></Link>
+                                                            </Button>
+                                                            <Button
+                                                                variant="ghost" size="icon"
+                                                                onClick={() => handleSendEmail(booking)}
+                                                                className="h-8 w-8"
+                                                                title="Send Confirmation Email"
+                                                            >
+                                                                <Mail className="h-4 w-4" />
+                                                            </Button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>
