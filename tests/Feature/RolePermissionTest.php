@@ -238,3 +238,49 @@ it('shares role and direct permissions with the frontend', function () {
 
     expect($user->fresh()->allPermissions())->toContain('orders.view', 'bookings.view');
 });
+
+it('lets an admin assign and clear the instructor on a booking', function () {
+    $admin = userWithRole(Role::SUPER_ADMIN);
+    $instructor = Instructor::create(['name' => 'Assigned One', 'is_active' => true]);
+    $booking = Booking::factory()->create(['instructor_id' => null]);
+
+    $this->actingAs($admin, 'web')
+        ->patch("/admin/bookings/{$booking->id}/instructor", ['instructor_id' => $instructor->id])
+        ->assertSessionHas('success');
+
+    expect($booking->fresh()->instructor_id)->toBe($instructor->id);
+
+    $this->actingAs($admin, 'web')
+        ->patch("/admin/bookings/{$booking->id}/instructor", ['instructor_id' => null])
+        ->assertSessionHas('success');
+
+    expect($booking->fresh()->instructor_id)->toBeNull();
+});
+
+it('stops an instructor account from handing its booking to someone else', function () {
+    $mine = Instructor::create(['name' => 'Mine', 'is_active' => true]);
+    $other = Instructor::create(['name' => 'Other', 'is_active' => true]);
+    $booking = Booking::factory()->create(['instructor_id' => $mine->id]);
+    $user = userWithRole('instructor', ['instructor_id' => $mine->id]);
+
+    $this->actingAs($user, 'web')
+        ->patch("/admin/bookings/{$booking->id}/instructor", ['instructor_id' => $other->id])
+        ->assertForbidden();
+
+    expect($booking->fresh()->instructor_id)->toBe($mine->id);
+});
+
+it('filters the bookings list by instructor and by unassigned', function () {
+    $admin = userWithRole(Role::SUPER_ADMIN);
+    $instructor = Instructor::create(['name' => 'Filter Target', 'is_active' => true]);
+
+    Booking::factory()->create(['instructor_id' => $instructor->id]);
+    Booking::factory()->create(['instructor_id' => null]);
+    Booking::factory()->create(['instructor_id' => null]);
+
+    $this->actingAs($admin, 'web')->get('/admin/bookings?instructor=unassigned')
+        ->assertInertia(fn ($page) => $page->has('bookings.data', 2));
+
+    $this->actingAs($admin, 'web')->get("/admin/bookings?instructor={$instructor->id}")
+        ->assertInertia(fn ($page) => $page->has('bookings.data', 1)->has('instructors'));
+});

@@ -48,14 +48,61 @@ class BookingController extends Controller
             $query->where('payment_status', $request->payment_status);
         }
 
+        if ($request->filled('instructor')) {
+            $request->instructor === 'unassigned'
+                ? $query->whereNull('instructor_id')
+                : $query->where('instructor_id', $request->instructor);
+        }
+
         $bookings = $query->latest()->paginate(12)->withQueryString();
 
         return Inertia::render('bookings/index', [
             'bookings' => $bookings,
             'bookingStatuses' => $this->bookingStatuses,
             'paymentStatuses' => $this->paymentStatuses,
-            'filters' => $request->only(['search', 'booking_status', 'payment_status']),
+            'instructors' => $this->assignableInstructors(),
+            'canAssignInstructor' => ! $request->user()?->instructor_id,
+            'filters' => $request->only(['search', 'booking_status', 'payment_status', 'instructor']),
         ]);
+    }
+
+    /**
+     * Active instructors with the services they cover, so the admin screens can offer
+     * only the people who actually provide the booked service.
+     */
+    private function assignableInstructors()
+    {
+        return Instructor::where('is_active', true)
+            ->with('services:id')
+            ->orderBy('name')
+            ->get(['id', 'name'])
+            ->map(fn ($instructor) => [
+                'id' => $instructor->id,
+                'name' => $instructor->name,
+                'service_ids' => $instructor->services->pluck('id'),
+            ]);
+    }
+
+    /**
+     * Assign (or clear) the instructor on a booking. Used for bookings made with
+     * "Any Available", which are saved without an instructor when nobody was free.
+     */
+    public function assignInstructor(Request $request, Booking $booking)
+    {
+        // An instructor account manages its own bookings but cannot hand them to someone else.
+        abort_if((bool) $request->user()?->instructor_id, 403);
+
+        $validated = $request->validate([
+            'instructor_id' => 'nullable|exists:instructors,id',
+        ]);
+
+        $booking->update(['instructor_id' => $validated['instructor_id'] ?: null]);
+
+        $name = $booking->fresh()->instructor?->name;
+
+        return back()->with('success', $name
+            ? "Booking **{$booking->booking_id}** assigned to **{$name}**."
+            : "Instructor cleared for booking **{$booking->booking_id}**.");
     }
 
     /** An instructor account may only touch bookings assigned to its own instructor record. */
@@ -95,7 +142,7 @@ class BookingController extends Controller
         return Inertia::render('bookings/edit', [
             'booking' => $booking,
             'services' => Service::orderBy('title')->get(['id', 'title']),
-            'instructors' => Instructor::orderBy('name')->get(['id', 'name']),
+            'instructors' => $this->assignableInstructors(),
             'bookingStatuses' => $this->bookingStatuses,
             'paymentStatuses' => $this->paymentStatuses,
         ]);

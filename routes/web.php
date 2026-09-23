@@ -150,6 +150,7 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function
         Route::resource('bookings', BookingController::class)->except(['index', 'show'])->names('bookings');
         Route::post('bookings/{booking}/send-email', [BookingController::class, 'sendOrderEmail'])->name('bookings.sendOrderEmail');
         Route::patch('bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+        Route::patch('bookings/{booking}/instructor', [BookingController::class, 'assignInstructor'])->name('bookings.assignInstructor');
     });
     Route::resource('bookings', BookingController::class)->only(['index', 'show'])->middleware('can:bookings.view')->names('bookings');
 

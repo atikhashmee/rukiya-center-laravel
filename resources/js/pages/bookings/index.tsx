@@ -2,7 +2,7 @@ import React from 'react';
 import AppLayout from "@/layouts/app-layout";
 import { Head, router, Link } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
-import { index as bookingIndex, edit, show, updateStatus, sendOrderEmail } from '@/actions/App/Http/Controllers/BookingController';
+import { index as bookingIndex, edit, show, updateStatus, sendOrderEmail, assignInstructor } from '@/actions/App/Http/Controllers/BookingController';
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { CalendarX2, Eye, Mail, Pencil } from 'lucide-react';
@@ -10,7 +10,8 @@ import Pagination from '@/components/pagination';
 import { dashboard } from '@/routes';
 import FilterBar from '@/components/filter-bar';
 import PageHeader from '@/components/page-header';
-import { statusClasses, statusLabel } from '@/lib/status';
+import { statusClasses, statusLabel, badgeClasses } from '@/lib/status';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import { useCan } from '@/lib/permissions';
 
 interface Customer { id: number; name: string; }
@@ -27,7 +28,8 @@ interface Booking {
     email: string;
     service_id: string;
     service: { title: string } | null;
-    instructor: { name: string } | null;
+    instructor_id: number | null;
+    instructor: { id: number; name: string } | null;
     booking_date: string | null;
     booking_time: string | null;
     service_price: number;
@@ -46,16 +48,26 @@ interface PaginatedBookings {
     total: number;
 }
 
+interface InstructorOption {
+    id: number;
+    name: string;
+    /** Services this instructor covers, so only the relevant people are offered. */
+    service_ids: number[];
+}
+
 interface BookingsIndexProps {
     bookings: PaginatedBookings;
     bookingStatuses: BookingStatus[];
     paymentStatuses: PaymentStatus[];
+    instructors: InstructorOption[];
+    /** False for instructor accounts: they manage their own bookings but cannot hand them over. */
+    canAssignInstructor: boolean;
     filters: Record<string, string>;
 }
 
 const th = 'text-xs font-medium uppercase tracking-wide text-muted-foreground';
 
-export default function Index({ bookings, bookingStatuses, paymentStatuses, filters }: BookingsIndexProps) {
+export default function Index({ bookings, bookingStatuses, paymentStatuses, instructors, canAssignInstructor, filters }: BookingsIndexProps) {
     const canManage = useCan('bookings.manage');
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: dashboard().url },
@@ -76,6 +88,42 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                 preserveScroll: true,
             });
         }
+    };
+
+    const handleAssignInstructor = (booking: Booking, instructorId: string) => {
+        router.patch(assignInstructor(booking.id).url, { instructor_id: instructorId || null }, {
+            preserveScroll: true,
+        });
+    };
+
+    /** Instructors covering this booking's service; falls back to everyone if none are linked to it. */
+    const eligibleInstructors = (booking: Booking) => {
+        const serviceId = Number(booking.service_id);
+        const covering = instructors.filter((i) => i.service_ids.includes(serviceId));
+
+        return covering.length > 0 ? covering : instructors;
+    };
+
+    const InstructorCell: React.FC<{ booking: Booking }> = ({ booking }) => {
+        if (!canManage || !canAssignInstructor) {
+            return booking.instructor
+                ? <span className="text-sm">{booking.instructor.name}</span>
+                : <span className={badgeClasses('warning')}>Unassigned</span>;
+        }
+
+        return (
+            <NativeSelect
+                className="w-full min-w-[150px]"
+                aria-label={`Instructor for booking ${booking.booking_id}`}
+                value={booking.instructor_id ? String(booking.instructor_id) : ''}
+                onChange={(e) => handleAssignInstructor(booking, e.target.value)}
+            >
+                <NativeSelectOption value="">Unassigned</NativeSelectOption>
+                {eligibleInstructors(booking).map((instructor) => (
+                    <NativeSelectOption key={instructor.id} value={String(instructor.id)}>{instructor.name}</NativeSelectOption>
+                ))}
+            </NativeSelect>
+        );
     };
 
     const StatusDropdown: React.FC<{ booking: Booking }> = ({ booking }) => (
@@ -113,6 +161,14 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                                 label: 'All Payment Status',
                                 options: paymentStatuses.map(s => ({ label: statusLabel(s), value: s })),
                             },
+                            {
+                                key: 'instructor',
+                                label: 'All Instructors',
+                                options: [
+                                    { label: 'Unassigned', value: 'unassigned' },
+                                    ...instructors.map(i => ({ label: i.name, value: String(i.id) })),
+                                ],
+                            },
                         ]}
                     />
 
@@ -123,6 +179,7 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                                 <TableRow className="hover:bg-transparent">
                                     <TableHead className={`w-[150px] ${th}`}>Ref / Client</TableHead>
                                     <TableHead className={th}>Service Info</TableHead>
+                                    <TableHead className={`w-[180px] ${th}`}>Instructor</TableHead>
                                     <TableHead className={`text-center ${th}`}>Booking Status</TableHead>
                                     <TableHead className={`text-center ${th}`}>Payment Status</TableHead>
                                     <TableHead className={`text-right ${th}`}>Price</TableHead>
@@ -145,8 +202,10 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                                                     {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString('en-GB') : 'No date'}
                                                     {booking.booking_time && ` · ${booking.booking_time.slice(0, 5)}`}
                                                 </div>
-                                                {booking.instructor && <div className="text-xs text-muted-foreground">{booking.instructor.name}</div>}
                                                 <div className="text-xs text-muted-foreground">{booking.price_type}</div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <InstructorCell booking={booking} />
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 {canManage ? (
@@ -191,7 +250,7 @@ export default function Index({ bookings, bookingStatuses, paymentStatuses, filt
                                     ))
                                 ) : (
                                     <TableRow className="hover:bg-transparent">
-                                        <TableCell colSpan={6}>
+                                        <TableCell colSpan={7}>
                                             <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
                                                 <CalendarX2 className="h-8 w-8 opacity-40" />
                                                 <p className="text-sm">No bookings found matching your filters.</p>
