@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instructor;
+use App\Support\Permissions;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -54,8 +55,11 @@ class UserController extends Controller
     private function formOptions(): array
     {
         return [
-            'roles' => Role::orderBy('label')->get(['id', 'name', 'label']),
+            // Role permissions travel with each role so the form can show what the
+            // chosen role already grants, and only ask for extras on top of it.
+            'roles' => Role::orderBy('label')->get(['id', 'name', 'label', 'permissions']),
             'instructors' => Instructor::orderBy('name')->get(['id', 'name']),
+            'permissionGroups' => Permissions::groups(),
         ];
     }
 
@@ -68,7 +72,11 @@ class UserController extends Controller
             'email_verified_at' => 'nullable|date',
             'role_id' => 'required|exists:roles,id',
             'instructor_id' => 'nullable|exists:instructors,id',
+            'permissions' => 'array',
+            'permissions.*' => 'in:'.implode(',', Permissions::all()),
         ]);
+
+        $validated['permissions'] = $validated['permissions'] ?? [];
 
         // Hash password
         $validated['password'] = Hash::make($validated['password']);
@@ -99,7 +107,11 @@ class UserController extends Controller
             'password' => ['nullable', 'confirmed', Password::min(8)],
             'role_id' => 'required|exists:roles,id',
             'instructor_id' => 'nullable|exists:instructors,id',
+            'permissions' => 'array',
+            'permissions.*' => 'in:'.implode(',', Permissions::all()),
         ]);
+
+        $validated['permissions'] = $validated['permissions'] ?? [];
 
         // Don't let the last super admin (or yourself) drop super admin rights and lock the panel.
         if ($user->isSuperAdmin() && (int) $validated['role_id'] !== $user->role_id

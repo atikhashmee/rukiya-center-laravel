@@ -20,6 +20,7 @@ export function PermissionGrid({
     error,
     disabled = false,
     note,
+    inherited,
 }: {
     groups: PermissionGroup[];
     has: (permission: string) => boolean;
@@ -29,6 +30,8 @@ export function PermissionGrid({
     error?: string;
     disabled?: boolean;
     note?: React.ReactNode;
+    /** Permissions already granted elsewhere (e.g. by the role): shown ticked and locked. */
+    inherited?: (permission: string) => boolean;
 }) {
     return (
         <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
@@ -66,18 +69,23 @@ export function PermissionGrid({
                         {groups.map((group) => (
                             <tr key={group.key} className="border-t transition-colors hover:bg-muted/40">
                                 <td className="px-5 py-2.5 font-medium">{group.label}</td>
-                                {(['view', 'manage'] as const).map((key) => (
-                                    <td key={key} className="px-5 py-2.5 text-center">
-                                        <input
-                                            type="checkbox"
-                                            aria-label={`${group.label} ${key}`}
-                                            className="h-4 w-4 rounded accent-primary disabled:opacity-60"
-                                            checked={has(group[key])}
-                                            disabled={disabled}
-                                            onChange={(e) => toggle(group, key, e.target.checked)}
-                                        />
-                                    </td>
-                                ))}
+                                {(['view', 'manage'] as const).map((key) => {
+                                    const fromRole = inherited?.(group[key]) ?? false;
+
+                                    return (
+                                        <td key={key} className="px-5 py-2.5 text-center">
+                                            <input
+                                                type="checkbox"
+                                                aria-label={`${group.label} ${key}`}
+                                                title={fromRole ? 'Granted by the role' : undefined}
+                                                className="h-4 w-4 rounded accent-primary disabled:opacity-60"
+                                                checked={fromRole || has(group[key])}
+                                                disabled={disabled || fromRole}
+                                                onChange={(e) => toggle(group, key, e.target.checked)}
+                                            />
+                                        </td>
+                                    );
+                                })}
                             </tr>
                         ))}
                     </tbody>

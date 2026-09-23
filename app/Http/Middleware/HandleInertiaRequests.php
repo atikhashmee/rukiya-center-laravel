@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
                 'role' => $user instanceof \App\Models\User ? $user->role?->only(['id', 'name', 'label']) : null,
-                'permissions' => $user instanceof \App\Models\User ? $user->permissions() : [],
+                'permissions' => $user instanceof \App\Models\User ? $user->allPermissions() : [],
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [

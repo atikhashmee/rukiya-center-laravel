@@ -23,7 +23,7 @@ beforeEach(function () {
 it('gives the super admin every permission, including ones added later', function () {
     $user = userWithRole(Role::SUPER_ADMIN);
 
-    expect($user->permissions())->toHaveCount(count(Permissions::all()))
+    expect($user->allPermissions())->toHaveCount(count(Permissions::all()))
         ->and($user->hasPermission('themes.manage'))->toBeTrue()
         ->and($user->hasPermission('anything.invented'))->toBeTrue();
 
@@ -176,4 +176,65 @@ it('leaves no admin account without a role after migrating', function () {
     // production hit when the roles data was missing.
     $orphan = User::factory()->create(['role_id' => null, 'email_verified_at' => now()]);
     $this->actingAs($orphan, 'web')->get('/admin/dashboard')->assertForbidden();
+});
+
+it('grants a permission directly to one user on top of their role', function () {
+    $user = userWithRole('instructor'); // role has no users.* permissions
+
+    $this->actingAs($user, 'web')->get('/admin/users')->assertForbidden();
+
+    $user->update(['permissions' => ['users.view']]);
+
+    $this->actingAs($user->fresh(), 'web')->get('/admin/users')->assertOk();
+    // Still no manage right: the direct grant was view only.
+    $this->actingAs($user->fresh(), 'web')->get('/admin/users/create')->assertForbidden();
+
+    expect($user->fresh()->hasPermission('users.view'))->toBeTrue()
+        ->and($user->fresh()->allPermissions())->toContain('users.view', 'bookings.view');
+});
+
+it('saves and clears direct permissions from the user form', function () {
+    $admin = userWithRole(Role::SUPER_ADMIN);
+    $target = userWithRole('instructor');
+
+    $this->actingAs($admin, 'web')->put("/admin/users/{$target->id}", [
+        'name' => $target->name,
+        'email' => $target->email,
+        'role_id' => $target->role_id,
+        'permissions' => ['orders.view', 'orders.manage'],
+    ])->assertRedirect();
+
+    expect($target->fresh()->permissions)->toBe(['orders.view', 'orders.manage']);
+
+    // Submitting with no boxes ticked clears them again.
+    $this->actingAs($admin, 'web')->put("/admin/users/{$target->id}", [
+        'name' => $target->name,
+        'email' => $target->email,
+        'role_id' => $target->role_id,
+    ])->assertRedirect();
+
+    expect($target->fresh()->permissions)->toBe([])
+        ->and($target->fresh()->hasPermission('orders.view'))->toBeFalse();
+});
+
+it('rejects an invented direct permission', function () {
+    $admin = userWithRole(Role::SUPER_ADMIN);
+    $target = userWithRole('manager');
+
+    $this->actingAs($admin, 'web')->put("/admin/users/{$target->id}", [
+        'name' => $target->name,
+        'email' => $target->email,
+        'role_id' => $target->role_id,
+        'permissions' => ['everything.always'],
+    ])->assertSessionHasErrors('permissions.0');
+});
+
+it('shares role and direct permissions with the frontend', function () {
+    $user = userWithRole('instructor', ['permissions' => ['orders.view']]);
+
+    $this->actingAs($user, 'web')->get('/admin/dashboard')
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page->where('auth.role.name', 'instructor'));
+
+    expect($user->fresh()->allPermissions())->toContain('orders.view', 'bookings.view');
 });

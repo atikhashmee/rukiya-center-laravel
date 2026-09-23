@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import InputError from "@/components/input-error";
 import PageHeader from '@/components/page-header';
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
+import { PermissionGrid, type PermissionGroup } from '@/components/permission-grid';
 import { badgeClasses, tones } from '@/lib/status';
 
 const Link: React.FC<any> = ({ children, href, className, ...props }) => <a href={href} className={className} {...props}>{children}</a>;
@@ -22,12 +23,14 @@ interface UserFormData {
     password_confirmation: string;
     role_id: string;
     instructor_id: string;
+    permissions: string[];
 }
 
 interface Option {
     id: number;
     name?: string;
     label?: string;
+    permissions?: string[] | null;
 }
 
 interface EditUserProps {
@@ -39,9 +42,11 @@ interface EditUserProps {
         created_at: string;
         role_id: number | null;
         instructor_id: number | null;
+        permissions: string[] | null;
     };
     roles: Option[];
     instructors: Option[];
+    permissionGroups: PermissionGroup[];
 }
 
 const Section: React.FC<{ title: string; description: string; children: React.ReactNode }> = ({ title, description, children }) => (
@@ -54,7 +59,7 @@ const Section: React.FC<{ title: string; description: string; children: React.Re
     </div>
 );
 
-export default function Edit({ user, roles, instructors }: EditUserProps) {
+export default function Edit({ user, roles, instructors, permissionGroups }: EditUserProps) {
     const pageTitle = `Edit User: ${user.name}`;
 
     const { data, setData, errors, processing, put } = useForm<UserFormData>({
@@ -64,7 +69,26 @@ export default function Edit({ user, roles, instructors }: EditUserProps) {
         password_confirmation: '',
         role_id: user.role_id ? String(user.role_id) : '',
         instructor_id: user.instructor_id ? String(user.instructor_id) : '',
+        permissions: user.permissions ?? [],
     });
+
+    const allKeys = permissionGroups.flatMap((g) => [g.view, g.manage]);
+    const selectedRole = roles.find((r) => String(r.id) === data.role_id);
+    // Super admin holds everything, so every box shows as granted by the role.
+    const rolePermissions = selectedRole?.name === 'super-admin' ? allKeys : (selectedRole?.permissions ?? []);
+    const inherited = (permission: string) => rolePermissions.includes(permission);
+    const has = (permission: string) => data.permissions.includes(permission);
+
+    /** Managing implies reading; permissions already given by the role are left alone. */
+    const togglePermission = (group: PermissionGroup, key: 'view' | 'manage', checked: boolean) => {
+        const add = checked ? (key === 'manage' ? [group.manage, group.view] : [group.view]) : [];
+        const remove = checked ? [] : key === 'view' ? [group.view, group.manage] : [group.manage];
+
+        setData('permissions', [
+            ...new Set([...data.permissions.filter((p) => !remove.includes(p)), ...add]),
+        ].filter((p) => !inherited(p)));
+    };
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -143,7 +167,7 @@ export default function Edit({ user, roles, instructors }: EditUserProps) {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <Section title="Basic Information" description="Update user's personal details and email">
                         <div className="grid gap-5">
-                            <div className="grid gap-2">
+                            <div className="grid content-start gap-2">
                                 <Label htmlFor="name">Full Name *</Label>
                                 <Input
                                     id="name"
@@ -155,7 +179,7 @@ export default function Edit({ user, roles, instructors }: EditUserProps) {
                                 <InputError message={errors.name} />
                             </div>
 
-                            <div className="grid gap-2">
+                            <div className="grid content-start gap-2">
                                 <Label htmlFor="email">Email Address *</Label>
                                 <Input
                                     id="email"
@@ -172,7 +196,7 @@ export default function Edit({ user, roles, instructors }: EditUserProps) {
 
                     <Section title="Access" description="Which role this account gets, and whether it belongs to an instructor">
                         <div className="grid gap-5 sm:grid-cols-2">
-                            <div className="grid gap-2">
+                            <div className="grid content-start gap-2">
                                 <Label htmlFor="role_id">Role *</Label>
                                 <NativeSelect
                                     id="role_id"
@@ -189,7 +213,7 @@ export default function Edit({ user, roles, instructors }: EditUserProps) {
                                 <InputError message={errors.role_id} />
                             </div>
 
-                            <div className="grid gap-2">
+                            <div className="grid content-start gap-2">
                                 <Label htmlFor="instructor_id">Linked instructor</Label>
                                 <NativeSelect
                                     id="instructor_id"
@@ -209,6 +233,22 @@ export default function Edit({ user, roles, instructors }: EditUserProps) {
                         </div>
                     </Section>
 
+                    <PermissionGrid
+                        groups={permissionGroups}
+                        has={has}
+                        toggle={togglePermission}
+                        inherited={inherited}
+                        onSelectAll={() => setData('permissions', allKeys.filter((p) => !inherited(p)))}
+                        onClear={() => setData('permissions', [])}
+                        error={errors.permissions}
+                        note={
+                            <p className="text-sm text-muted-foreground">
+                                Ticked and locked boxes come from the role. Anything you tick here is granted to this user on top of it.
+                            </p>
+                        }
+                    />
+
+
                     <Section title="Change Password" description="Leave blank to keep current password">
                         <div className="grid gap-5">
                             <div className="flex items-start gap-3 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-amber-700 dark:text-amber-300">
@@ -220,7 +260,7 @@ export default function Edit({ user, roles, instructors }: EditUserProps) {
                             </div>
 
                             <div className="grid gap-5 sm:grid-cols-2">
-                                <div className="grid gap-2">
+                                <div className="grid content-start gap-2">
                                     <Label htmlFor="password">New Password</Label>
                                     <Input
                                         id="password"
@@ -233,7 +273,7 @@ export default function Edit({ user, roles, instructors }: EditUserProps) {
                                     <InputError message={errors.password} />
                                 </div>
 
-                                <div className="grid gap-2">
+                                <div className="grid content-start gap-2">
                                     <Label htmlFor="password_confirmation">Confirm New Password</Label>
                                     <Input
                                         id="password_confirmation"

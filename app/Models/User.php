@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'role_id',
         'instructor_id',
+        'permissions',
     ];
 
     /**
@@ -50,6 +51,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'permissions' => 'array',
         ];
     }
 
@@ -71,18 +73,26 @@ class User extends Authenticatable
 
     public function hasPermission(string $permission): bool
     {
-        return (bool) $this->role?->hasPermission($permission);
+        return $this->role?->hasPermission($permission)
+            || in_array($permission, $this->extraPermissions(), true);
     }
 
-    /** Permission keys this user holds, for the frontend. */
-    public function permissions(): array
+    /** Permissions granted to this user directly, on top of their role. */
+    public function extraPermissions(): array
     {
-        if (! $this->role) {
-            return [];
+        return array_values($this->permissions ?? []);
+    }
+
+    /** Everything this user holds - role permissions plus direct grants - for the frontend. */
+    public function allPermissions(): array
+    {
+        if ($this->role?->isSuperAdmin()) {
+            return \App\Support\Permissions::all();
         }
 
-        return $this->role->isSuperAdmin()
-            ? \App\Support\Permissions::all()
-            : array_values($this->role->permissions ?? []);
+        return array_values(array_unique([
+            ...($this->role->permissions ?? []),
+            ...$this->extraPermissions(),
+        ]));
     }
 }
