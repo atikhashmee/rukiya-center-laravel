@@ -166,3 +166,14 @@ it('resolves the create pages instead of matching them as a record id', function
         expect($response->status())->toBe(200, "/admin/{$section}/create returned {$response->status()}");
     }
 });
+
+it('leaves no admin account without a role after migrating', function () {
+    // RefreshDatabase has run every migration, including the role seeding one.
+    expect(Role::whereIn('name', [Role::SUPER_ADMIN, 'manager', 'instructor'])->count())->toBe(3)
+        ->and(User::whereNull('role_id')->count())->toBe(0);
+
+    // A role-less account (created straight in the database) is locked out - this is what
+    // production hit when the roles data was missing.
+    $orphan = User::factory()->create(['role_id' => null, 'email_verified_at' => now()]);
+    $this->actingAs($orphan, 'web')->get('/admin/dashboard')->assertForbidden();
+});
