@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToRegion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
+    use BelongsToRegion;
+
     use HasFactory;
 
     /**
@@ -34,6 +37,7 @@ class Service extends Model
         'required_form_fields',
         'submit_button_text',
         'appointment_type',
+        'region',
     ];
 
     protected function casts(): array

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToRegion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,6 +12,8 @@ use Illuminate\Support\Str;
 
 class Theme extends Model
 {
+    use BelongsToRegion;
+
     use HasFactory;
 
     protected $fillable = [
@@ -19,6 +22,7 @@ class Theme extends Model
         'description',
         'is_active',
         'files',
+        'region',
     ];
 
     protected $casts = [
@@ -176,7 +180,13 @@ class Theme extends Model
      */
     public function activate(): void
     {
-        static::query()->update(['is_active' => false]);
+        // Only one active theme *per region*: activating a UK theme must not
+        // switch off the Bangladeshi one.
+        static::query()
+            ->withoutGlobalScopes()
+            ->where('region', $this->region)
+            ->update(['is_active' => false]);
+
         $this->update(['is_active' => true]);
     }
 

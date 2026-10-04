@@ -18,7 +18,6 @@ class ServiceFactory extends Factory
     {
         return [
             'id_code' => $this->faker->unique()->slug(3),
-            'category' => 'general',
             'title' => $this->faker->words(3, true),
             'tagline' => $this->faker->sentence(5),
             'description' => $this->faker->paragraph(3),
@@ -44,7 +43,6 @@ class ServiceFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'category' => 'counseling',
                 'icon' => 'handshake',
                 'card_color' => 'border-indigo-600',
                 'required_form_fields' => [],
@@ -84,7 +82,6 @@ class ServiceFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'category' => 'rukiya',
                 'icon' => 'shield',
                 'card_color' => 'border-red-600',
                 'required_form_fields' => [],
@@ -124,7 +121,6 @@ class ServiceFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'category' => 'istekhara',
                 'icon' => 'eye',
                 'card_color' => 'border-theme-gold',
                 'required_form_fields' => ['motherName'], // Istekhara specific requirement

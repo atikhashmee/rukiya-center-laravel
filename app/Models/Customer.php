@@ -25,6 +25,7 @@ class Customer extends User implements MustVerifyEmail
         'interests',
         'about',
         'is_active',
+        'region',
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToRegion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Instructor extends Model
 {
+    use BelongsToRegion;
+
     use HasFactory;
 
     protected $fillable = [
@@ -23,6 +26,7 @@ class Instructor extends Model
         'appointment_type',
         'photo',
         'is_active',
+        'region',
     ];
 
     protected $casts = [

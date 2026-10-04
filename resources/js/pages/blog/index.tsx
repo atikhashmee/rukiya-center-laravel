@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Pencil, Trash2, Plus, Eye, FileText } from 'lucide-react';
 import { show } from "@/actions/App/Http/Controllers/BlogController";
 import PageHeader from '@/components/page-header';
-import { statusClasses, statusLabel } from '@/lib/status';
+import { badgeClasses, statusClasses, statusLabel } from '@/lib/status';
 import { useCan } from '@/lib/permissions';
 
 interface BlogPost {
@@ -19,6 +19,7 @@ interface BlogPost {
     content: string;
     status: string;
     created_at: string;
+    region: string;
 }
 
 interface PostsIndexPageProps {
@@ -34,7 +35,15 @@ const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function BlogIndex() {
     const { posts } = usePage().props as PostsIndexPageProps;
+    const { region } = usePage().props as unknown as {
+        region?: { current: string; options: { value: string; short: string }[] };
+    };
     const canManage = useCan('blog.manage');
+
+    // Only worth showing when the admin is looking at every region at once.
+    const regionBadge = (value?: string) => region?.current === 'all' && value
+        ? <span className={`ml-2 ${badgeClasses('neutral')}`}>{region.options.find((o) => o.value === value)?.short ?? value.toUpperCase()}</span>
+        : null;
 
     const handleDelete = (post: BlogPost) => {
         if (window.confirm(`Are you sure you want to delete "${post.title}"?`)) {
@@ -72,7 +81,7 @@ export default function BlogIndex() {
                                 {posts.length > 0 ? (
                                     posts.map((post) => (
                                         <TableRow key={post.id} className="hover:bg-muted/40">
-                                            <TableCell className="font-medium">{post.title}</TableCell>
+                                            <TableCell className="font-medium">{post.title}{regionBadge(post.region)}</TableCell>
                                             <TableCell className="font-mono text-xs text-muted-foreground">{post.slug}</TableCell>
                                             <TableCell className="text-center">
                                                 <span className={statusClasses(post.status)}>

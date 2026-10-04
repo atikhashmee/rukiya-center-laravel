@@ -31,6 +31,7 @@ class BlogController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'featured_image' => 'nullable|string|max:255',
@@ -65,6 +66,7 @@ class BlogController extends Controller
     public function update(Request $request, BlogPost $blog): RedirectResponse
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'featured_image' => 'nullable|string|max:255',

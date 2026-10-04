@@ -34,6 +34,7 @@ class ServiceCategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'name' => 'required|string|max:100|unique:service_categories,name',
             'description' => 'nullable|string|max:255',
             'icon' => 'nullable|string|max:100',
@@ -66,6 +67,7 @@ class ServiceCategoryController extends Controller
     public function update(Request $request, ServiceCategory $serviceCategory)
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'name' => 'required|string|max:100|unique:service_categories,name,'.$serviceCategory->id,
             'description' => 'nullable|string|max:255',
             'icon' => 'nullable|string|max:100',

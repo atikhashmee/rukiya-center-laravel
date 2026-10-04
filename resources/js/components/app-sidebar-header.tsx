@@ -1,6 +1,7 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { RegionSwitcher } from '@/components/region-switcher';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 
 export function AppSidebarHeader({
@@ -14,6 +15,10 @@ export function AppSidebarHeader({
                 <SidebarTrigger className="-ml-1 text-muted-foreground hover:text-foreground" />
                 <Separator orientation="vertical" className="mr-1 h-4!" />
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
+            </div>
+
+            <div className="ml-auto flex items-center gap-2">
+                <RegionSwitcher />
             </div>
         </header>
     );

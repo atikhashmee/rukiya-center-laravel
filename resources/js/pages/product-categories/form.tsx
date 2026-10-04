@@ -1,8 +1,9 @@
 import React from 'react';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import InputError from '@/components/input-error';
 import { store, update } from '@/routes/productCategories';
 
@@ -11,12 +12,18 @@ interface CategoryFormProps {
         id: number;
         name: string;
         slug: string;
+        region?: string;
     };
 }
 
 export default function CategoryForm({ category }: CategoryFormProps) {
+    const { region } = usePage().props as unknown as {
+        region: { current: string; options: { value: string; label: string }[] };
+    };
+
     const { data, setData, post, put, processing, errors } = useForm({
         name: category?.name || '',
+        region: category?.region || (region.current !== 'all' ? region.current : region.options[0]?.value ?? 'uk'),
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -39,6 +46,23 @@ export default function CategoryForm({ category }: CategoryFormProps) {
                     placeholder="e.g. Essential Oils"
                 />
                 <InputError message={errors.name} />
+            </div>
+
+            <div className="grid content-start gap-2">
+                <Label htmlFor="region">Region</Label>
+                <NativeSelect
+                    id="region"
+                    className="w-full"
+                    value={data.region}
+                    onChange={(e) => setData('region', e.target.value)}
+                    aria-invalid={!!errors.region}
+                >
+                    {region.options.map((option) => (
+                        <NativeSelectOption key={option.value} value={option.value}>{option.label}</NativeSelectOption>
+                    ))}
+                </NativeSelect>
+                <p className="text-xs text-muted-foreground">This category only appears on that country's site.</p>
+                <InputError message={errors.region} />
             </div>
 
             {category && (

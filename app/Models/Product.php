@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToRegion;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use BelongsToRegion;
+
     protected $table = 'products';
 
     protected $fillable = [
@@ -16,6 +19,7 @@ class Product extends Model
         'price',
         'stock_quantity',
         'is_active',
+        'region',
     ];
 
     protected $casts = [

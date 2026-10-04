@@ -15,6 +15,11 @@ class OrderController extends Controller
     {
         $query = Order::withCount('items');
 
+        // Follow the admin's region picker ("all regions" leaves this open).
+        if ($region = \App\Support\Region::current()) {
+            $query->where('orders.region', $region);
+        }
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {

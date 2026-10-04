@@ -24,6 +24,8 @@ interface Product {
     price: number;
     stock_quantity: number;
     is_active: boolean;
+    /** Country this product belongs to: 'uk' or 'bd'. */
+    region: string;
     created_at: string;
     updated_at: string;
     // Relationships (eager loaded)

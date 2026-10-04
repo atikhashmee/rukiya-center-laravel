@@ -1,5 +1,5 @@
 import React from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import InputError from "@/components/input-error";
 import PageHeader from "@/components/page-header";
 import { ArrowLeft } from 'lucide-react';
@@ -28,6 +29,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function CreateInstructor({ services }: Props) {
+    const { region } = usePage().props as unknown as {
+        region: { current: string; options: { value: string; label: string }[] };
+    };
+
     const [data, setData] = React.useState<{
         name: string;
         title: string;
@@ -39,6 +44,7 @@ export default function CreateInstructor({ services }: Props) {
         location: string;
         appointment_type: string;
         is_active: boolean;
+        region: string;
         service_ids: number[];
     }>({
         name: '',
@@ -51,6 +57,7 @@ export default function CreateInstructor({ services }: Props) {
         location: '',
         appointment_type: '',
         is_active: true,
+        region: region.current !== 'all' ? region.current : region.options[0]?.value ?? 'uk',
         service_ids: [],
     });
     const [processing, setProcessing] = React.useState(false);
@@ -104,6 +111,22 @@ export default function CreateInstructor({ services }: Props) {
                                     <Label>Full Name *</Label>
                                     <Input value={data.name} onChange={e => setData(prev => ({ ...prev, name: e.target.value }))} placeholder="e.g. Sheikh Ahmed" />
                                     <InputError message={errors.name} />
+                                </div>
+                                <div className="grid content-start gap-2">
+                                    <Label htmlFor="region">Region</Label>
+                                    <NativeSelect
+                                        id="region"
+                                        className="w-full"
+                                        value={data.region}
+                                        onChange={e => setData(prev => ({ ...prev, region: e.target.value }))}
+                                        aria-invalid={!!errors.region}
+                                    >
+                                        {region.options.map((option) => (
+                                            <NativeSelectOption key={option.value} value={option.value}>{option.label}</NativeSelectOption>
+                                        ))}
+                                    </NativeSelect>
+                                    <p className="text-xs text-muted-foreground">This instructor only appears on that country's site.</p>
+                                    <InputError message={errors.region} />
                                 </div>
                                 <div className="grid gap-2">
                                     <Label>Title</Label>

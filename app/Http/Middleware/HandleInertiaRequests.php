@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Middleware\AdminRegionContext;
+use App\Support\Region;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -39,6 +41,7 @@ class HandleInertiaRequests extends Middleware
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
         $user = $request->user();
+        $adminRegion = $request->session()->get(AdminRegionContext::SESSION_KEY, 'all');
 
         return [
             ...parent::share($request),
@@ -48,6 +51,10 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 'role' => $user instanceof \App\Models\User ? $user->role?->only(['id', 'name', 'label']) : null,
                 'permissions' => $user instanceof \App\Models\User ? $user->allPermissions() : [],
+            ],
+            'region' => [
+                'current' => $adminRegion,
+                'options' => Region::all(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [

@@ -29,6 +29,7 @@ interface ServiceOption {
     price_value: number | null;
     min_donation: number | null;
     requires_custom_assessment: boolean;
+    region: string;
 }
 
 interface PaginatedServices {
@@ -66,8 +67,13 @@ const getPriceDisplay = (option: ServiceOption) => {
 };
 
 export default function Index({ services, categories, filters }: ServiceOptionsIndexProps) {
-    const { flash } = usePage().props as any;
+    const { flash, region } = usePage().props as any;
     const canManage = useCan('services.manage');
+
+    // Only worth showing when the admin is looking at every region at once.
+    const regionBadge = (value?: string) => region?.current === 'all' && value
+        ? <span className={`ml-2 ${badgeClasses('neutral')}`}>{region.options.find((o: any) => o.value === value)?.short ?? value.toUpperCase()}</span>
+        : null;
 
     const handleDelete = (optionId: number, title: string) => {
         if (window.confirm(`Are you sure you want to delete the option: "${title}"? This is permanent.`)) {
@@ -165,7 +171,7 @@ export default function Index({ services, categories, filters }: ServiceOptionsI
                                             <TableCell className="font-semibold tabular-nums">{option.order}</TableCell>
                                             <TableCell className="font-mono text-xs text-muted-foreground">{option.id_code}</TableCell>
                                             <TableCell>
-                                                <div className="font-medium">{option.title}</div>
+                                                <div className="font-medium">{option.title}{regionBadge(option.region)}</div>
                                                 <div className="text-xs text-muted-foreground">{option.tagline}</div>
                                             </TableCell>
                                             <TableCell className="text-center">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToRegion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BlogPost extends Model
 {
+    use BelongsToRegion;
+
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
@@ -19,6 +22,7 @@ class BlogPost extends Model
         'featured_image',
         'status',
         'author_id',
+        'region',
     ];
 
     protected $casts = [

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, type ReactNode } from 'react';
 import AppLayout from "@/layouts/app-layout";
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
 import { index, update } from "@/actions/App/Http/Controllers/ServiceController";
@@ -46,7 +46,7 @@ interface Schedule {
 }
 
 interface EditServiceOptionProps {
-    service: ServiceOptionFormData & { id: number; schedules: Schedule[] };
+    service: ServiceOptionFormData & { id: number; schedules: Schedule[]; region: string };
     serviceCategories: { id: number; name: string; slug: string }[];
 }
 
@@ -65,6 +65,10 @@ function Section({ title, description, children }: { title: string; description:
 export default function Edit({ service, serviceCategories = [] }: EditServiceOptionProps) {
 
     const pageTitle = `Edit Service: ${service.title}`;
+
+    const { region } = usePage().props as unknown as {
+        region: { current: string; options: { value: string; label: string }[] };
+    };
 
     const [scheduleData, setScheduleData] = useState({
         day_of_week: 1,
@@ -90,6 +94,7 @@ export default function Edit({ service, serviceCategories = [] }: EditServiceOpt
     // Convert arrays to comma-separated strings for the form
     const initialFormData = {
         ...service,
+        region: service.region || region.options[0]?.value || 'uk',
         features: Array.isArray(service.features) ? service.features.join(', ') : service.features,
         required_form_fields: Array.isArray(service.required_form_fields)
             ? service.required_form_fields.join(', ')
@@ -169,6 +174,23 @@ export default function Edit({ service, serviceCategories = [] }: EditServiceOpt
 
                     {/* 1. Core Identification and Ordering */}
                     <Section title="Core Identity" description="Unique code, category, and display order.">
+                        <div className="grid content-start gap-2 sm:col-span-2">
+                            <Label htmlFor="region">Region</Label>
+                            <NativeSelect
+                                id="region"
+                                className="w-full"
+                                value={data.region}
+                                onChange={(e) => setData('region', e.target.value)}
+                                aria-invalid={!!errors.region}
+                            >
+                                {region.options.map((option) => (
+                                    <NativeSelectOption key={option.value} value={option.value}>{option.label}</NativeSelectOption>
+                                ))}
+                            </NativeSelect>
+                            <p className="text-xs text-muted-foreground">This service only appears on that country's site.</p>
+                            <InputError message={errors.region} />
+                        </div>
+
                         <div className="grid gap-2">
                             <Label htmlFor="id_code">ID Code (Unique)</Label>
                             <Input

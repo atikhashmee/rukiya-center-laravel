@@ -20,6 +20,7 @@ interface Instructor {
     bio: string | null;
     is_active: boolean;
     services_count: number;
+    region: string;
 }
 
 interface PaginatedInstructors {
@@ -43,8 +44,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 const TH = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Index({ instructors, filters }: InstructorsIndexProps) {
-    const { flash } = usePage().props as any;
+    const { flash, region } = usePage().props as any;
     const canManage = useCan('instructors.manage');
+
+    // Only worth showing when the admin is looking at every region at once.
+    const regionBadge = (value?: string) => region?.current === 'all' && value
+        ? <span className={`ml-2 ${badgeClasses('neutral')}`}>{region.options.find((o: any) => o.value === value)?.short ?? value.toUpperCase()}</span>
+        : null;
 
     const handleDelete = (id: number) => {
         if (confirm("Are you sure you want to delete this instructor?")) {
@@ -107,7 +113,7 @@ export default function Index({ instructors, filters }: InstructorsIndexProps) {
                                                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
                                                         {instructor.name.charAt(0).toUpperCase()}
                                                     </div>
-                                                    <span className="font-medium">{instructor.name}</span>
+                                                    <span className="font-medium">{instructor.name}{regionBadge(instructor.region)}</span>
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-sm text-muted-foreground">{instructor.email || '—'}</TableCell>

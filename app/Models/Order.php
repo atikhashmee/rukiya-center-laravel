@@ -11,6 +11,7 @@ class Order extends Model
         'order_number', 'email', 'full_name', 'phone',
         'subtotal', 'total', 'status', 'payment_status',
         'billing_address', 'notes',
+        'region',
     ];
 
     protected $casts = [

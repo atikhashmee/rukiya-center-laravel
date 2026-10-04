@@ -1,6 +1,6 @@
 import React from 'react';
 import AppLayout from "@/layouts/app-layout";
-import { Head, useForm, Link } from '@inertiajs/react';
+import { Head, useForm, usePage, Link } from '@inertiajs/react';
 import { BreadcrumbItem } from "@/types";
 import { dashboard } from '@/routes';
 import { index, update } from "@/actions/App/Http/Controllers/BlogController";
@@ -20,6 +20,7 @@ interface BlogPost {
     content: string;
     featured_image: string | null;
     status: string;
+    region: string;
 }
 
 interface BlogEditProps {
@@ -33,11 +34,16 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function BlogEdit({ post }: BlogEditProps) {
+    const { region } = usePage().props as unknown as {
+        region: { current: string; options: { value: string; label: string }[] };
+    };
+
     const { data, setData, processing, errors, put } = useForm({
         title: post.title,
         content: post.content,
         featured_image: post.featured_image || '',
         status: post.status,
+        region: post.region || region.options[0]?.value || 'uk',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -71,6 +77,23 @@ export default function BlogEdit({ post }: BlogEditProps) {
                                 onChange={(e) => setData('title', e.target.value)}
                             />
                             <InputError message={errors.title} />
+                        </div>
+
+                        <div className="grid content-start gap-2">
+                            <Label htmlFor="region">Region</Label>
+                            <NativeSelect
+                                id="region"
+                                className="w-full"
+                                value={data.region}
+                                onChange={(e) => setData('region', e.target.value)}
+                                aria-invalid={!!errors.region}
+                            >
+                                {region.options.map((option) => (
+                                    <NativeSelectOption key={option.value} value={option.value}>{option.label}</NativeSelectOption>
+                                ))}
+                            </NativeSelect>
+                            <p className="text-xs text-muted-foreground">This post only appears on that country's site.</p>
+                            <InputError message={errors.region} />
                         </div>
 
                         <div className="grid gap-2">

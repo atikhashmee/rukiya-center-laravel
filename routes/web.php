@@ -97,7 +97,15 @@ Route::prefix('customer')->name('customer.')->group(function () {
     });
 });
 
-Route::prefix('admin')->middleware(['auth:web', 'verified:web'])->group(function () {
+Route::prefix('admin')->middleware(['auth:web', 'verified:web', 'admin.region'])->group(function () {
+    // Which country's records the admin is looking at ("all" clears the filter).
+    Route::post('region', function (\Illuminate\Http\Request $request) {
+        $request->validate(['region' => ['required', 'string', \Illuminate\Validation\Rule::in(['all', ...array_keys(\App\Support\Region::REGIONS)])]]);
+        $request->session()->put(\App\Http\Middleware\AdminRegionContext::SESSION_KEY, $request->region);
+
+        return back();
+    })->name('admin.region.switch');
+
     Route::redirect('/', 'admin/dashboard', 301);
     Route::get('dashboard', DashboardController::class)->middleware('can:dashboard.view')->name('dashboard');
 

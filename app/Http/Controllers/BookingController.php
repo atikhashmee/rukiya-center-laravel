@@ -25,6 +25,11 @@ class BookingController extends Controller
     {
         $query = Booking::with(['customer', 'service:id,title', 'instructor:id,name']);
 
+        // Follow the admin's region picker ("all regions" leaves this open).
+        if ($region = \App\Support\Region::current()) {
+            $query->where('bookings.region', $region);
+        }
+
         // Instructor accounts only ever see their own bookings.
         if ($instructorId = $request->user()?->instructor_id) {
             $query->where('instructor_id', $instructorId);

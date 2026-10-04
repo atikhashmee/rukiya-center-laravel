@@ -42,7 +42,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Index({ products, categories, filters }: ProductsIndexProps) {
-    const { flash } = usePage().props as any;
+    const { flash, region } = usePage().props as any;
+
+    // Only worth showing when the admin is looking at every region at once.
+    const regionBadge = (value?: string) => region?.current === 'all' && value
+        ? <span className={`ml-2 ${badgeClasses('neutral')}`}>{region.options.find((o: any) => o.value === value)?.short ?? value.toUpperCase()}</span>
+        : null;
     const canManage = useCan('products.manage');
 
     const handleDelete = (productId: number) => {
@@ -118,7 +123,7 @@ export default function Index({ products, categories, filters }: ProductsIndexPr
                                 {products.data.length > 0 ? (
                                     products.data.map((product: Product) => (
                                         <TableRow key={product.id} className="hover:bg-muted/40">
-                                            <TableCell className="font-medium">{product.name}</TableCell>
+                                            <TableCell className="font-medium">{product.name}{regionBadge(product.region)}</TableCell>
                                             <TableCell className="font-mono text-xs text-muted-foreground">{product.sku}</TableCell>
                                             <TableCell className="text-muted-foreground">{product.category?.name || '-'}</TableCell>
                                             <TableCell className="text-right font-medium tabular-nums">£{product.price.toFixed(2)}</TableCell>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useForm, router, Form } from '@inertiajs/react';
+import { useForm, usePage, router, Form } from '@inertiajs/react';
 import { ProductFormProps, ProductImage } from '@/types/product';
 import { index, store, update } from '@/routes/products';
 import {Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '@/components/ui/select'
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import InputError from "@/components/input-error";
 import { X } from 'lucide-react';
 
@@ -18,6 +19,7 @@ interface ProductFormData {
     price: number | '';
     stock_quantity: number | '';
     is_active: boolean;
+    region: string;
     // For creation
     images: File[];
     // For update
@@ -29,6 +31,10 @@ interface ProductFormData {
 export default function ProductForm({ product, categories }: ProductFormProps) {
     const isEdit = !!product;
 
+    const { region } = usePage().props as unknown as {
+        region: { current: string; options: { value: string; label: string }[] };
+    };
+
     const { data, setData, errors, processing } = useForm<ProductFormData>({
         category_id: product?.category_id || '',
         name: product?.name || '',
@@ -37,6 +43,7 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
         price: product?.price || '',
         stock_quantity: product?.stock_quantity || '',
         is_active: product?.is_active || true,
+        region: product?.region || (region.current !== 'all' ? region.current : region.options[0]?.value ?? 'uk'),
         images: [],
         new_images: [],
         delete_image_ids: [],
@@ -99,6 +106,23 @@ return (
                         </SelectContent>
                     </Select>
                         {errors.category_id && <InputError message={errors.category_id} />}
+                </div>
+
+                <div className="grid content-start gap-2">
+                    <Label htmlFor="region">Region</Label>
+                    <NativeSelect
+                        id="region"
+                        className="w-full"
+                        value={data.region}
+                        onChange={(e) => setData('region', e.target.value)}
+                        aria-invalid={!!errors.region}
+                    >
+                        {region.options.map((option) => (
+                            <NativeSelectOption key={option.value} value={option.value}>{option.label}</NativeSelectOption>
+                        ))}
+                    </NativeSelect>
+                    <p className="text-xs text-muted-foreground">This product only appears on that country's site.</p>
+                    <InputError message={errors.region} />
                 </div>
 
                 {/* Basic Product Fields */}

@@ -18,6 +18,7 @@ interface ProductCategory {
     name: string;
     slug: string;
     products_count: number;
+    region: string;
 }
 
 interface PaginatedCategories {
@@ -41,8 +42,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 const th = "text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 export default function Index({ categories, filters }: CategoriesIndexProps) {
-    const { flash } = usePage().props as any;
+    const { flash, region } = usePage().props as any;
     const canManage = useCan('products.manage');
+
+    // Only worth showing when the admin is looking at every region at once.
+    const regionBadge = (value?: string) => region?.current === 'all' && value
+        ? <span className={`ml-2 ${badgeClasses('neutral')}`}>{region.options.find((o: any) => o.value === value)?.short ?? value.toUpperCase()}</span>
+        : null;
 
     const handleDelete = (categoryId: number) => {
         if (confirm("Are you sure you want to delete this category? This action is irreversible.")) {
@@ -92,7 +98,7 @@ export default function Index({ categories, filters }: CategoriesIndexProps) {
                                 {categories.data.length > 0 ? (
                                     categories.data.map((category) => (
                                         <TableRow key={category.id} className="hover:bg-muted/40">
-                                            <TableCell className="font-medium">{category.name}</TableCell>
+                                            <TableCell className="font-medium">{category.name}{regionBadge(category.region)}</TableCell>
                                             <TableCell className="font-mono text-xs text-muted-foreground">{category.slug}</TableCell>
                                             <TableCell className="text-center">
                                                 <span className={badgeClasses('info')}>

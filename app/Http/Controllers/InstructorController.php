@@ -43,6 +43,7 @@ class InstructorController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'name' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -85,6 +86,7 @@ class InstructorController extends Controller
     public function update(Request $request, Instructor $instructor)
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'name' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',

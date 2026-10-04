@@ -34,6 +34,7 @@ class ProductCategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'name' => 'required|string|max:100|unique:product_categories,name',
         ]);
 
@@ -64,6 +65,7 @@ class ProductCategoryController extends Controller
     public function update(Request $request, ProductCategory $productCategory)
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'name' => 'required|string|max:100|unique:product_categories,name,' . $productCategory->id,
         ]);
 

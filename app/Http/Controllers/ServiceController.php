@@ -119,6 +119,7 @@ class ServiceController extends Controller
             'required_form_fields' => $requiredFormFields,
         ]);
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'id_code' => 'required|string|max:255|unique:services,id_code,'.$service->id,
             'category_id' => 'required|exists:service_categories,id',
             'title' => 'required|string|max:255',
@@ -161,6 +162,7 @@ class ServiceController extends Controller
     public function storeSchedule(Request $request, Service $service)
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'day_of_week' => 'required|integer|between:0,6',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',

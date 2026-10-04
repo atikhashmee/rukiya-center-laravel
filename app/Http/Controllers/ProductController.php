@@ -63,6 +63,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'category_id' => 'required|integer|exists:product_categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -149,6 +150,7 @@ class ProductController extends Controller
 
         // 1. Validation
         $validated = $request->validate([
+            'region' => \App\Support\Region::rule(),
             'category_id' => 'sometimes|required|integer|exists:product_categories,id',
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',

@@ -20,8 +20,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function WhatsApp({
     whatsappNumber,
+    regionLabel,
 }: {
     whatsappNumber: string | null;
+    regionLabel: string;
 }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -31,7 +33,7 @@ export default function WhatsApp({
                 <div className="space-y-6">
                     <HeadingSmall
                         title="WhatsApp chat"
-                        description="Number used by the floating WhatsApp button on the website. Leave empty to hide the button."
+                        description={`Number used by the floating WhatsApp button on the ${regionLabel} website. Each country has its own number — switch region in the header to edit another. Leave empty to hide the button.`}
                     />
 
                     <Form

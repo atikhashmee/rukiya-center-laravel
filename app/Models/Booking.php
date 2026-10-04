@@ -43,6 +43,7 @@ class Booking extends Model
         'price_type',
         'payment_status',
         'booking_status',
+        'region',
     ];
 
     protected $attributes = [

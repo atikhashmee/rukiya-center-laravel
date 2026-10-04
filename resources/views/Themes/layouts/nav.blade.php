@@ -1,12 +1,12 @@
 <!-- Top Announcement Bar -->
 <div class="bg-brand-teal text-brand-cream py-2 px-4 text-center text-xs tracking-wider font-semibold">
-    🕌 AUTHENTIC RUQYAH CLINIC • 100% SECURE UK GDPR COMPLIANT • ACCORDING TO QUR'AN & SUNNAH
+    {{ __('site.announcement') }}
 </div>
 
 <!-- Sticky Header -->
 <header class="sticky top-0 z-50 bg-brand-cream/90 backdrop-blur-md border-b border-brand-gold/20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        <a href="{{ route('home') }}" class="flex items-center gap-3">
+        <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-3">
             <svg class="w-14 h-14" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="46" fill="white" stroke="#c5a880" stroke-width="2"/>
                 <circle cx="50" cy="50" r="42" fill="none" stroke="#b31b1b" stroke-width="1.5"/>
@@ -15,21 +15,31 @@
                 <text x="48" y="58" font-family="'Playfair Display', serif" font-size="28" font-weight="bold" fill="#b31b1b">K</text>
             </svg>
             <div>
-                <span class="block text-lg font-bold tracking-tight text-brand-teal uppercase">DK Healing Centre</span>
-                <span class="block text-[10px] tracking-widest text-brand-gold font-semibold uppercase">Ruqyah & Prophetic Medicine</span>
+                <span class="block text-base lg:text-lg font-bold tracking-tight text-brand-teal uppercase whitespace-nowrap">{{ __('site.brand') }}</span>
+                <span class="block text-[10px] tracking-widest text-brand-gold font-semibold uppercase">{{ __('site.tagline') }}</span>
             </div>
         </a>
 
-        <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
-            <a href="{{ route('about') }}" class="hover:text-brand-gold transition">About Us</a>
-            <a href="{{ route('wizard.index') }}" class="hover:text-brand-gold transition">Book an Appointment</a>
-            <a href="{{ route('shop') }}" class="hover:text-brand-gold transition">Shop</a>
-            <a href="{{ route('posts.index') }}" class="hover:text-brand-gold transition">Blog</a>
-            <a href="{{ route('contact') }}" class="hover:text-brand-gold transition">Contact Us</a>
-            <a href="{{ route('free.counselling') }}" class="text-brand-crimson font-bold hover:opacity-80 transition">Free Counseling</a>
+        <nav class="hidden md:flex items-center gap-5 lg:gap-6 font-medium text-sm whitespace-nowrap">
+            <a href="{{ route('about') }}" class="hover:text-brand-gold transition">{{ __('site.nav.about') }}</a>
+            <a href="{{ route('wizard.index') }}" class="hover:text-brand-gold transition">{{ __('site.nav.book') }}</a>
+            <a href="{{ route('shop') }}" class="hover:text-brand-gold transition">{{ __('site.nav.shop') }}</a>
+            <a href="{{ route('posts.index') }}" class="hover:text-brand-gold transition">{{ __('site.nav.blog') }}</a>
+            <a href="{{ route('contact') }}" class="hover:text-brand-gold transition">{{ __('site.nav.contact') }}</a>
+            <a href="{{ route('free.counselling') }}" class="text-brand-crimson font-bold hover:opacity-80 transition">{{ __('site.nav.free_counselling') }}</a>
         </nav>
 
-        <div class="flex items-center gap-4">
+        <div class="flex shrink-0 items-center gap-3">
+            {{-- Sister site: one compact link to the other country --}}
+            @foreach (\App\Support\Region::all() as $region)
+                @continue($region['value'] === \App\Support\Region::current())
+                <a href="{{ \App\Support\Region::url($region['value']) }}"
+                   title="{{ __('site.nav.visit_site', ['country' => $region['label']]) }}"
+                   class="inline-flex shrink-0 items-center gap-1 rounded-full border border-brand-gold/40 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-brand-teal whitespace-nowrap hover:bg-brand-gold/10 transition">
+                    {{ $region['value'] === 'bd' ? '🇧🇩' : '🇬🇧' }} {{ $region['short'] }}
+                </a>
+            @endforeach
+
             <!-- Cart -->
             @php $cartCount = collect(session()->get('cart', []))->sum(); @endphp
             <a href="{{ route('cart') }}" class="relative text-brand-teal hover:text-brand-gold transition">
@@ -45,10 +55,10 @@
                 </a>
             @else
                 <a href="{{ route('customer.login') }}" class="bg-brand-teal hover:bg-brand-navy text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">
-                    Login
+                    {{ __('site.nav.login') }}
                 </a>
                 <a href="{{ route('customer.register') }}" class="bg-brand-gold hover:bg-brand-goldDark text-white px-5 py-2.5 rounded-full text-sm font-semibold transition">
-                    Register
+                    {{ __('site.nav.register') }}
                 </a>
             @endauth
         </div>

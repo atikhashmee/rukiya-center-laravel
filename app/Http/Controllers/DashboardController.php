@@ -19,7 +19,11 @@ class DashboardController extends Controller
         $user = $request->user();
         // Instructor accounts only count their own bookings.
         $instructorId = $user?->instructor_id;
-        $bookings = fn () => Booking::query()->when($instructorId, fn ($q) => $q->where('instructor_id', $instructorId));
+        $region = \App\Support\Region::current();
+        $bookings = fn () => Booking::query()
+            ->when($region, fn ($q) => $q->where('bookings.region', $region))
+            ->when($instructorId, fn ($q) => $q->where('instructor_id', $instructorId));
+        $customers = fn () => Customer::query()->when($region, fn ($q) => $q->where('customers.region', $region));
 
         $all = [
             'products' => [
@@ -38,9 +42,9 @@ class DashboardController extends Controller
                 'drafts'    => BlogPost::where('status', 'draft')->count(),
             ],
             'customers' => [
-                'total'    => Customer::count(),
-                'active'   => Customer::where('is_active', true)->count(),
-                'verified' => Customer::whereNotNull('email_verified_at')->count(),
+                'total'    => $customers()->count(),
+                'active'   => $customers()->where('is_active', true)->count(),
+                'verified' => $customers()->whereNotNull('email_verified_at')->count(),
             ],
             'users' => [
                 'total'    => User::count(),
@@ -79,7 +83,7 @@ class DashboardController extends Controller
                 'created_at'     => $b->created_at->format('d M Y'),
             ]);
 
-        $recentCustomers = ! $user?->hasPermission('customers.view') ? collect() : Customer::latest()
+        $recentCustomers = ! $user?->hasPermission('customers.view') ? collect() : $customers()->latest()
             ->take(5)
             ->get()
             ->map(fn ($c) => [

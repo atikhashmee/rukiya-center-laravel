@@ -7,7 +7,7 @@ use App\Http\Controllers\Settings\WhatsAppController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::prefix('admin')->middleware('auth:web')->group(function () {
+Route::prefix('admin')->middleware(['auth:web', 'admin.region'])->group(function () {
     Route::redirect('settings', '/admin/settings/profile');
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');

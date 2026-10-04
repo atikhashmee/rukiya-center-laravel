@@ -1,6 +1,6 @@
 import React, { useEffect, type ReactNode } from 'react';
 import AppLayout from "@/layouts/app-layout";
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { BreadcrumbItem} from "@/types";
 import { dashboard } from '@/routes';
 import { store, index, create } from "@/actions/App/Http/Controllers/ServiceController";
@@ -33,6 +33,7 @@ interface ServiceOptionFormData {
     appointment_type: AppointmentType;
     required_form_fields: string[];
     submit_button_text: string;
+    region: string;
 }
 
 interface CreateServiceOptionProps {
@@ -57,6 +58,7 @@ const initialData: ServiceOptionFormData = {
     appointment_type: 'both',
     required_form_fields: ["email", "question"],
     submit_button_text: 'Book Now',
+    region: 'uk',
 };
 
 function Section({ title, description, children }: { title: string; description: string; children: ReactNode }) {
@@ -75,7 +77,14 @@ export default function Create({ serviceCategories = [] }: CreateServiceOptionPr
 
     const pageTitle = `Create New Service `;
 
-    const { data, setData, errors, processing, post} = useForm<ServiceOptionFormData>(initialData);
+    const { region } = usePage().props as unknown as {
+        region: { current: string; options: { value: string; label: string }[] };
+    };
+
+    const { data, setData, errors, processing, post} = useForm<ServiceOptionFormData>({
+        ...initialData,
+        region: region.current !== 'all' ? region.current : region.options[0]?.value ?? 'uk',
+    });
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -137,6 +146,23 @@ export default function Create({ serviceCategories = [] }: CreateServiceOptionPr
 
                     {/* 1. Core Identification and Ordering */}
                     <Section title="Core Identity" description="Unique code, category, and display order.">
+                        <div className="grid content-start gap-2 sm:col-span-2">
+                            <Label htmlFor="region">Region</Label>
+                            <NativeSelect
+                                id="region"
+                                className="w-full"
+                                value={data.region}
+                                onChange={(e) => setData('region', e.target.value)}
+                                aria-invalid={!!errors.region}
+                            >
+                                {region.options.map((option) => (
+                                    <NativeSelectOption key={option.value} value={option.value}>{option.label}</NativeSelectOption>
+                                ))}
+                            </NativeSelect>
+                            <p className="text-xs text-muted-foreground">This service only appears on that country's site.</p>
+                            <InputError message={errors.region} />
+                        </div>
+
                         <div className="grid gap-2">
                             <Label htmlFor="id_code">ID Code (Unique)</Label>
                             <Input
