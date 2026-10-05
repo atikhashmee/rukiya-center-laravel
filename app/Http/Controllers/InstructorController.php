@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Instructor;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class InstructorController extends Controller
@@ -55,14 +57,21 @@ class InstructorController extends Controller
             'appointment_type' => 'nullable|string|max:100',
             'service_ids' => 'required|array|min:1',
             'service_ids.*' => 'exists:services,id',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'remove_photo' => 'nullable|boolean',
         ]);
 
         $serviceIds = $validated['service_ids'];
         unset($validated['service_ids']);
 
         $validated['is_active'] = $request->boolean('is_active', true);
-        $validated['languages'] = $validated['languages']
+        $validated['languages'] = ! empty($validated['languages'])
             ? array_map('trim', explode(',', $validated['languages']))
+            : null;
+
+        unset($validated['remove_photo']);
+        $validated['photo'] = $request->hasFile('photo')
+            ? Storage::url($request->file('photo')->store('instructors', 'public'))
             : null;
 
         $instructor = Instructor::create($validated);
@@ -98,15 +107,30 @@ class InstructorController extends Controller
             'appointment_type' => 'nullable|string|max:100',
             'service_ids' => 'required|array|min:1',
             'service_ids.*' => 'exists:services,id',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'remove_photo' => 'nullable|boolean',
         ]);
 
         $serviceIds = $validated['service_ids'];
         unset($validated['service_ids']);
 
         $validated['is_active'] = $request->boolean('is_active', true);
-        $validated['languages'] = $validated['languages']
+        $validated['languages'] = ! empty($validated['languages'])
             ? array_map('trim', explode(',', $validated['languages']))
             : null;
+
+        $removePhoto = (bool) ($validated['remove_photo'] ?? false);
+        unset($validated['remove_photo']);
+
+        if ($request->hasFile('photo')) {
+            $this->deletePhoto($instructor->photo);
+            $validated['photo'] = Storage::url($request->file('photo')->store('instructors', 'public'));
+        } elseif ($removePhoto) {
+            $this->deletePhoto($instructor->photo);
+            $validated['photo'] = null;
+        } else {
+            unset($validated['photo']);   // no file sent: leave the current one alone
+        }
 
         $instructor->update($validated);
         $instructor->services()->sync($serviceIds);
@@ -115,8 +139,20 @@ class InstructorController extends Controller
             ->with('success', 'Instructor updated successfully.');
     }
 
+    /** Photos are stored as public URLs ("/storage/instructors/x.jpg"), matching the product images. */
+    private function deletePhoto(?string $url): void
+    {
+        if (! $url) {
+            return;
+        }
+
+        // Storage::url('/') returns "/storage//", so strip the prefix explicitly.
+        Storage::disk('public')->delete(ltrim(Str::after($url, '/storage/'), '/'));
+    }
+
     public function destroy(Instructor $instructor)
     {
+        $this->deletePhoto($instructor->photo);
         $instructor->delete();
 
         return redirect()->route('instructors.index')

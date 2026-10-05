@@ -21,6 +21,7 @@ interface Instructor {
     is_active: boolean;
     services_count: number;
     region: string;
+    photo: string | null;
 }
 
 interface PaginatedInstructors {
@@ -110,9 +111,18 @@ export default function Index({ instructors, filters }: InstructorsIndexProps) {
                                         <TableRow key={instructor.id} className="transition-colors hover:bg-muted/40">
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
+                                                    {instructor.photo ? (
+                                                        <img
+                                                            src={instructor.photo}
+                                                            alt={instructor.name}
+                                                            loading="lazy"
+                                                            className="h-9 w-9 shrink-0 rounded-full border object-cover"
+                                                        />
+                                                    ) : (
                                                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
                                                         {instructor.name.charAt(0).toUpperCase()}
                                                     </div>
+                                                    )}
                                                     <span className="font-medium">{instructor.name}{regionBadge(instructor.region)}</span>
                                                 </div>
                                             </TableCell>

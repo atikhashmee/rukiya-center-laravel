@@ -21,7 +21,7 @@
                         <div class="bg-white border border-brand-gold/20 rounded-2xl p-6 flex flex-col gap-4 hover:shadow-md transition">
                             <div class="flex items-center gap-4">
                                 @if($instructor->photo)
-                                    <img src="{{ asset('storage/' . $instructor->photo) }}" alt="{{ $instructor->name }}"
+                                    <img src="{{ $instructor->photo }}" alt="{{ $instructor->name }}" loading="lazy"
                                          class="w-16 h-16 rounded-full object-cover border border-brand-gold/30 flex-shrink-0">
                                 @else
                                     <div class="w-16 h-16 rounded-full bg-brand-teal/10 text-brand-teal font-serif font-bold flex items-center justify-center flex-shrink-0 text-lg">

@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import InputError from "@/components/input-error";
 import PageHeader from "@/components/page-header";
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Image as ImageIcon, X } from 'lucide-react';
 
 interface Service {
     id: number;
@@ -31,6 +31,8 @@ interface Instructor {
     appointment_type: string | null;
     is_active: boolean;
     region: string;
+    /** Public URL of the uploaded photo, e.g. "/storage/instructors/x.jpg". */
+    photo: string | null;
     services: { id: number }[];
 }
 
@@ -50,7 +52,7 @@ export default function EditInstructor({ instructor, services }: Props) {
         region: { current: string; options: { value: string; label: string }[] };
     };
 
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, processing, errors } = useForm({
         name: instructor.name,
         title: instructor.title || '',
         email: instructor.email || '',
@@ -63,11 +65,16 @@ export default function EditInstructor({ instructor, services }: Props) {
         is_active: instructor.is_active,
         region: instructor.region || region.options[0]?.value || 'uk',
         service_ids: instructor.services.map(s => s.id),
+        photo: null as File | null,
+        remove_photo: false,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(`/admin/instructors/${instructor.id}`);
+        // POST with _method=put: Inertia cannot send files over a real PUT request.
+        router.post(`/admin/instructors/${instructor.id}`, { ...data, _method: 'put' }, {
+            forceFormData: true,
+        });
     };
 
     const toggleService = (id: number) => {
@@ -124,6 +131,42 @@ export default function EditInstructor({ instructor, services }: Props) {
                                     <p className="text-xs text-muted-foreground">This instructor only appears on that country's site.</p>
                                     <InputError message={errors.region} />
                                 </div>
+                                <div className="grid content-start gap-2 sm:col-span-2">
+                                    <Label htmlFor="photo">Photo</Label>
+                                    <div className="flex items-center gap-4">
+                                        {data.photo ? (
+                                            <img src={URL.createObjectURL(data.photo)} alt="Selected photo preview" className="h-16 w-16 shrink-0 rounded-full border object-cover" />
+                                        ) : instructor.photo && !data.remove_photo ? (
+                                            <img src={instructor.photo} alt={instructor.name} className="h-16 w-16 shrink-0 rounded-full border object-cover" />
+                                        ) : (
+                                            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border bg-muted text-muted-foreground">
+                                                <ImageIcon className="h-5 w-5" />
+                                            </div>
+                                        )}
+                                        <div className="grid gap-2">
+                                            <Input
+                                                id="photo"
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp"
+                                                onChange={e => setData(prev => ({ ...prev, photo: e.target.files?.[0] ?? null, remove_photo: false }))}
+                                            />
+                                            <p className="text-xs text-muted-foreground">JPG, PNG or WebP, up to 2MB. Leave empty to keep the current photo.</p>
+                                            {instructor.photo && !data.photo && (
+                                                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="h-4 w-4 rounded accent-primary"
+                                                        checked={data.remove_photo}
+                                                        onChange={e => setData('remove_photo', e.target.checked)}
+                                                    />
+                                                    <X className="h-3 w-3" /> Remove the current photo
+                                                </label>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <InputError message={errors.photo} />
+                                </div>
+
                                 <div className="grid gap-2">
                                     <Label>Title</Label>
                                     <Input value={data.title} onChange={e => setData('title', e.target.value)} placeholder="e.g. Senior Imam & Ruqyah Practitioner" />

@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import InputError from "@/components/input-error";
 import PageHeader from "@/components/page-header";
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Image as ImageIcon } from 'lucide-react';
 
 interface Service {
     id: number;
@@ -46,6 +46,7 @@ export default function CreateInstructor({ services }: Props) {
         is_active: boolean;
         region: string;
         service_ids: number[];
+        photo: File | null;
     }>({
         name: '',
         title: '',
@@ -59,6 +60,7 @@ export default function CreateInstructor({ services }: Props) {
         is_active: true,
         region: region.current !== 'all' ? region.current : region.options[0]?.value ?? 'uk',
         service_ids: [],
+        photo: null,
     });
     const [processing, setProcessing] = React.useState(false);
     const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -67,6 +69,7 @@ export default function CreateInstructor({ services }: Props) {
         e.preventDefault();
         setProcessing(true);
         router.post('/admin/instructors', data, {
+            forceFormData: true,   // the photo is a file upload
             onFinish: () => setProcessing(false),
             onError: (errs) => setErrors(errs),
         });
@@ -127,6 +130,32 @@ export default function CreateInstructor({ services }: Props) {
                                     </NativeSelect>
                                     <p className="text-xs text-muted-foreground">This instructor only appears on that country's site.</p>
                                     <InputError message={errors.region} />
+                                </div>
+                                <div className="grid content-start gap-2 sm:col-span-2">
+                                    <Label htmlFor="photo">Photo</Label>
+                                    <div className="flex items-center gap-4">
+                                        {data.photo ? (
+                                            <img
+                                                src={URL.createObjectURL(data.photo)}
+                                                alt="Selected photo preview"
+                                                className="h-16 w-16 shrink-0 rounded-full border object-cover"
+                                            />
+                                        ) : (
+                                            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border bg-muted text-muted-foreground">
+                                                <ImageIcon className="h-5 w-5" />
+                                            </div>
+                                        )}
+                                        <div className="grid gap-2">
+                                            <Input
+                                                id="photo"
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp"
+                                                onChange={e => setData(prev => ({ ...prev, photo: e.target.files?.[0] ?? null }))}
+                                            />
+                                            <p className="text-xs text-muted-foreground">JPG, PNG or WebP, up to 2MB. Shown on the public team page; initials are used if left empty.</p>
+                                        </div>
+                                    </div>
+                                    <InputError message={errors.photo} />
                                 </div>
                                 <div className="grid gap-2">
                                     <Label>Title</Label>
