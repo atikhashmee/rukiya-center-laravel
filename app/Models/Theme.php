@@ -41,6 +41,7 @@ class Theme extends Model
         'about' => 'about.blade.php',
         'contact' => 'contact.blade.php',
         'free-counselling' => 'free-counselling.blade.php',
+        'team' => 'team.blade.php',
 
         // Shop
         'shop' => 'shop.blade.php',
@@ -87,6 +88,7 @@ class Theme extends Model
         'about' => 'About Page',
         'contact' => 'Contact Page',
         'free-counselling' => 'Free Counselling',
+        'team' => 'Team Members',
 
         'shop' => 'Shop Listing',
         'shop-show' => 'Product Detail',
@@ -125,7 +127,7 @@ class Theme extends Model
      * EDITABLE_FILES/FILE_LABELS above remain the source of truth for validity.
      */
     const PAGE_GROUPS = [
-        'Core Pages' => ['index', 'about', 'contact', 'free-counselling'],
+        'Core Pages' => ['index', 'about', 'contact', 'free-counselling', 'team'],
         'Shop' => ['shop', 'shop-show', 'cart', 'checkout-form'],
         'Booking & Services' => [
             'service-detail', 'service-book-preview', 'checkout', 'payment-result-page',
@@ -151,6 +153,7 @@ class Theme extends Model
         'about' => '/about',
         'contact' => '/contact',
         'free-counselling' => '/free-counselling',
+        'team' => '/team',
         'shop' => '/shop',
         'cart' => '/cart',
         'blog' => '/blog',

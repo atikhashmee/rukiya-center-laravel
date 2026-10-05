@@ -15,6 +15,7 @@ return [
         'book' => 'Book an Appointment',
         'shop' => 'Shop',
         'blog' => 'Blog',
+        'team' => 'Team Members',
         'contact' => 'Contact Us',
         'free_counselling' => 'Free Counseling',
         'login' => 'Login',

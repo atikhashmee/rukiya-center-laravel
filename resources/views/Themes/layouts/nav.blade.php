@@ -25,6 +25,9 @@
             <a href="{{ route('wizard.index') }}" class="hover:text-brand-gold transition">{{ __('site.nav.book') }}</a>
             <a href="{{ route('shop') }}" class="hover:text-brand-gold transition">{{ __('site.nav.shop') }}</a>
             <a href="{{ route('posts.index') }}" class="hover:text-brand-gold transition">{{ __('site.nav.blog') }}</a>
+            @if (\App\Support\Region::current() === \App\Support\Region::BD)
+                <a href="{{ route('team') }}" class="hover:text-brand-gold transition">{{ __('site.nav.team') }}</a>
+            @endif
             <a href="{{ route('contact') }}" class="hover:text-brand-gold transition">{{ __('site.nav.contact') }}</a>
             <a href="{{ route('free.counselling') }}" class="text-brand-crimson font-bold hover:opacity-80 transition">{{ __('site.nav.free_counselling') }}</a>
         </nav>

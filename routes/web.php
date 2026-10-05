@@ -29,6 +29,14 @@ Route::get('/', fn () => view(Theme::resolveViewName('index')))->name('home');
 Route::get('/about', fn () => view(Theme::resolveViewName('about')))->name('about');
 Route::get('/contact', fn () => view(Theme::resolveViewName('contact')))->name('contact');
 Route::get('/free-counselling', fn () => view(Theme::resolveViewName('free-counselling')))->name('free.counselling');
+
+// Team page: instructors are region-scoped, so each country lists its own people.
+Route::get('/team', fn () => view(Theme::resolveViewName('team'), [
+    'instructors' => \App\Models\Instructor::where('is_active', true)
+        ->with('services:id,title')
+        ->orderBy('name')
+        ->get(),
+]))->name('team');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/{product}', [ShopController::class, 'show'])->name('shop.show');
 Route::get('/blog', [CustomerBlogController::class, 'index'])->name('posts.index');

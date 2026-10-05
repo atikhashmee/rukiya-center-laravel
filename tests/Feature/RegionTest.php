@@ -242,3 +242,41 @@ it('creates and moves content between regions from the admin forms', function ()
 
     expect($category->fresh()->region)->toBe(Region::UK);
 });
+
+it('lists only the current region instructors on the team page', function () {
+    \App\Models\Instructor::forceCreate([
+        'name' => 'Shaykh UK', 'title' => 'Senior Imam', 'is_active' => true, 'region' => Region::UK,
+    ]);
+    \App\Models\Instructor::forceCreate([
+        'name' => 'শায়খ বাংলাদেশ', 'title' => 'সিনিয়র ইমাম', 'is_active' => true, 'region' => Region::BD,
+    ]);
+    \App\Models\Instructor::forceCreate([
+        'name' => 'Hidden Inactive', 'is_active' => false, 'region' => Region::BD,
+    ]);
+
+    Region::forget();
+
+    $this->get('http://bd.dkhealingcenter.com/team')
+        ->assertOk()
+        ->assertSee('শায়খ বাংলাদেশ', false)
+        ->assertDontSee('Shaykh UK')
+        ->assertDontSee('Hidden Inactive');
+
+    $this->get('http://dkhealingcenter.com/team')
+        ->assertOk()
+        ->assertSee('Shaykh UK')
+        ->assertDontSee('শায়খ বাংলাদেশ', false);
+});
+
+it('shows the team link in the navigation on the Bangladesh site only', function () {
+    $this->get('http://bd.dkhealingcenter.com/')->assertOk()->assertSee('আমাদের টিম', false);
+    $this->get('http://dkhealingcenter.com/')->assertOk()->assertDontSee('Team Members');
+});
+
+it('tells visitors when no team members are published yet', function () {
+    // The Bangla copy lives in the Bangladesh theme (a database record built by
+    // "php artisan theme:bangla"), so a bare test database falls back to the English view.
+    $this->get('http://bd.dkhealingcenter.com/team')
+        ->assertOk()
+        ->assertSee('Our team details will be published here shortly.');
+});
