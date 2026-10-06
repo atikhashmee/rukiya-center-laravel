@@ -156,11 +156,29 @@ class ThemeController extends Controller
             return response()->json(['error' => 'Invalid file key'], 404);
         }
 
+        /*
+         * Page code is sent base64-encoded ("content_b64") because web application
+         * firewalls reject request bodies containing things like innerHTML or <script>
+         * as if they were XSS attempts. Raw "content" is still accepted as a fallback.
+         */
         $validated = $request->validate([
-            'content' => 'required|string',
+            'content' => 'required_without:content_b64|nullable|string',
+            'content_b64' => 'required_without:content|nullable|string',
         ]);
 
-        $theme->setFileContent($key, $validated['content']);
+        $content = $validated['content'] ?? '';
+
+        if (! empty($validated['content_b64'])) {
+            $decoded = base64_decode($validated['content_b64'], true);
+
+            if ($decoded === false || ! mb_check_encoding($decoded, 'UTF-8')) {
+                return response()->json(['error' => 'The submitted content could not be decoded.'], 422);
+            }
+
+            $content = $decoded;
+        }
+
+        $theme->setFileContent($key, $content);
 
         // If this theme is active, regenerate its cached view
         if ($theme->is_active) {

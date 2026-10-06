@@ -83,6 +83,16 @@ export default function ThemeEdit() {
     const isDirty = (key: string) => fileContents[key] !== undefined && fileContents[key] !== savedContents[key];
     const activeDirty = isDirty(activeKey);
 
+    const toBase64 = (value: string) => {
+        const bytes = new TextEncoder().encode(value);
+        let binary = '';
+        bytes.forEach((byte) => {
+            binary += String.fromCharCode(byte);
+        });
+
+        return btoa(binary);
+    };
+
     const handleSave = useCallback(async () => {
         if (!activeKey) return;
 
@@ -96,14 +106,15 @@ export default function ThemeEdit() {
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-XSRF-TOKEN': getXsrfToken(),
                 },
-                body: JSON.stringify({ content: fileContents[activeKey] || '' }),
+                // Base64 so firewalls don't mistake page code (innerHTML, <script>) for an attack
+                body: JSON.stringify({ content_b64: toBase64(fileContents[activeKey] || '') }),
             });
 
             if (response.ok) {
                 setSavedContents((prev) => ({ ...prev, [activeKey]: fileContents[activeKey] || '' }));
                 setSaveMessage({ type: 'success', text: 'Saved successfully.' });
             } else {
-                setSaveMessage({ type: 'error', text: 'Failed to save - please try again.' });
+                setSaveMessage({ type: 'error', text: `Failed to save (HTTP ${response.status}) - please try again.` });
             }
         } catch (error) {
             console.error('Failed to save file:', error);
