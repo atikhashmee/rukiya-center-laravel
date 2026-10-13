@@ -93,7 +93,14 @@ class ConvertThemeContent extends Command
             }
 
             if ($result['converted'] === 0) {
-                continue;   // already done, or nothing matched
+                // Say so when a map fits nothing: silence here is what hid the
+                // homepage having no map at all.
+                if ($result['missing']) {
+                    $this->warn("   {$page}: nothing matched (".count($result['missing']).' field(s) not found in this theme)');
+                    $problems++;
+                }
+
+                continue;   // otherwise: already converted
             }
 
             $files[$page] = $result['source'];

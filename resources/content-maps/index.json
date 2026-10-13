@@ -1,0 +1,164 @@
+[
+    {
+        "key": "hero_eyebrow",
+        "type": "text",
+        "uk": "AUTHENTIC QUR’AN & SUNNAH BASED SUPPORT",
+        "bn": "কুরআন ও সুন্নাহভিত্তিক নির্ভরযোগ্য সহায়তা"
+    },
+    {
+        "key": "hero_title",
+        "type": "html",
+        "uk": "Authentic Ruqyah & <span class=\"italic text-brand-gold\">Islamic Spiritual Guidance</span>",
+        "bn": "বিশুদ্ধ রুকইয়াহ ও <span class=\"italic text-brand-gold\">ইসলামিক আধ্যাত্মিক দিকনির্দেশনা</span>"
+    },
+    {
+        "key": "hero_text",
+        "type": "text",
+        "uk": "Compassionate Qur'an and Sunnah-based Ruqyah, Istikharah guidance and Islamic spiritual support for individuals and families across the UK and worldwide.",
+        "bn": "কুরআন ও সুন্নাহর আলোকে রুকইয়াহ, ইস্তিখারা পরামর্শ এবং ইসলামিক আধ্যাত্মিক সহায়তা — বাংলাদেশের ব্যক্তি ও পরিবারের জন্য, অনলাইনে দেশের বাইরেও।"
+    },
+    {
+        "key": "hero_ayah_translation",
+        "type": "text",
+        "uk": "\"We send down in the Qur'an that which is a healing and a mercy for the believers.\"",
+        "bn": "“আর আমি কুরআনে এমন বিষয় অবতীর্ণ করি যা মুমিনদের জন্য আরোগ্য ও রহমত।”"
+    },
+    {
+        "key": "hero_ayah_reference",
+        "type": "text",
+        "uk": "Surah Al-Isra (17:82)",
+        "bn": "সূরা আল-ইসরা (১৭:৮২)"
+    },
+    {
+        "key": "hero_button_primary",
+        "type": "text",
+        "uk": "Book a Ruqyah Session",
+        "bn": "রুকইয়াহ সেশন বুক করুন"
+    },
+    {
+        "key": "hero_button_secondary",
+        "type": "text",
+        "uk": "Explore Our Services",
+        "bn": "আমাদের সেবাসমূহ দেখুন"
+    },
+    {
+        "key": "standards_eyebrow",
+        "type": "text",
+        "uk": "⚠️ RESPECTFUL CONSULTATION STANDARDS",
+        "bn": "⚠️ সম্মানজনক পরামর্শ নীতিমালা"
+    },
+    {
+        "key": "standards_title",
+        "type": "text",
+        "uk": "Safe, Respectful & Confidential Care",
+        "bn": "নিরাপদ, সম্মানজনক ও গোপনীয় সেবা"
+    },
+    {
+        "key": "standards_text",
+        "type": "text",
+        "uk": "Every consultation is conducted professionally, confidentially and in accordance with authentic Islamic principles.",
+        "bn": "প্রতিটি পরামর্শ পেশাদারিত্ব, গোপনীয়তা এবং বিশুদ্ধ ইসলামি নীতিমালা মেনে পরিচালিত হয়।"
+    },
+    {
+        "key": "services_eyebrow",
+        "type": "text",
+        "uk": "Our Healing Offerings",
+        "bn": "আমাদের সেবাসমূহ"
+    },
+    {
+        "key": "services_title",
+        "type": "text",
+        "uk": "Our Islamic Healing Services",
+        "bn": "আমাদের ইসলামিক সেবাসমূহ"
+    },
+    {
+        "key": "services_text",
+        "type": "text",
+        "uk": "Compassionate Islamic support rooted in the Qur'an and authentic Sunnah. Every service is delivered confidentially and with professional care.",
+        "bn": "কুরআন ও বিশুদ্ধ সুন্নাহর ভিত্তিতে সহানুভূতিশীল ইসলামিক সহায়তা। প্রতিটি সেবা গোপনীয়তা ও পেশাদারিত্বের সঙ্গে প্রদান করা হয়।"
+    },
+    {
+        "key": "service_1_title",
+        "type": "text",
+        "uk": "Islamic Counselling",
+        "bn": "ইসলামিক কাউন্সেলিং"
+    },
+    {
+        "key": "service_1_text",
+        "type": "text",
+        "uk": "Confidential one-to-one Islamic counselling to help you navigate emotional, spiritual and personal challenges with wisdom and compassion.",
+        "bn": "আবেগজনিত, আধ্যাত্মিক ও ব্যক্তিগত সমস্যায় প্রজ্ঞা ও সহানুভূতির সঙ্গে পথ দেখাতে গোপনীয় একান্ত ইসলামিক কাউন্সেলিং।"
+    },
+    {
+        "key": "service_2_text",
+        "type": "text",
+        "uk": "Authentic Qur'an and Sunnah based Ruqyah for spiritual healing, protection and restoration, delivered with sincerity and professionalism.",
+        "bn": "আধ্যাত্মিক আরোগ্য, সুরক্ষা ও প্রশান্তির জন্য কুরআন ও সুন্নাহভিত্তিক বিশুদ্ধ রুকইয়াহ, আন্তরিকতা ও পেশাদারিত্বের সঙ্গে পরিচালিত।"
+    },
+    {
+        "key": "service_3_title",
+        "type": "text",
+        "uk": "Istikharah Guidance",
+        "bn": "ইস্তিখারা দিকনির্দেশনা"
+    },
+    {
+        "key": "service_3_text",
+        "type": "text",
+        "uk": "Seek Allah's guidance before important life decisions through authentic Istikharah and practical Islamic advice.",
+        "bn": "জীবনের গুরুত্বপূর্ণ সিদ্ধান্তের আগে বিশুদ্ধ ইস্তিখারা ও বাস্তবভিত্তিক ইসলামিক পরামর্শের মাধ্যমে আল্লাহর নির্দেশনা প্রার্থনা করুন।"
+    },
+    {
+        "key": "process_text",
+        "type": "text",
+        "uk": "Every consultation is carried out with compassion, confidentiality and strict adherence to the Qur'an and authentic Sunnah.",
+        "bn": "প্রতিটি পরামর্শ সহানুভূতি, গোপনীয়তা এবং কুরআন ও বিশুদ্ধ সুন্নাহর কঠোর অনুসরণে পরিচালিত হয়।"
+    },
+    {
+        "key": "step_1_title",
+        "type": "text",
+        "uk": "📋 Initial Consultation",
+        "bn": "📋 প্রাথমিক পরামর্শ"
+    },
+    {
+        "key": "step_2_title",
+        "type": "text",
+        "uk": "📖 Authentic Ruqyah Session",
+        "bn": "📖 বিশুদ্ধ রুকইয়াহ সেশন"
+    },
+    {
+        "key": "step_3_title",
+        "type": "text",
+        "uk": "🤝 Follow-up Support",
+        "bn": "🤝 পরবর্তী সহায়তা"
+    },
+    {
+        "key": "testimonials_title",
+        "type": "text",
+        "uk": "Trusted Client Experiences",
+        "bn": "ক্লায়েন্টদের অভিজ্ঞতা"
+    },
+    {
+        "key": "testimonials_note",
+        "type": "text",
+        "uk": "Testimonials reflect individual experiences. Outcomes vary according to individual circumstances and the will of Allah.",
+        "bn": "মতামতগুলো ব্যক্তিগত অভিজ্ঞতার প্রতিফলন। ফলাফল ব্যক্তিভেদে ও আল্লাহর ইচ্ছা অনুযায়ী ভিন্ন হতে পারে।"
+    },
+    {
+        "key": "cta_title",
+        "type": "text",
+        "uk": "Begin Your Journey with Confidence",
+        "bn": "আত্মবিশ্বাসের সঙ্গে আপনার যাত্রা শুরু করুন"
+    },
+    {
+        "key": "cta_button",
+        "type": "text",
+        "uk": "Book Your Consultation",
+        "bn": "পরামর্শের জন্য বুক করুন"
+    },
+    {
+        "key": "newsletter_button",
+        "type": "text",
+        "uk": "Subscribe",
+        "bn": "সাবস্ক্রাইব"
+    }
+]
