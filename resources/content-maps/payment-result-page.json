@@ -1,0 +1,86 @@
+[
+  {
+    "key": "success_title",
+    "type": "text",
+    "uk": "Payment Successful!",
+    "bn": "Payment Successful!"
+  },
+  {
+    "key": "success_text",
+    "type": "text",
+    "uk": "Your booking is Confirmed.",
+    "bn": "Your booking is Confirmed."
+  },
+  {
+    "key": "success_service_label",
+    "type": "text",
+    "uk": "Service Paid:",
+    "bn": "Service Paid:"
+  },
+  {
+    "key": "success_amount_label",
+    "type": "text",
+    "uk": "Total Amount:",
+    "bn": "Total Amount:"
+  },
+  {
+    "key": "success_transaction_label",
+    "type": "text",
+    "uk": "Transaction ID:",
+    "bn": "Transaction ID:"
+  },
+  {
+    "key": "success_home_button",
+    "type": "text",
+    "uk": "Back to Home",
+    "bn": "Back to Home"
+  },
+  {
+    "key": "failure_title",
+    "type": "text",
+    "uk": "Payment Failed",
+    "bn": "Payment Failed"
+  },
+  {
+    "key": "failure_text",
+    "type": "text",
+    "uk": "We couldn't process your transaction.",
+    "bn": "We couldn't process your transaction."
+  },
+  {
+    "key": "failure_reason_label",
+    "type": "text",
+    "uk": "Reason:",
+    "bn": "Reason:"
+  },
+  {
+    "key": "failure_reason_declined",
+    "type": "text",
+    "uk": "Card declined by the bank.",
+    "bn": "Card declined by the bank."
+  },
+  {
+    "key": "failure_reason_cvc",
+    "type": "text",
+    "uk": "Incorrect CVC or expiry date.",
+    "bn": "Incorrect CVC or expiry date."
+  },
+  {
+    "key": "failure_reason_funds",
+    "type": "text",
+    "uk": "Insufficient funds.",
+    "bn": "Insufficient funds."
+  },
+  {
+    "key": "failure_retry_button",
+    "type": "text",
+    "uk": "Try Payment Again",
+    "bn": "Try Payment Again"
+  },
+  {
+    "key": "failure_support_button",
+    "type": "text",
+    "uk": "Contact Support",
+    "bn": "Contact Support"
+  }
+]

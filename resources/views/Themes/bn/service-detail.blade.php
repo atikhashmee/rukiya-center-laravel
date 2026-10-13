@@ -9,19 +9,19 @@
     <section class="relative py-20 bg-brand-teal">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
             @if ($service_type == "counseling")
-                <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">Spiritual Counseling Paths</h1>
+                <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">{{ content('service-detail', 'counseling_title', 'Spiritual Counseling Paths') }}</h1>
                 <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-                    Start your journey with a complimentary session to establish trust and clarity before committing to deep, transformative guidance.
+                    {{ content('service-detail', 'counseling_text', 'Start your journey with a complimentary session to establish trust and clarity before committing to deep, transformative guidance.') }}
                 </p>
             @elseif ($service_type == "rukiya")
-                <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">Rukiya: Spiritual Healing & Restoration</h1>
+                <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">{{ content('service-detail', 'rukiya_title', 'Rukiya: Spiritual Healing & Restoration') }}</h1>
                 <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-                    Select the path that aligns with your spiritual needs. We offer gentle guidance for minor concerns and intensive intervention for complex challenges.
+                    {{ content('service-detail', 'rukiya_text', 'Select the path that aligns with your spiritual needs. We offer gentle guidance for minor concerns and intensive intervention for complex challenges.') }}
                 </p>
             @elseif ($service_type == "istekhara")
-                <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">Istekhara Guidance Options</h1>
+                <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">{{ content('service-detail', 'istekhara_title', 'Istekhara Guidance Options') }}</h1>
                 <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-                    Seek divine guidance and clarity for life's important decisions. Choose the path that matches the complexity of your situation.
+                    {{ content('service-detail', 'istekhara_text', 'Seek divine guidance and clarity for life\'s important decisions. Choose the path that matches the complexity of your situation.') }}
                 </p>
             @endif
         </div>

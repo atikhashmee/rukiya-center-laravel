@@ -1,0 +1,44 @@
+[
+  {
+    "key": "section_title",
+    "type": "text",
+    "uk": "Select a Service Category",
+    "bn": "Select a Service Category"
+  },
+  {
+    "key": "help_question",
+    "type": "text",
+    "uk": "Not sure which service is right for you?",
+    "bn": "Not sure which service is right for you?"
+  },
+  {
+    "key": "help_text",
+    "type": "text",
+    "uk": "Start with a Free Initial Enquiry and we'll help you choose the most suitable service.",
+    "bn": "Start with a Free Initial Enquiry and we'll help you choose the most suitable service."
+  },
+  {
+    "key": "enquiry_button",
+    "type": "text",
+    "uk": "Free Initial Enquiry →",
+    "bn": "Free Initial Enquiry →"
+  },
+  {
+    "key": "continue_label",
+    "type": "text",
+    "uk": "Continue →",
+    "bn": "Continue →"
+  },
+  {
+    "key": "hero_title",
+    "type": "arg",
+    "uk": "'Book Your Consultation'",
+    "bn": "'Book Your Consultation'"
+  },
+  {
+    "key": "hero_subtitle",
+    "type": "arg",
+    "uk": "'Select the type of support you are looking for.'",
+    "bn": "'Select the type of support you are looking for.'"
+  }
+]

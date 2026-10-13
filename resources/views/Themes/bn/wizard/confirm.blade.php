@@ -5,8 +5,8 @@
 
     @include('Themes.wizard.partials.hero', [
         'step' => 5,
-        'title' => 'Book an Appointment',
-        'subtitle' => 'Just a few details and you\'re booked.',
+        'title' => content('wizard.confirm', 'hero_title', 'Book an Appointment'),
+        'subtitle' => content('wizard.confirm', 'hero_subtitle', 'Just a few details and you\'re booked.'),
     ])
 
     <main class="py-16 bg-slate-50">
@@ -26,45 +26,45 @@
                 <!-- Booking Summary Sidebar -->
                 <div class="lg:col-span-1">
                     <div class="bg-brand-teal text-white p-6 rounded-2xl space-y-4 sticky top-24 shadow-lg">
-                        <h2 class="text-lg font-serif font-bold">Your Appointment</h2>
+                        <h2 class="text-lg font-serif font-bold">{{ content('wizard.confirm', 'summary_title', 'Your Appointment') }}</h2>
                         <div class="space-y-3 text-sm">
                             <div class="flex justify-between gap-4">
-                                <span class="text-slate-300">Service</span>
+                                <span class="text-slate-300">{{ content('wizard.confirm', 'summary_service_label', 'Service') }}</span>
                                 <span class="font-semibold text-right">{{ $service->title }}</span>
                             </div>
                             <div class="flex justify-between gap-4">
-                                <span class="text-slate-300">Category</span>
+                                <span class="text-slate-300">{{ content('wizard.confirm', 'summary_category_label', 'Category') }}</span>
                                 <span class="font-semibold">{{ $service->category->name }}</span>
                             </div>
                             <div class="flex justify-between gap-4">
-                                <span class="text-slate-300">Practitioner</span>
+                                <span class="text-slate-300">{{ content('wizard.confirm', 'summary_practitioner_label', 'Practitioner') }}</span>
                                 <span class="font-semibold">{{ $instructor->name }}</span>
                             </div>
                             <div class="flex justify-between gap-4">
-                                <span class="text-slate-300">Date</span>
+                                <span class="text-slate-300">{{ content('wizard.confirm', 'summary_date_label', 'Date') }}</span>
                                 <span class="font-semibold">{{ \Carbon\Carbon::parse(request('booking_date'))->format('l, M j, Y') }}</span>
                             </div>
                             <div class="flex justify-between gap-4">
-                                <span class="text-slate-300">Time</span>
+                                <span class="text-slate-300">{{ content('wizard.confirm', 'summary_time_label', 'Time') }}</span>
                                 <span class="font-semibold">{{ \Carbon\Carbon::parse(request('booking_time'))->format('g:i A') }}</span>
                             </div>
                             @if($donationAddon > 0)
                                 <div class="flex justify-between gap-4">
-                                    <span class="text-slate-300">Gift of Ruqyah</span>
+                                    <span class="text-slate-300">{{ content('wizard.confirm', 'summary_gift_label', 'Gift of Ruqyah') }}</span>
                                     <span class="font-semibold">£{{ number_format($donationAddon, 2) }}</span>
                                 </div>
                             @endif
                             <div class="border-t border-white/15 pt-3">
                                 <div class="flex justify-between items-center">
-                                    <span class="font-semibold text-slate-300">Total</span>
+                                    <span class="font-semibold text-slate-300">{{ content('wizard.confirm', 'summary_total_label', 'Total') }}</span>
                                     @if($service->price_type === 'FIXED')
                                         <span class="text-xl font-serif font-bold text-brand-gold">£{{ number_format($service->price_value + $donationAddon, 2) }}</span>
                                     @elseif($service->price_type === 'DONATION')
                                         <span class="text-xl font-serif font-bold text-brand-gold">Min. £{{ number_format($service->min_donation + $donationAddon, 2) }}</span>
                                     @elseif($service->price_type === 'RESERVATION' && $donationAddon <= 0)
-                                        <span class="text-sm font-bold text-yellow-400">Assessment Required</span>
+                                        <span class="text-sm font-bold text-yellow-400">{{ content('wizard.confirm', 'summary_assessment_required', 'Assessment Required') }}</span>
                                     @elseif($service->price_type === 'FREE' && $donationAddon <= 0)
-                                        <span class="text-xl font-serif font-bold text-green-400">Free</span>
+                                        <span class="text-xl font-serif font-bold text-green-400">{{ content('wizard.confirm', 'summary_free', 'Free') }}</span>
                                     @else
                                         <span class="text-xl font-serif font-bold text-brand-gold">£{{ number_format($donationAddon, 2) }}</span>
                                     @endif
@@ -85,7 +85,7 @@
                         <input type="hidden" name="donation_addon" value="{{ $donationAddon }}">
 <!-- Section 1: Appointment Type -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
-                            @include('Themes.wizard.partials.section-header', ['n' => 1, 'title' => 'Appointment Type'])
+                            @include('Themes.wizard.partials.section-header', ['n' => 1, 'title' => content('wizard.confirm', 'section_1_title', 'Appointment Type')])
 
                             @if($service->appointment_type === 'online')
                                 <input type="hidden" name="appointment_format" value="online">
@@ -93,8 +93,8 @@
                                     <div class="flex items-start gap-4">
                                         <div class="text-3xl">💻</div>
                                         <div>
-                                            <h3 class="font-serif font-bold text-brand-teal">Online Consultation</h3>
-                                            <p class="text-sm text-slate-600 mt-1">This service is delivered online only.</p>
+                                            <h3 class="font-serif font-bold text-brand-teal">{{ content('wizard.confirm', 'online_only_title', 'Online Consultation') }}</h3>
+                                            <p class="text-sm text-slate-600 mt-1">{{ content('wizard.confirm', 'online_only_text', 'This service is delivered online only.') }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -104,28 +104,28 @@
                                     <div class="flex items-start gap-4">
                                         <div class="text-3xl">🏢</div>
                                         <div>
-                                            <h3 class="font-serif font-bold text-brand-teal">In-Person Consultation</h3>
-                                            <p class="text-sm text-slate-600 mt-1">This service is delivered in person at DK Healing Centre.</p>
+                                            <h3 class="font-serif font-bold text-brand-teal">{{ content('wizard.confirm', 'in_person_only_title', 'In-Person Consultation') }}</h3>
+                                            <p class="text-sm text-slate-600 mt-1">{{ content('wizard.confirm', 'in_person_only_text', 'This service is delivered in person at DK Healing Centre.') }}</p>
                                         </div>
                                     </div>
                                 </div>
                             @else
-                                <p class="text-sm text-slate-600 mb-5">Choose how you would like to attend your consultation.</p>
+                                <p class="text-sm text-slate-600 mb-5">{{ content('wizard.confirm', 'format_choice_text', 'Choose how you would like to attend your consultation.') }}</p>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <label class="cursor-pointer">
                                         <input type="radio" name="appointment_format" value="online" required class="peer sr-only" {{ old('appointment_format') === 'online' ? 'checked' : '' }}>
                                         <div class="border border-slate-200 rounded-xl p-5 text-center peer-checked:border-brand-gold peer-checked:ring-2 peer-checked:ring-brand-gold/20 hover:border-brand-gold transition">
                                             <div class="text-3xl mb-2">💻</div>
-                                            <h3 class="font-serif font-bold text-brand-teal">Online Consultation</h3>
-                                            <p class="text-xs text-slate-500 mt-2">Attend by video call from anywhere.</p>
+                                            <h3 class="font-serif font-bold text-brand-teal">{{ content('wizard.confirm', 'format_online_title', 'Online Consultation') }}</h3>
+                                            <p class="text-xs text-slate-500 mt-2">{{ content('wizard.confirm', 'format_online_text', 'Attend by video call from anywhere.') }}</p>
                                         </div>
                                     </label>
                                     <label class="cursor-pointer">
                                         <input type="radio" name="appointment_format" value="in_person" required class="peer sr-only" {{ old('appointment_format') === 'in_person' ? 'checked' : '' }}>
                                         <div class="border border-slate-200 rounded-xl p-5 text-center peer-checked:border-brand-gold peer-checked:ring-2 peer-checked:ring-brand-gold/20 hover:border-brand-gold transition">
                                             <div class="text-3xl mb-2">🏢</div>
-                                            <h3 class="font-serif font-bold text-brand-teal">In-Person Consultation</h3>
-                                            <p class="text-xs text-slate-500 mt-2">Attend at DK Healing Centre.</p>
+                                            <h3 class="font-serif font-bold text-brand-teal">{{ content('wizard.confirm', 'format_in_person_title', 'In-Person Consultation') }}</h3>
+                                            <p class="text-xs text-slate-500 mt-2">{{ content('wizard.confirm', 'format_in_person_text', 'Attend at DK Healing Centre.') }}</p>
                                         </div>
                                     </label>
                                 </div>
@@ -137,22 +137,22 @@
 
 <!-- Section 1: Your Information -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
-                            @include('Themes.wizard.partials.section-header', ['n' => 2, 'title' => 'Your Information'])
+                            @include('Themes.wizard.partials.section-header', ['n' => 2, 'title' => content('wizard.confirm', 'section_2_title', 'Your Information')])
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">First Name <span class="text-brand-crimson">*</span></label>
-                                    <input type="text" name="first_name" required value="{{ old('first_name') }}" placeholder="First name"
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'first_name_label', 'First Name') }} <span class="text-brand-crimson">*</span></label>
+                                    <input type="text" name="first_name" required value="{{ old('first_name') }}" placeholder="{{ content('wizard.confirm', 'first_name_placeholder', 'First name') }}"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                     @error('first_name') <p class="text-brand-crimson text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Last Name <span class="text-brand-crimson">*</span></label>
-                                    <input type="text" name="last_name" required value="{{ old('last_name') }}" placeholder="Last name"
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'last_name_label', 'Last Name') }} <span class="text-brand-crimson">*</span></label>
+                                    <input type="text" name="last_name" required value="{{ old('last_name') }}" placeholder="{{ content('wizard.confirm', 'last_name_placeholder', 'Last name') }}"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                     @error('last_name') <p class="text-brand-crimson text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Phone <span class="text-brand-crimson">*</span></label>
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'phone_label', 'Phone') }} <span class="text-brand-crimson">*</span></label>
                                     <div class="flex gap-2">
                                         <select name="phone_country" class="w-24 px-2 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                             <option value="GB" {{ old('phone_country') == 'GB' ? 'selected' : '' }}>🇬🇧 +44</option>
@@ -164,14 +164,14 @@
                                             <option value="IN" {{ old('phone_country') == 'IN' ? 'selected' : '' }}>🇮🇳 +91</option>
                                             <option value="TR" {{ old('phone_country') == 'TR' ? 'selected' : '' }}>🇹🇷 +90</option>
                                         </select>
-                                        <input type="tel" name="phone_number" required value="{{ old('phone_number') }}" placeholder="Phone number"
+                                        <input type="tel" name="phone_number" required value="{{ old('phone_number') }}" placeholder="{{ content('wizard.confirm', 'phone_placeholder', 'Phone number') }}"
                                             class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                     </div>
                                     @error('phone_number') <p class="text-brand-crimson text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Email <span class="text-brand-crimson">*</span></label>
-                                    <input type="email" name="email" required value="{{ old('email') }}" placeholder="your@email.com"
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'email_label', 'Email') }} <span class="text-brand-crimson">*</span></label>
+                                    <input type="email" name="email" required value="{{ old('email') }}" placeholder="{{ content('wizard.confirm', 'email_placeholder', 'your@email.com') }}"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                     @error('email') <p class="text-brand-crimson text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
@@ -180,10 +180,10 @@
 
                         <!-- Section 2: More About You -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
-                            @include('Themes.wizard.partials.section-header', ['n' => 2, 'title' => 'More About You'])
+                            @include('Themes.wizard.partials.section-header', ['n' => 2, 'title' => content('wizard.confirm', 'section_3_title', 'More About You')])
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Gender <span class="text-brand-crimson">*</span></label>
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'gender_label', 'Gender') }} <span class="text-brand-crimson">*</span></label>
                                     <select name="gender" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                         <option value="">Select an option</option>
                                         <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
@@ -191,7 +191,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Language <span class="text-brand-crimson">*</span></label>
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'language_label', 'Language') }} <span class="text-brand-crimson">*</span></label>
                                     <select name="language" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                         <option value="">Select an option</option>
                                         <option value="English" {{ old('language') == 'English' ? 'selected' : '' }}>English</option>
@@ -206,12 +206,12 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Ethnic Origin <span class="text-brand-crimson">*</span></label>
-                                    <input type="text" name="ethnic_origin" required value="{{ old('ethnic_origin') }}" placeholder="e.g. Arab, South Asian, Black African..."
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'ethnic_origin_label', 'Ethnic Origin') }} <span class="text-brand-crimson">*</span></label>
+                                    <input type="text" name="ethnic_origin" required value="{{ old('ethnic_origin') }}" placeholder="{{ content('wizard.confirm', 'ethnic_origin_placeholder', 'e.g. Arab, South Asian, Black African...') }}"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 bg-white">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Age Range <span class="text-brand-crimson">*</span></label>
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'age_range_label', 'Age Range') }} <span class="text-brand-crimson">*</span></label>
                                     <select name="age" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                         <option value="">Select an option</option>
                                         <option value="under_18" {{ old('age') == 'under_18' ? 'selected' : '' }}>Under 18</option>
@@ -228,15 +228,15 @@
 
                         <!-- Section 3: Mahram / Guardian (highlighted — policy-critical) -->
                         <div class="bg-white border-2 border-brand-gold/50 rounded-2xl p-6 sm:p-7 relative">
-                            <span class="absolute -top-3 left-6 bg-brand-crimson text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">Required policy</span>
+                            <span class="absolute -top-3 left-6 bg-brand-crimson text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">{{ content('wizard.confirm', 'guardian_policy_badge', 'Required policy') }}</span>
                             @include('Themes.wizard.partials.section-header', [
                                 'n' => 3,
-                                'title' => 'Who Will Accompany You?',
-                                'hint' => 'We do NOT see clients alone — you must bring a Mahram/Guardian with you, or your appointment will not go ahead.',
+                                'title' => content('wizard.confirm', 'section_4_title', 'Who Will Accompany You?'),
+                                'hint' => content('wizard.confirm', 'section_4_hint', 'We do NOT see clients alone — you must bring a Mahram/Guardian with you, or your appointment will not go ahead.'),
                             ])
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Gender <span class="text-brand-crimson">*</span></label>
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'guardian_gender_label', 'Gender') }} <span class="text-brand-crimson">*</span></label>
                                     <select name="guardian_gender" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                         <option value="">Select an option</option>
                                         <option value="male" {{ old('guardian_gender') == 'male' ? 'selected' : '' }}>Male</option>
@@ -244,18 +244,18 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Name</label>
-                                    <input type="text" name="guardian_name" value="{{ old('guardian_name') }}" placeholder="Full name"
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'guardian_name_label', 'Name') }}</label>
+                                    <input type="text" name="guardian_name" value="{{ old('guardian_name') }}" placeholder="{{ content('wizard.confirm', 'guardian_name_placeholder', 'Full name') }}"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Relationship</label>
-                                    <input type="text" name="guardian_relationship" value="{{ old('guardian_relationship') }}" placeholder="e.g. Father, Brother, Husband..."
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'guardian_relationship_label', 'Relationship') }}</label>
+                                    <input type="text" name="guardian_relationship" value="{{ old('guardian_relationship') }}" placeholder="{{ content('wizard.confirm', 'guardian_relationship_placeholder', 'e.g. Father, Brother, Husband...') }}"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-brand-teal mb-1">Contact Number</label>
-                                    <input type="tel" name="guardian_phone" value="{{ old('guardian_phone') }}" placeholder="Different from above"
+                                    <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'guardian_phone_label', 'Contact Number') }}</label>
+                                    <input type="tel" name="guardian_phone" value="{{ old('guardian_phone') }}" placeholder="{{ content('wizard.confirm', 'guardian_phone_placeholder', 'Different from above') }}"
                                         class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                 </div>
                             </div>
@@ -265,8 +265,8 @@
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
                             @include('Themes.wizard.partials.section-header', [
                                 'n' => 4,
-                                'title' => 'Symptoms',
-                                'hint' => 'Tap all that apply.',
+                                'title' => content('wizard.confirm', 'section_5_title', 'Symptoms'),
+                                'hint' => content('wizard.confirm', 'section_5_hint', 'Tap all that apply.'),
                             ])
                             @php
                                 $symptomOptions = [
@@ -301,7 +301,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-brand-teal mb-1">Other</label>
-                                <textarea name="symptoms_other" rows="3" placeholder="Any other symptoms or details..."
+                                <textarea name="symptoms_other" rows="3" placeholder="{{ content('wizard.confirm', 'symptoms_other_placeholder', 'Any other symptoms or details...') }}"
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">{{ old('symptoms_other') }}</textarea>
                             </div>
                         </div>
@@ -310,8 +310,8 @@
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
                             @include('Themes.wizard.partials.section-header', [
                                 'n' => 5,
-                                'title' => 'How Did You Find Us?',
-                                'hint' => 'Select at least one.',
+                                'title' => content('wizard.confirm', 'section_6_title', 'How Did You Find Us?'),
+                                'hint' => content('wizard.confirm', 'section_6_hint', 'Select at least one.'),
                             ])
                             @php
                                 $foundViaOptions = [
@@ -339,8 +339,8 @@
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
                             @include('Themes.wizard.partials.section-header', [
                                 'n' => 6,
-                                'title' => 'Your Visit',
-                                'hint' => 'If this is your first appointment we may move you to another practitioner if we feel it will be more appropriate.',
+                                'title' => content('wizard.confirm', 'section_7_title', 'Your Visit'),
+                                'hint' => content('wizard.confirm', 'section_7_hint', 'If this is your first appointment we may move you to another practitioner if we feel it will be more appropriate.'),
                             ])
                             @php
                                 $visitOptions = [
@@ -361,10 +361,10 @@
 
                         <!-- Section 7: Inquiry Description -->
                         <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7">
-                            @include('Themes.wizard.partials.section-header', ['n' => 7, 'title' => 'Tell Us More'])
+                            @include('Themes.wizard.partials.section-header', ['n' => 7, 'title' => content('wizard.confirm', 'section_8_title', 'Tell Us More')])
                             <div>
-                                <label class="block text-xs font-bold text-brand-teal mb-1">Describe Your Inquiry</label>
-                                <textarea name="inquiry_description" rows="4" placeholder="Please share any additional information you'd like us to know..."
+                                <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('wizard.confirm', 'inquiry_label', 'Describe Your Inquiry') }}</label>
+                                <textarea name="inquiry_description" rows="4" placeholder="{{ content('wizard.confirm', 'inquiry_placeholder', 'Please share any additional information you\'d like us to know...') }}"
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">{{ old('inquiry_description') }}</textarea>
                             </div>
                         </div>
@@ -373,15 +373,15 @@
                         <label class="flex items-start gap-3 cursor-pointer px-1">
                             <input type="checkbox" name="consent_updates" value="1" {{ old('consent_updates') ? 'checked' : '' }}
                                 class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-teal focus:ring-brand-gold">
-                            <span class="text-sm text-slate-600">I consent to receive DK Healing Centre updates and promotions by email, SMS, phone, and WhatsApp.</span>
+                            <span class="text-sm text-slate-600">{{ content('wizard.confirm', 'consent_updates_text', 'I consent to receive DK Healing Centre updates and promotions by email, SMS, phone, and WhatsApp.') }}</span>
                         </label>
                        <label class="flex items-start gap-3 cursor-pointer px-1">
     <input type="checkbox" name="consent_updates" value="1" {{ old('consent_updates') ? 'checked' : '' }}
         class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-teal focus:ring-brand-gold">
     <span class="text-sm text-slate-600">
-        I agree to the DKhealing centre 
+        {{ content('wizard.confirm', 'consent_terms_text', 'I agree to the DKhealing centre') }} 
         <a href="/path-to-your-file/terms-and-conditions.pdf" target="_blank" class="underline text-brand-teal hover:text-brand-teal/80 font-medium">
-            Terms and Conditions
+            {{ content('wizard.confirm', 'consent_terms_link_text', 'Terms and Conditions') }}
         </a>
     </span>
 </label>
@@ -390,15 +390,15 @@
                         <div class="text-center pt-4">
                             @if($service->price_type !== 'FREE' && $service->price_type !== 'RESERVATION' || $donationAddon > 0)
                                 <button type="submit" class="w-full sm:w-auto bg-brand-gold hover:bg-brand-goldDark text-white px-12 py-4 rounded-full font-semibold text-sm transition shadow">
-                                    Continue to Payment →
+                                    {{ content('wizard.confirm', 'submit_payment_button', 'Continue to Payment →') }}
                                 </button>
                             @elseif($service->price_type === 'RESERVATION')
                                 <button type="submit" class="w-full sm:w-auto bg-brand-teal hover:bg-brand-navy text-white px-12 py-4 rounded-full font-semibold text-sm transition shadow">
-                                    Request Assessment & Book
+                                    {{ content('wizard.confirm', 'submit_assessment_button', 'Request Assessment & Book') }}
                                 </button>
                             @else
                                 <button type="submit" class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-12 py-4 rounded-full font-semibold text-sm transition shadow">
-                                    Book Free Consultation
+                                    {{ content('wizard.confirm', 'submit_free_button', 'Book Free Consultation') }}
                                 </button>
                             @endif
                         </div>

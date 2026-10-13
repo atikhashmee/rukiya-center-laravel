@@ -6,7 +6,7 @@
     <!-- Page Header -->
     <section class="relative py-16 bg-brand-teal">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-            <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">Your Cart</h1>
+            <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">{{ content('cart', 'hero_title', 'Your Cart') }}</h1>
         </div>
     </section>
 
@@ -70,7 +70,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <button type="submit" class="text-red-400 hover:text-red-600 transition" title="Remove">
+                                <button type="submit" class="text-red-400 hover:text-red-600 transition" title="{{ content('cart', 'remove_label', 'Remove') }}">
                                     <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                 </button>
                             </form>
@@ -86,20 +86,20 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-sm text-red-500 hover:text-red-700 font-medium transition">
-                                    Clear Cart
+                                    {{ content('cart', 'clear_cart_button', 'Clear Cart') }}
                                 </button>
                             </form>
                             <a href="{{ route('shop') }}" class="text-sm text-brand-teal hover:text-brand-gold font-medium transition">
-                                Continue Shopping
+                                {{ content('cart', 'continue_shopping_link', 'Continue Shopping') }}
                             </a>
                         </div>
 
                         <div class="text-right space-y-2">
                             <div class="text-2xl font-bold text-brand-teal">
-                                Total: <span class="text-brand-goldDark">£{{ number_format($total, 2) }}</span>
+                                {{ content('cart', 'total_label', 'Total:') }} <span class="text-brand-goldDark">£{{ number_format($total, 2) }}</span>
                             </div>
                             <a href="{{ route('cart.checkout') }}" class="inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full font-semibold text-sm transition shadow">
-                                Proceed to Checkout &rarr;
+                                {{ content('cart', 'checkout_button', 'Proceed to Checkout') }} &rarr;
                             </a>
                         </div>
                     </div>
@@ -111,10 +111,10 @@
                     <svg class="w-20 h-20 text-brand-gold/30 mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
                     </svg>
-                    <h3 class="text-2xl font-serif font-bold text-brand-teal mb-3">Your cart is empty</h3>
-                    <p class="text-sm text-slate-500 mb-8">Looks like you haven't added any products yet.</p>
+                    <h3 class="text-2xl font-serif font-bold text-brand-teal mb-3">{{ content('cart', 'empty_title', 'Your cart is empty') }}</h3>
+                    <p class="text-sm text-slate-500 mb-8">{{ content('cart', 'empty_text', 'Looks like you haven\'t added any products yet.') }}</p>
                     <a href="{{ route('shop') }}" class="inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full font-semibold text-sm transition shadow">
-                        Browse Shop
+                        {{ content('cart', 'empty_button', 'Browse Shop') }}
                     </a>
                 </div>
             @endif

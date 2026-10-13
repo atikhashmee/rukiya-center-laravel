@@ -1,0 +1,86 @@
+[
+  {
+    "key": "hero_title",
+    "type": "arg",
+    "uk": "'Book an Appointment'",
+    "bn": "'Book an Appointment'"
+  },
+  {
+    "key": "notice_text",
+    "type": "html",
+    "uk": "*Please Note: for <strong>RUQYAH</strong> appointments &mdash; we do not see clients alone. You will need to be accompanied on the day by another adult.",
+    "bn": "*Please Note: for <strong>RUQYAH</strong> appointments &mdash; we do not see clients alone. You will need to be accompanied on the day by another adult."
+  },
+  {
+    "key": "back_link_text",
+    "type": "text",
+    "uk": "SELECT APPOINTMENT",
+    "bn": "SELECT APPOINTMENT"
+  },
+  {
+    "key": "step_label",
+    "type": "text",
+    "uk": "Select Practitioner",
+    "bn": "Select Practitioner"
+  },
+  {
+    "key": "appointment_label",
+    "type": "text",
+    "uk": "Appointment",
+    "bn": "Appointment"
+  },
+  {
+    "key": "price_assessment_required",
+    "type": "text",
+    "uk": "Assessment Required",
+    "bn": "Assessment Required"
+  },
+  {
+    "key": "price_free",
+    "type": "text",
+    "uk": "Free",
+    "bn": "Free"
+  },
+  {
+    "key": "with_label",
+    "type": "text",
+    "uk": "With",
+    "bn": "With"
+  },
+  {
+    "key": "any_available_title",
+    "type": "text",
+    "uk": "Any Available",
+    "bn": "Any Available"
+  },
+  {
+    "key": "any_available_text",
+    "type": "text",
+    "uk": "Fastest option — we'll match you with a free practitioner",
+    "bn": "Fastest option — we'll match you with a free practitioner"
+  },
+  {
+    "key": "select_any_button",
+    "type": "text",
+    "uk": "SELECT",
+    "bn": "SELECT"
+  },
+  {
+    "key": "select_practitioner_button",
+    "type": "text",
+    "uk": "SELECT",
+    "bn": "SELECT"
+  },
+  {
+    "key": "empty_text",
+    "type": "text",
+    "uk": "No named practitioners are listed for this service yet — choose \"Any Available\" above to continue.",
+    "bn": "No named practitioners are listed for this service yet — choose \"Any Available\" above to continue."
+  },
+  {
+    "key": "hero_subtitle",
+    "type": "arg",
+    "uk": "'Choose who you\\'d like to see, or let us pick for you.'",
+    "bn": "'Choose who you\\'d like to see, or let us pick for you.'"
+  }
+]

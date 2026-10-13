@@ -1,0 +1,38 @@
+[
+  {
+    "key": "counseling_title",
+    "type": "text",
+    "uk": "Spiritual Counseling Paths",
+    "bn": "Spiritual Counseling Paths"
+  },
+  {
+    "key": "counseling_text",
+    "type": "text",
+    "uk": "Start your journey with a complimentary session to establish trust and clarity before committing to deep, transformative guidance.",
+    "bn": "Start your journey with a complimentary session to establish trust and clarity before committing to deep, transformative guidance."
+  },
+  {
+    "key": "rukiya_title",
+    "type": "text",
+    "uk": "Rukiya: Spiritual Healing & Restoration",
+    "bn": "Rukiya: Spiritual Healing & Restoration"
+  },
+  {
+    "key": "rukiya_text",
+    "type": "text",
+    "uk": "Select the path that aligns with your spiritual needs. We offer gentle guidance for minor concerns and intensive intervention for complex challenges.",
+    "bn": "Select the path that aligns with your spiritual needs. We offer gentle guidance for minor concerns and intensive intervention for complex challenges."
+  },
+  {
+    "key": "istekhara_title",
+    "type": "text",
+    "uk": "Istekhara Guidance Options",
+    "bn": "Istekhara Guidance Options"
+  },
+  {
+    "key": "istekhara_text",
+    "type": "text",
+    "uk": "Seek divine guidance and clarity for life's important decisions. Choose the path that matches the complexity of your situation.",
+    "bn": "Seek divine guidance and clarity for life's important decisions. Choose the path that matches the complexity of your situation."
+  }
+]

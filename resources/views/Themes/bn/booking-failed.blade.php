@@ -10,14 +10,14 @@
                     ✗
                 </div>
 
-                <h1 class="text-3xl font-serif font-bold text-brand-teal">Booking Failed</h1>
+                <h1 class="text-3xl font-serif font-bold text-brand-teal">{{ content('booking-failed', 'failed_title', 'Booking Failed') }}</h1>
 
                 <p class="text-sm text-slate-600">
-                    Unfortunately, your booking could not be completed. Please try again or contact support.
+                    {{ content('booking-failed', 'failed_text', 'Unfortunately, your booking could not be completed. Please try again or contact support.') }}
                 </p>
 
                 <a href="{{ route('wizard.index') }}" class="inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full text-sm font-semibold transition shadow">
-                    Try Again
+                    {{ content('booking-failed', 'try_again_button', 'Try Again') }}
                 </a>
             </div>
         </div>

@@ -1,0 +1,116 @@
+[
+  {
+    "key": "heading_title",
+    "type": "text",
+    "uk": "Create Your Account",
+    "bn": "Create Your Account"
+  },
+  {
+    "key": "already_registered_text",
+    "type": "text",
+    "uk": "Already registered?",
+    "bn": "Already registered?"
+  },
+  {
+    "key": "signin_link_text",
+    "type": "text",
+    "uk": "Sign in here",
+    "bn": "Sign in here"
+  },
+  {
+    "key": "name_label",
+    "type": "text",
+    "uk": "Full Name",
+    "bn": "Full Name"
+  },
+  {
+    "key": "name_placeholder",
+    "type": "text",
+    "uk": "John Doe",
+    "bn": "John Doe"
+  },
+  {
+    "key": "email_label",
+    "type": "text",
+    "uk": "Email Address",
+    "bn": "Email Address"
+  },
+  {
+    "key": "email_placeholder",
+    "type": "text",
+    "uk": "you@example.com",
+    "bn": "you@example.com"
+  },
+  {
+    "key": "phone_placeholder",
+    "type": "text",
+    "uk": "555-123-4567",
+    "bn": "555-123-4567"
+  },
+  {
+    "key": "password_placeholder",
+    "type": "text",
+    "uk": "Min 8 characters",
+    "bn": "Min 8 characters"
+  },
+  {
+    "key": "interests_label",
+    "type": "text",
+    "uk": "Interests in Services (Select all that apply)",
+    "bn": "Interests in Services (Select all that apply)"
+  },
+  {
+    "key": "interest_sacred_listening",
+    "type": "text",
+    "uk": "Sacred Listening",
+    "bn": "Sacred Listening"
+  },
+  {
+    "key": "interest_personalized_rukiya",
+    "type": "text",
+    "uk": "Personalized Rukiya",
+    "bn": "Personalized Rukiya"
+  },
+  {
+    "key": "interest_istikhara_guidance",
+    "type": "text",
+    "uk": "Istikhara Guidance",
+    "bn": "Istikhara Guidance"
+  },
+  {
+    "key": "about_label",
+    "type": "text",
+    "uk": "Tell us a little about yourself (Optional)",
+    "bn": "Tell us a little about yourself (Optional)"
+  },
+  {
+    "key": "about_placeholder",
+    "type": "text",
+    "uk": "I am looking for guidance on a major life decision...",
+    "bn": "I am looking for guidance on a major life decision..."
+  },
+  {
+    "key": "about_help_text",
+    "type": "text",
+    "uk": "Briefly share your goals or why you're seeking guidance.",
+    "bn": "Briefly share your goals or why you're seeking guidance."
+  },
+  {
+    "key": "submit_button",
+    "type": "text",
+    "uk": "Register and Begin Your Healing Journey",
+    "bn": "Register and Begin Your Healing Journey"
+  },
+  {
+    "key": "form_phone_label",
+    "type": "text",
+    "uk": "Phone Number",
+    "bn": "Phone Number"
+  },
+  {
+    "key": "form_password_label",
+    "type": "text",
+    "uk": "Password",
+    "bn": "Password"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "key": "price_assessment_required",
+    "type": "text",
+    "uk": "Assessment Required",
+    "bn": "Assessment Required"
+  },
+  {
+    "key": "price_free",
+    "type": "text",
+    "uk": "Free",
+    "bn": "Free"
+  },
+  {
+    "key": "hero_title",
+    "type": "arg",
+    "uk": "'Book an Appointment'",
+    "bn": "'Book an Appointment'"
+  },
+  {
+    "key": "hero_subtitle",
+    "type": "arg",
+    "uk": "'Choose the appointment that fits your needs.'",
+    "bn": "'Choose the appointment that fits your needs.'"
+  }
+]

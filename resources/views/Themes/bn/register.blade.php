@@ -67,10 +67,10 @@
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-brand-cream/50 border border-brand-gold/20 p-8 md:p-12 rounded-2xl space-y-8">
                 <div class="text-center space-y-2">
-                    <h2 class="text-2xl font-serif font-bold text-brand-teal">Create Your Account</h2>
+                    <h2 class="text-2xl font-serif font-bold text-brand-teal">{{ content('register', 'heading_title', 'Create Your Account') }}</h2>
                     <p class="text-xs text-slate-500">
-                        Already registered? <a href="{{ route('customer.login') }}" class="font-semibold text-brand-gold hover:text-brand-goldDark transition">
-                            Sign in here
+                        {{ content('register', 'already_registered_text', 'Already registered?') }} <a href="{{ route('customer.login') }}" class="font-semibold text-brand-gold hover:text-brand-goldDark transition">
+                            {{ content('register', 'signin_link_text', 'Sign in here') }}
                         </a>
                     </p>
                 </div>
@@ -81,19 +81,19 @@
                     <!-- Personal Information -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="name" class="block text-xs font-bold text-brand-teal mb-1">Full Name</label>
+                            <label for="name" class="block text-xs font-bold text-brand-teal mb-1">{{ content('register', 'name_label', 'Full Name') }}</label>
                             <input id="name" name="name" type="text" autocomplete="name"  
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold" 
-                                placeholder="John Doe">
+                                placeholder="{{ content('register', 'name_placeholder', 'John Doe') }}">
                             @error('name')
                                 <small class="text-brand-crimson text-xs">{{ $message }}</small> 
                             @enderror
                         </div>
                         <div>
-                            <label for="email" class="block text-xs font-bold text-brand-teal mb-1">Email Address</label>
+                            <label for="email" class="block text-xs font-bold text-brand-teal mb-1">{{ content('register', 'email_label', 'Email Address') }}</label>
                             <input id="email" name="email" type="email" autocomplete="email"  
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold" 
-                                placeholder="you@example.com">
+                                placeholder="{{ content('register', 'email_placeholder', 'you@example.com') }}">
                             @error('email')
                                 <small class="text-brand-crimson text-xs">{{ $message }}</small> 
                             @enderror
@@ -103,7 +103,7 @@
                     <!-- Phone Number and Password -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="phone" class="block text-xs font-bold text-brand-teal mb-1">Phone Number</label>
+                            <label for="phone" class="block text-xs font-bold text-brand-teal mb-1">{{ content('register', 'form_phone_label', 'Phone Number') }}</label>
                             <div class="flex rounded-xl border border-slate-200 overflow-hidden">
                                 <select id="country-code" name="phone_prefix" class="border-r border-slate-200 px-3 py-3 text-slate-500 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                     <option>+1</option>
@@ -114,14 +114,14 @@
                                 </select>
                                 <input id="phone" name="phone" type="tel" autocomplete="tel"  
                                     class="flex-1 w-full px-4 py-3 border-0 text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold" 
-                                    placeholder="555-123-4567">
+                                    placeholder="{{ content('register', 'phone_placeholder', '555-123-4567') }}">
                             </div>
                         </div>
                         <div>
-                            <label for="password" class="block text-xs font-bold text-brand-teal mb-1">Password</label>
+                            <label for="password" class="block text-xs font-bold text-brand-teal mb-1">{{ content('register', 'form_password_label', 'Password') }}</label>
                             <input id="password" name="password" type="password" autocomplete="new-password"  
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold" 
-                                placeholder="Min 8 characters">
+                                placeholder="{{ content('register', 'password_placeholder', 'Min 8 characters') }}">
                         </div>
                     </div>
                     @error('phone')
@@ -133,19 +133,19 @@
 
                     <!-- Interests Checkboxes -->
                     <div>
-                        <label class="block text-xs font-bold text-brand-teal mb-3">Interests in Services (Select all that apply)</label>
+                        <label class="block text-xs font-bold text-brand-teal mb-3">{{ content('register', 'interests_label', 'Interests in Services (Select all that apply)') }}</label>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div class="flex items-center">
                                 <input id="interest-listening" name="interests[]" type="checkbox" value="listening" class="h-4 w-4 text-brand-teal border-slate-300 rounded focus:ring-brand-gold">
-                                <label for="interest-listening" class="ml-3 text-sm text-slate-600">Sacred Listening</label>
+                                <label for="interest-listening" class="ml-3 text-sm text-slate-600">{{ content('register', 'interest_sacred_listening', 'Sacred Listening') }}</label>
                             </div>
                             <div class="flex items-center">
                                 <input id="interest-rukiya" name="interests[]" type="checkbox" value="rukiya" class="h-4 w-4 text-brand-teal border-slate-300 rounded focus:ring-brand-gold">
-                                <label for="interest-rukiya" class="ml-3 text-sm text-slate-600">Personalized Rukiya</label>
+                                <label for="interest-rukiya" class="ml-3 text-sm text-slate-600">{{ content('register', 'interest_personalized_rukiya', 'Personalized Rukiya') }}</label>
                             </div>
                             <div class="flex items-center">
                                 <input id="interest-istikhara" name="interests[]" type="checkbox" value="istikhara" class="h-4 w-4 text-brand-teal border-slate-300 rounded focus:ring-brand-gold">
-                                <label for="interest-istikhara" class="ml-3 text-sm text-slate-600">Istikhara Guidance</label>
+                                <label for="interest-istikhara" class="ml-3 text-sm text-slate-600">{{ content('register', 'interest_istikhara_guidance', 'Istikhara Guidance') }}</label>
                             </div>
                         </div>
                         @error('interests')
@@ -155,9 +155,9 @@
 
                     <!-- About Himself -->
                     <div>
-                        <label for="about" class="block text-xs font-bold text-brand-teal mb-1">Tell us a little about yourself (Optional)</label>
-                        <textarea id="about" name="about" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold" placeholder="I am looking for guidance on a major life decision..."></textarea>
-                        <p class="mt-2 text-xs text-slate-400">Briefly share your goals or why you're seeking guidance.</p>
+                        <label for="about" class="block text-xs font-bold text-brand-teal mb-1">{{ content('register', 'about_label', 'Tell us a little about yourself (Optional)') }}</label>
+                        <textarea id="about" name="about" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold" placeholder="{{ content('register', 'about_placeholder', 'I am looking for guidance on a major life decision...') }}"></textarea>
+                        <p class="mt-2 text-xs text-slate-400">{{ content('register', 'about_help_text', 'Briefly share your goals or why you\'re seeking guidance.') }}</p>
                     </div>
 
                     <!-- Submit Button -->
@@ -180,7 +180,7 @@
                             </div>
                         @endif
                         <button type="submit" class="w-full bg-brand-teal hover:bg-brand-navy text-white font-bold py-3.5 rounded-xl transition shadow text-sm">
-                            Register and Begin Your Healing Journey
+                            {{ content('register', 'submit_button', 'Register and Begin Your Healing Journey') }}
                         </button>
                     </div>
                 </form>

@@ -320,8 +320,6 @@ class Theme extends Model
      */
     public static function resolveViewName(string $key): string
     {
-        static $prependedDirs = [];
-
         $theme = static::active();
 
         if ($theme) {
@@ -329,9 +327,12 @@ class Theme extends Model
 
             if ($path) {
                 $dir = dirname($path);
-                if (!in_array($dir, $prependedDirs, true)) {
+
+                // Ask the view finder itself rather than remembering in a static: the
+                // application can be rebuilt (tests, queue workers, Octane) while a
+                // static would wrongly report the path as already registered.
+                if (! in_array($dir, View::getFinder()->getPaths(), true)) {
                     View::prependLocation($dir);
-                    $prependedDirs[] = $dir;
                 }
 
                 return basename($path, '.blade.php');

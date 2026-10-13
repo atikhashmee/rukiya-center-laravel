@@ -1,0 +1,38 @@
+[
+  {
+    "key": "hero_eyebrow",
+    "type": "text",
+    "uk": "Our Team",
+    "bn": "আমাদের টিম"
+  },
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Meet Our Specialists",
+    "bn": "আমাদের বিশেষজ্ঞদের সঙ্গে পরিচিত হোন"
+  },
+  {
+    "key": "hero_text",
+    "type": "text",
+    "uk": "Ruqyah, Istikhara guidance and Islamic counselling delivered by experienced specialists, with care and confidentiality.",
+    "bn": "অভিজ্ঞ বিশেষজ্ঞদের মাধ্যমে রুকইয়াহ, ইস্তিখারা দিকনির্দেশনা ও ইসলামিক কাউন্সেলিং — যত্ন ও গোপনীয়তার সঙ্গে।"
+  },
+  {
+    "key": "empty_state_text",
+    "type": "text",
+    "uk": "Our team details will be published here soon.",
+    "bn": "আমাদের টিমের তথ্য শীঘ্রই এখানে প্রকাশ করা হবে।"
+  },
+  {
+    "key": "services_label",
+    "type": "text",
+    "uk": "Services",
+    "bn": "সেবাসমূহ"
+  },
+  {
+    "key": "cta_button",
+    "type": "text",
+    "uk": "Book an Appointment",
+    "bn": "অ্যাপয়েন্টমেন্ট নিন"
+  }
+]

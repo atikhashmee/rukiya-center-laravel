@@ -7,9 +7,9 @@
     <section class="bg-brand-cream/50 border-b border-brand-gold/10">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <nav class="flex items-center gap-2 text-xs text-slate-500">
-                <a href="{{ route('home') }}" class="hover:text-brand-teal transition">Home</a>
+                <a href="{{ route('home') }}" class="hover:text-brand-teal transition">{{ content('blog-show', 'breadcrumb_home', 'Home') }}</a>
                 <span>/</span>
-                <a href="{{ route('posts.index') }}" class="hover:text-brand-teal transition">Blog</a>
+                <a href="{{ route('posts.index') }}" class="hover:text-brand-teal transition">{{ content('blog-show', 'breadcrumb_blog', 'Blog') }}</a>
                 <span>/</span>
                 <span class="text-brand-teal font-medium">{{ $post->title }}</span>
             </nav>
@@ -52,7 +52,7 @@
                 </h2>
 
                 <div class="bg-brand-cream/30 border border-brand-gold/15 rounded-2xl p-6 mb-10">
-                    <h3 class="text-lg font-serif font-bold text-brand-teal mb-4">Leave a Comment</h3>
+                    <h3 class="text-lg font-serif font-bold text-brand-teal mb-4">{{ content('blog-show', 'comment_form_title', 'Leave a Comment') }}</h3>
 
                     @if($errors->any())
                         <div class="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-lg">
@@ -68,24 +68,24 @@
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-bold text-brand-teal mb-1">Name <span class="text-brand-crimson">*</span></label>
-                                <input type="text" name="name" required value="{{ old('name') }}" placeholder="Your name"
+                                <label class="block text-xs font-bold text-brand-teal mb-1">{!! content_html('blog-show', 'form_name_label', 'Name <span class="text-brand-crimson">*</span>') !!}</label>
+                                <input type="text" name="name" required value="{{ old('name') }}" placeholder="{{ content('blog-show', 'form_name_placeholder', 'Your name') }}"
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-brand-teal mb-1">Email</label>
-                                <input type="email" name="email" value="{{ old('email') }}" placeholder="your@email.com (optional)"
+                                <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('blog-show', 'form_email_label', 'Email') }}</label>
+                                <input type="email" name="email" value="{{ old('email') }}" placeholder="{{ content('blog-show', 'form_email_placeholder', 'your@email.com (optional)') }}"
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-brand-teal mb-1">Comment <span class="text-brand-crimson">*</span></label>
-                            <textarea name="comment" rows="4" required placeholder="Share your thoughts..."
+                            <label class="block text-xs font-bold text-brand-teal mb-1">{!! content_html('blog-show', 'form_comment_label', 'Comment <span class="text-brand-crimson">*</span>') !!}</label>
+                            <textarea name="comment" rows="4" required placeholder="{{ content('blog-show', 'form_comment_placeholder', 'Share your thoughts...') }}"
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">{{ old('comment') }}</textarea>
                         </div>
-                        <p class="text-xs text-slate-400">Comments are reviewed before they appear publicly.</p>
+                        <p class="text-xs text-slate-400">{{ content('blog-show', 'form_note', 'Comments are reviewed before they appear publicly.') }}</p>
                         <button type="submit" class="bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full font-semibold text-sm transition shadow">
-                            Submit Comment
+                            {{ content('blog-show', 'form_submit_button', 'Submit Comment') }}
                         </button>
                     </form>
                 </div>
@@ -108,7 +108,7 @@
             <!-- Recent Posts -->
             @if($recentPosts->count() > 0)
                 <section class="mt-20">
-                    <h2 class="text-2xl font-serif font-bold text-brand-teal mb-8">More Articles</h2>
+                    <h2 class="text-2xl font-serif font-bold text-brand-teal mb-8">{{ content('blog-show', 'recent_posts_title', 'More Articles') }}</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         @foreach($recentPosts as $item)
                             <a href="{{ route('posts.show', $item->slug) }}" class="group bg-brand-cream/30 border border-brand-gold/15 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300">

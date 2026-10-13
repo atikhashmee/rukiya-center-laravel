@@ -5,8 +5,8 @@
 
     @include('Themes.wizard.partials.hero', [
         'step' => 2,
-        'title' => 'Book an Appointment',
-        'subtitle' => 'Choose the appointment that fits your needs.',
+        'title' => content('wizard.service', 'hero_title', 'Book an Appointment'),
+        'subtitle' => content('wizard.service', 'hero_subtitle', 'Choose the appointment that fits your needs.'),
     ])
 
     <main class="py-16 bg-white">
@@ -59,9 +59,9 @@
                                 @elseif($service->price_type === 'DONATION')
                                     <span class="text-lg font-bold text-brand-teal">Min. £{{ number_format($service->min_donation, 2) }} donation</span>
                                 @elseif($service->price_type === 'RESERVATION')
-                                    <span class="text-sm font-semibold text-yellow-600">Assessment Required</span>
+                                    <span class="text-sm font-semibold text-yellow-600">{{ content('wizard.service', 'price_assessment_required', 'Assessment Required') }}</span>
                                 @else
-                                    <span class="text-lg font-bold text-green-700">Free</span>
+                                    <span class="text-lg font-bold text-green-700">{{ content('wizard.service', 'price_free', 'Free') }}</span>
                                 @endif
                             </div>
                             <a href="{{ route('wizard.instructor', ['serviceId' => $service->id]) }}"

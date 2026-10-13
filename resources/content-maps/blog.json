@@ -1,0 +1,32 @@
+[
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Our Blog",
+    "bn": "Our Blog"
+  },
+  {
+    "key": "hero_text",
+    "type": "text",
+    "uk": "Reflections, guidance, and insights from the DK Healing Centre team.",
+    "bn": "Reflections, guidance, and insights from the DK Healing Centre team."
+  },
+  {
+    "key": "read_more_label",
+    "type": "text",
+    "uk": "Read More →",
+    "bn": "Read More →"
+  },
+  {
+    "key": "empty_state_title",
+    "type": "text",
+    "uk": "No posts yet",
+    "bn": "No posts yet"
+  },
+  {
+    "key": "empty_state_text",
+    "type": "text",
+    "uk": "Check back soon for new articles.",
+    "bn": "Check back soon for new articles."
+  }
+]

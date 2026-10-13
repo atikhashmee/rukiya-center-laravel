@@ -7,10 +7,10 @@
         <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-brand-cream/50 border border-brand-gold/20 p-8 md:p-10 rounded-2xl space-y-6">
                 <div class="text-center space-y-2">
-                    <h2 class="text-2xl font-serif font-bold text-brand-teal">Sign in to your account</h2>
+                    <h2 class="text-2xl font-serif font-bold text-brand-teal">{{ content('login', 'signin_title', 'Sign in to your account') }}</h2>
                     <p class="text-xs text-slate-500">
-                        Or <a href="{{ route('customer.register') }}" class="font-semibold text-brand-gold hover:text-brand-goldDark transition">
-                            register for a new account
+                        {{ content('login', 'register_prompt_text', 'Or') }} <a href="{{ route('customer.register') }}" class="font-semibold text-brand-gold hover:text-brand-goldDark transition">
+                            {{ content('login', 'register_link_text', 'register for a new account') }}
                         </a>
                     </p>
                 </div>
@@ -21,17 +21,17 @@
 
                     <div class="space-y-4">
                         <div>
-                            <label for="email-address" class="block text-xs font-bold text-brand-teal mb-1">Email Address</label>
+                            <label for="email-address" class="block text-xs font-bold text-brand-teal mb-1">{{ content('login', 'email_label', 'Email Address') }}</label>
                             <input id="email-address" name="email" type="email" autocomplete="email"  
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold" 
-                                placeholder="Email address">
+                                placeholder="{{ content('login', 'email_placeholder', 'Email address') }}">
                         </div>
                         <div>
-                            <label for="password" class="block text-xs font-bold text-brand-teal mb-1">Password</label>
+                            <label for="password" class="block text-xs font-bold text-brand-teal mb-1">{{ content('login', 'password_label', 'Password') }}</label>
                             <div class="relative">
                                 <input id="password" name="password" type="password" autocomplete="current-password"  
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold" 
-                                placeholder="Password">
+                                placeholder="{{ content('login', 'password_placeholder', 'Password') }}">
                                 <button type="button" onclick="togglePasswordVisibility()"
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-teal transition">
                                     <svg id="eye-icon" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -44,7 +44,7 @@
                     <div class="flex items-center justify-between">
                         <div class="text-sm">
                             <a href="#" class="font-medium text-brand-gold hover:text-brand-goldDark transition">
-                                Forgot your password?
+                                {{ content('login', 'forgot_password_link', 'Forgot your password?') }}
                             </a>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                             </div>
                         @endif
                         <button type="submit" class="w-full bg-brand-teal hover:bg-brand-navy text-white font-bold py-3 rounded-xl transition shadow text-sm">
-                            Sign in
+                            {{ content('login', 'submit_button', 'Sign in') }}
                         </button>
                     </div>
                 </form>

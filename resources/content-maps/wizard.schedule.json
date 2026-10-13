@@ -1,0 +1,122 @@
+[
+  {
+    "key": "hero_title",
+    "type": "arg",
+    "uk": "'Book an Appointment'",
+    "bn": "'Book an Appointment'"
+  },
+  {
+    "key": "hero_subtitle",
+    "type": "arg",
+    "uk": "'Pick a date and time that works for you.'",
+    "bn": "'Pick a date and time that works for you.'"
+  },
+  {
+    "key": "empty_title",
+    "type": "text",
+    "uk": "No available dates",
+    "bn": "No available dates"
+  },
+  {
+    "key": "empty_text",
+    "type": "text",
+    "uk": "This practitioner has no upcoming availability in the next 14 days.",
+    "bn": "This practitioner has no upcoming availability in the next 14 days."
+  },
+  {
+    "key": "empty_button",
+    "type": "text",
+    "uk": "Choose Another Practitioner",
+    "bn": "Choose Another Practitioner"
+  },
+  {
+    "key": "back_link_text",
+    "type": "text",
+    "uk": "SELECT PRACTITIONER",
+    "bn": "SELECT PRACTITIONER"
+  },
+  {
+    "key": "step_label",
+    "type": "text",
+    "uk": "Date &amp; Time",
+    "bn": "Date &amp; Time"
+  },
+  {
+    "key": "appointment_label",
+    "type": "text",
+    "uk": "Appointment",
+    "bn": "Appointment"
+  },
+  {
+    "key": "price_assessment_required",
+    "type": "text",
+    "uk": "Assessment Required",
+    "bn": "Assessment Required"
+  },
+  {
+    "key": "price_free",
+    "type": "text",
+    "uk": "Free",
+    "bn": "Free"
+  },
+  {
+    "key": "donation_label",
+    "type": "text",
+    "uk": "Gift of Ruqyah",
+    "bn": "Gift of Ruqyah"
+  },
+  {
+    "key": "donation_optional_note",
+    "type": "text",
+    "uk": "(optional)",
+    "bn": "(optional)"
+  },
+  {
+    "key": "donation_text",
+    "type": "text",
+    "uk": "Support us to keep our core services free for those vulnerable and in need.",
+    "bn": "Support us to keep our core services free for those vulnerable and in need."
+  },
+  {
+    "key": "donation_decline_label",
+    "type": "text",
+    "uk": "No thanks",
+    "bn": "No thanks"
+  },
+  {
+    "key": "donation_tier_note",
+    "type": "text",
+    "uk": "Add a gift",
+    "bn": "Add a gift"
+  },
+  {
+    "key": "datetime_label",
+    "type": "text",
+    "uk": "Date &amp; Time",
+    "bn": "Date &amp; Time"
+  },
+  {
+    "key": "no_date_selected_text",
+    "type": "text",
+    "uk": "Select a date to see available times",
+    "bn": "Select a date to see available times"
+  },
+  {
+    "key": "timezone_note",
+    "type": "text",
+    "uk": "Time zone: London (GMT+01:00)",
+    "bn": "Time zone: London (GMT+01:00)"
+  },
+  {
+    "key": "no_times_text",
+    "type": "text",
+    "uk": "No available time slots for this date.",
+    "bn": "No available time slots for this date."
+  },
+  {
+    "key": "continue_button",
+    "type": "text",
+    "uk": "Continue to Confirmation &rarr;",
+    "bn": "Continue to Confirmation &rarr;"
+  }
+]

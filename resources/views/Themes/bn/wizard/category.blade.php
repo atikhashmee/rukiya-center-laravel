@@ -5,26 +5,26 @@
 
     @include('Themes.wizard.partials.hero', [
         'step' => 1,
-        'title' => 'Book Your Consultation',
-        'subtitle' => 'Select the type of support you are looking for.',
+        'title' => content('wizard.category', 'hero_title', 'Book Your Consultation'),
+        'subtitle' => content('wizard.category', 'hero_subtitle', 'Select the type of support you are looking for.'),
     ])
 
     <main class="py-16 bg-white">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-2xl font-serif font-bold text-brand-teal text-center mb-10">Select a Service Category</h2>
+            <h2 class="text-2xl font-serif font-bold text-brand-teal text-center mb-10">{{ content('wizard.category', 'section_title', 'Select a Service Category') }}</h2>
 <div class="text-center mb-10">
 
     <p class="text-slate-600">
-        Not sure which service is right for you?
+        {{ content('wizard.category', 'help_question', 'Not sure which service is right for you?') }}
     </p>
 
     <p class="mt-2 text-brand-teal font-semibold">
-        Start with a Free Initial Enquiry and we'll help you choose the most suitable service.
+        {{ content('wizard.category', 'help_text', 'Start with a Free Initial Enquiry and we\'ll help you choose the most suitable service.') }}
     </p>
 
    <a href="/free-counselling"
        class="inline-flex items-center mt-5 px-6 py-3 rounded-xl bg-brand-gold text-white font-semibold hover:bg-brand-goldDark transition">
-        Free Initial Enquiry →
+        {{ content('wizard.category', 'enquiry_button', 'Free Initial Enquiry →') }}
     </a>
 
 </div>
@@ -46,7 +46,7 @@
                             <p class="text-sm text-slate-500">{{ $category->description }}</p>
                         @endif
                        <span class="inline-block mt-auto pt-6 text-brand-gold text-sm font-semibold">
-    Continue →
+    {{ content('wizard.category', 'continue_label', 'Continue →') }}
 </span>
                     </a>
                 @endforeach

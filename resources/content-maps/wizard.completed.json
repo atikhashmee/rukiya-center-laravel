@@ -1,0 +1,80 @@
+[
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Booking Confirmed!",
+    "bn": "Booking Confirmed!"
+  },
+  {
+    "key": "thanks_greeting",
+    "type": "text",
+    "uk": "Thank You,",
+    "bn": "Thank You,"
+  },
+  {
+    "key": "confirmation_text",
+    "type": "text",
+    "uk": "Your booking has been confirmed. A confirmation email has been sent to",
+    "bn": "Your booking has been confirmed. A confirmation email has been sent to"
+  },
+  {
+    "key": "reference_label",
+    "type": "text",
+    "uk": "Booking Reference:",
+    "bn": "Booking Reference:"
+  },
+  {
+    "key": "service_label",
+    "type": "text",
+    "uk": "Service:",
+    "bn": "Service:"
+  },
+  {
+    "key": "instructor_label",
+    "type": "text",
+    "uk": "Instructor:",
+    "bn": "Instructor:"
+  },
+  {
+    "key": "date_label",
+    "type": "text",
+    "uk": "Date:",
+    "bn": "Date:"
+  },
+  {
+    "key": "time_label",
+    "type": "text",
+    "uk": "Time:",
+    "bn": "Time:"
+  },
+  {
+    "key": "next_steps_title",
+    "type": "text",
+    "uk": "What Happens Next?",
+    "bn": "What Happens Next?"
+  },
+  {
+    "key": "next_step_1",
+    "type": "text",
+    "uk": "You will receive a confirmation email with your booking details.",
+    "bn": "You will receive a confirmation email with your booking details."
+  },
+  {
+    "key": "next_step_2",
+    "type": "text",
+    "uk": "Our team will review your inquiry and may contact you for further information.",
+    "bn": "Our team will review your inquiry and may contact you for further information."
+  },
+  {
+    "key": "next_step_3",
+    "type": "text",
+    "uk": "Session details and instructions will be sent to you prior to your appointment.",
+    "bn": "Session details and instructions will be sent to you prior to your appointment."
+  },
+  {
+    "key": "book_again_button",
+    "type": "text",
+    "uk": "Book Another Appointment",
+    "bn": "Book Another Appointment"
+  }
+]

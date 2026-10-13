@@ -7,8 +7,8 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6">
 
             <header class="mb-8 text-center space-y-2">
-                <h1 class="text-3xl font-serif font-bold text-brand-teal">Checkout</h1>
-                <p class="text-sm text-slate-500">Review your cart and enter your details to continue.</p>
+                <h1 class="text-3xl font-serif font-bold text-brand-teal">{{ content('checkout-form', 'page_title', 'Checkout') }}</h1>
+                <p class="text-sm text-slate-500">{{ content('checkout-form', 'page_subtitle', 'Review your cart and enter your details to continue.') }}</p>
             </header>
 
             @if(session('error'))
@@ -21,7 +21,7 @@
 
                 {{-- Cart Summary --}}
                 <div class="lg:col-span-3 space-y-4">
-                    <h2 class="text-lg font-serif font-bold text-brand-teal mb-4">Cart Items</h2>
+                    <h2 class="text-lg font-serif font-bold text-brand-teal mb-4">{{ content('checkout-form', 'cart_items_title', 'Cart Items') }}</h2>
                     @foreach($products as $product)
                         <div class="bg-white border border-slate-200 rounded-xl p-4 flex items-center gap-4 shadow-sm">
                             <div class="w-16 h-16 bg-brand-cream/50 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
@@ -33,7 +33,7 @@
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="font-semibold text-sm text-slate-800 truncate">{{ $product->name }}</p>
-                                <p class="text-xs text-slate-400">Qty: {{ $product->quantity }} × £{{ number_format($product->price, 2) }}</p>
+                                <p class="text-xs text-slate-400">{{ content('checkout-form', 'item_qty_label', 'Qty:') }} {{ $product->quantity }} × £{{ number_format($product->price, 2) }}</p>
                             </div>
                             <span class="font-semibold text-sm text-brand-teal flex-shrink-0">£{{ number_format($product->line_total, 2) }}</span>
                         </div>
@@ -43,52 +43,52 @@
                 {{-- Checkout Form --}}
                 <div class="lg:col-span-2">
                     <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm sticky top-24">
-                        <h2 class="text-lg font-serif font-bold text-brand-teal mb-6">Your Details</h2>
+                        <h2 class="text-lg font-serif font-bold text-brand-teal mb-6">{{ content('checkout-form', 'form_title', 'Your Details') }}</h2>
 
                         <form method="POST" action="{{ route('cart.placeOrder') }}" class="space-y-5">
                             @csrf
 
                             <div>
-                                <label class="block text-xs font-bold text-brand-teal mb-1">Full Name <span class="text-brand-crimson">*</span></label>
-                                <input type="text" name="full_name" required value="{{ old('full_name') }}" placeholder="Your full name"
+                                <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('checkout-form', 'full_name_label', 'Full Name') }} <span class="text-brand-crimson">*</span></label>
+                                <input type="text" name="full_name" required value="{{ old('full_name') }}" placeholder="{{ content('checkout-form', 'full_name_placeholder', 'Your full name') }}"
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                 @error('full_name') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-brand-teal mb-1">Email <span class="text-brand-crimson">*</span></label>
-                                <input type="email" name="email" required value="{{ old('email') }}" placeholder="your@email.com"
+                                <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('checkout-form', 'email_label', 'Email') }} <span class="text-brand-crimson">*</span></label>
+                                <input type="email" name="email" required value="{{ old('email') }}" placeholder="{{ content('checkout-form', 'email_placeholder', 'your@email.com') }}"
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                 @error('email') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold text-brand-teal mb-1">Phone</label>
-                                <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="+44 7000 000000"
+                                <label class="block text-xs font-bold text-brand-teal mb-1">{{ content('checkout-form', 'phone_label', 'Phone') }}</label>
+                                <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="{{ content('checkout-form', 'phone_placeholder', '+44 7000 000000') }}"
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
                                 @error('phone') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                             </div>
 
                             <div class="border-t border-slate-200 pt-4 space-y-2">
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-slate-500">Subtotal</span>
+                                    <span class="text-slate-500">{{ content('checkout-form', 'subtotal_label', 'Subtotal') }}</span>
                                     <span class="font-semibold text-slate-700">£{{ number_format($total, 2) }}</span>
                                 </div>
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-slate-500">Shipping</span>
-                                    <span class="text-slate-400">Free</span>
+                                    <span class="text-slate-500">{{ content('checkout-form', 'shipping_label', 'Shipping') }}</span>
+                                    <span class="text-slate-400">{{ content('checkout-form', 'shipping_value', 'Free') }}</span>
                                 </div>
                                 <div class="flex justify-between text-lg font-bold pt-2 border-t border-slate-200">
-                                    <span class="text-brand-teal">Total</span>
+                                    <span class="text-brand-teal">{{ content('checkout-form', 'total_label', 'Total') }}</span>
                                     <span class="text-brand-teal">£{{ number_format($total, 2) }}</span>
                                 </div>
                             </div>
 
                             <button type="submit" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white font-bold py-3.5 rounded-xl transition shadow text-sm">
-                                Proceed to Payment &rarr;
+                                {{ content('checkout-form', 'submit_button', 'Proceed to Payment') }} &rarr;
                             </button>
 
-                            <p class="text-xs text-center text-slate-400">You will be redirected to our secure payment page.</p>
+                            <p class="text-xs text-center text-slate-400">{{ content('checkout-form', 'secure_note', 'You will be redirected to our secure payment page.') }}</p>
                         </form>
                     </div>
                 </div>

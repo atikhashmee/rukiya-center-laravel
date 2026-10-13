@@ -1,0 +1,104 @@
+[
+  {
+    "key": "page_title",
+    "type": "text",
+    "uk": "Checkout",
+    "bn": "Checkout"
+  },
+  {
+    "key": "page_subtitle",
+    "type": "text",
+    "uk": "Review your cart and enter your details to continue.",
+    "bn": "Review your cart and enter your details to continue."
+  },
+  {
+    "key": "cart_items_title",
+    "type": "text",
+    "uk": "Cart Items",
+    "bn": "Cart Items"
+  },
+  {
+    "key": "item_qty_label",
+    "type": "text",
+    "uk": "Qty:",
+    "bn": "Qty:"
+  },
+  {
+    "key": "form_title",
+    "type": "text",
+    "uk": "Your Details",
+    "bn": "Your Details"
+  },
+  {
+    "key": "full_name_label",
+    "type": "text",
+    "uk": "Full Name",
+    "bn": "Full Name"
+  },
+  {
+    "key": "full_name_placeholder",
+    "type": "text",
+    "uk": "Your full name",
+    "bn": "Your full name"
+  },
+  {
+    "key": "email_label",
+    "type": "text",
+    "uk": "Email",
+    "bn": "Email"
+  },
+  {
+    "key": "email_placeholder",
+    "type": "text",
+    "uk": "your@email.com",
+    "bn": "your@email.com"
+  },
+  {
+    "key": "phone_label",
+    "type": "text",
+    "uk": "Phone",
+    "bn": "Phone"
+  },
+  {
+    "key": "phone_placeholder",
+    "type": "text",
+    "uk": "+44 7000 000000",
+    "bn": "+44 7000 000000"
+  },
+  {
+    "key": "subtotal_label",
+    "type": "text",
+    "uk": "Subtotal",
+    "bn": "Subtotal"
+  },
+  {
+    "key": "shipping_label",
+    "type": "text",
+    "uk": "Shipping",
+    "bn": "Shipping"
+  },
+  {
+    "key": "shipping_value",
+    "type": "text",
+    "uk": "Free",
+    "bn": "Free"
+  },
+  {
+    "key": "total_label",
+    "type": "text",
+    "uk": "Total",
+    "bn": "Total"
+  },
+  {
+    "key": "submit_button",
+    "type": "text",
+    "uk": "Proceed to Payment",
+    "bn": "Proceed to Payment"
+  },
+  {
+    "key": "secure_note",
+    "type": "text",
+    "uk": "You will be redirected to our secure payment page.",
+    "bn": "You will be redirected to our secure payment page."
+  }
+]

@@ -1,0 +1,39 @@
+/* In-page editor chrome, only loaded while editing inside the admin. */
+.cf-editable {
+    outline: 1px dashed rgba(10, 60, 92, .35);
+    outline-offset: 2px;
+    border-radius: 3px;
+    transition: background-color .15s, outline-color .15s;
+    cursor: text;
+}
+.cf-editable:hover {
+    background-color: rgba(197, 168, 128, .18);
+    outline-color: rgba(10, 60, 92, .8);
+}
+.cf-editable[contenteditable="true"] {
+    background-color: rgba(197, 168, 128, .25);
+    outline: 2px solid #0a3c5c;
+    cursor: text;
+}
+.cf-image-editable {
+    outline: 2px dashed rgba(10, 60, 92, .5);
+    outline-offset: 3px;
+    cursor: pointer;
+}
+.cf-image-editable:hover { outline-color: #b31b1b; }
+
+.cf-hint {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    background: #0a3c5c;
+    color: #fff;
+    font: 600 12px/1.4 system-ui, sans-serif;
+    padding: 8px 14px;
+    border-radius: 999px;
+    z-index: 2147483647;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+    pointer-events: none;
+    opacity: .95;
+}

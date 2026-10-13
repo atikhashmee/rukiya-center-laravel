@@ -1,0 +1,116 @@
+[
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "About DK Healing Centre",
+    "bn": "About DK Healing Centre"
+  },
+  {
+    "key": "hero_text",
+    "type": "text",
+    "uk": "Qur’an and Sunnah-based Ruqyah, Istikhara guidance and Islamic spiritual support for individuals and families in the UK and worldwide..",
+    "bn": "Qur’an and Sunnah-based Ruqyah, Istikhara guidance and Islamic spiritual support for individuals and families in the UK and worldwide.."
+  },
+  {
+    "key": "intro_title",
+    "type": "text",
+    "uk": "Authentic Islamic Healing & Spiritual Support",
+    "bn": "Authentic Islamic Healing & Spiritual Support"
+  },
+  {
+    "key": "intro_text",
+    "type": "text",
+    "uk": "DK Healing Centre is a trusted UK-based Islamic spiritual support service providing authentic Ruqyah, Istikhara guidance and Islamic spiritual support in accordance with the Qur'an and Sunnah. Led by an experienced Imam, Ruqyah Practitioner and Islamic Spiritual Guide with over 30 years of serving the Muslim community and more than 9 years of Ruqyah practice in the UK, we are dedicated to supporting individuals and families with compassion, respect and confidentiality. Our aim is to help people strengthen their relationship with Allah, find spiritual clarity and receive authentic Islamic guidance, while recognising that healing, guidance and success come from Allah alone.",
+    "bn": "DK Healing Centre is a trusted UK-based Islamic spiritual support service providing authentic Ruqyah, Istikhara guidance and Islamic spiritual support in accordance with the Qur'an and Sunnah. Led by an experienced Imam, Ruqyah Practitioner and Islamic Spiritual Guide with over 30 years of serving the Muslim community and more than 9 years of Ruqyah practice in the UK, we are dedicated to supporting individuals and families with compassion, respect and confidentiality. Our aim is to help people strengthen their relationship with Allah, find spiritual clarity and receive authentic Islamic guidance, while recognising that healing, guidance and success come from Allah alone."
+  },
+  {
+    "key": "quote",
+    "type": "text",
+    "uk": "\"Healing comes from Allah alone. Our role is to provide authentic Qur'an and Sunnah based Ruqyah, sincere guidance and compassionate support.\"",
+    "bn": "\"Healing comes from Allah alone. Our role is to provide authentic Qur'an and Sunnah based Ruqyah, sincere guidance and compassionate support.\""
+  },
+  {
+    "key": "welcome_text",
+    "type": "text",
+    "uk": "Every individual is welcomed with dignity, compassion and complete confidentiality. We listen carefully, explain every step clearly and provide authentic Islamic spiritual guidance rooted in the Qur'an and Sunnah, helping people seek healing, peace and hope through Allah's mercy.",
+    "bn": "Every individual is welcomed with dignity, compassion and complete confidentiality. We listen carefully, explain every step clearly and provide authentic Islamic spiritual guidance rooted in the Qur'an and Sunnah, helping people seek healing, peace and hope through Allah's mercy."
+  },
+  {
+    "key": "stat_1_label",
+    "type": "text",
+    "uk": "Years of Community Service",
+    "bn": "Years of Community Service"
+  },
+  {
+    "key": "stat_1_text",
+    "type": "text",
+    "uk": "Serving the Muslim community with trusted Islamic guidance.",
+    "bn": "Serving the Muslim community with trusted Islamic guidance."
+  },
+  {
+    "key": "stat_2_label",
+    "type": "text",
+    "uk": "UK Ruqyah Experience",
+    "bn": "UK Ruqyah Experience"
+  },
+  {
+    "key": "stat_2_text",
+    "type": "text",
+    "uk": "Providing authentic Ruqyah and spiritual support across the UK.",
+    "bn": "Providing authentic Ruqyah and spiritual support across the UK."
+  },
+  {
+    "key": "stat_3_label",
+    "type": "text",
+    "uk": "Qur'an & Sunnah Based",
+    "bn": "Qur'an & Sunnah Based"
+  },
+  {
+    "key": "stat_3_text",
+    "type": "text",
+    "uk": "Every service is rooted in authentic Islamic teachings.",
+    "bn": "Every service is rooted in authentic Islamic teachings."
+  },
+  {
+    "key": "principles_title",
+    "type": "text",
+    "uk": "Our Guiding Principles",
+    "bn": "Our Guiding Principles"
+  },
+  {
+    "key": "principles_text",
+    "type": "text",
+    "uk": "Guided by authentic Islamic teachings, compassion and a commitment to serving every individual with respect and confidentiality.",
+    "bn": "Guided by authentic Islamic teachings, compassion and a commitment to serving every individual with respect and confidentiality."
+  },
+  {
+    "key": "principle_1_text",
+    "type": "text",
+    "uk": "Every service we provide is guided by authentic Islamic teachings from the Qur'an and the Sunnah.",
+    "bn": "Every service we provide is guided by authentic Islamic teachings from the Qur'an and the Sunnah."
+  },
+  {
+    "key": "principle_2_title",
+    "type": "text",
+    "uk": "Compassion & Confidentiality",
+    "bn": "Compassion & Confidentiality"
+  },
+  {
+    "key": "principle_2_text",
+    "type": "text",
+    "uk": "Every individual is welcomed with respect, compassion and complete confidentiality.",
+    "bn": "Every individual is welcomed with respect, compassion and complete confidentiality."
+  },
+  {
+    "key": "principle_3_title",
+    "type": "text",
+    "uk": "Supporting Individuals & Families Worldwide",
+    "bn": "Supporting Individuals & Families Worldwide"
+  },
+  {
+    "key": "principle_3_text",
+    "type": "text",
+    "uk": "We provide trusted Islamic spiritual support to individuals and families across the UK and worldwide through secure online and in-person services.",
+    "bn": "We provide trusted Islamic spiritual support to individuals and families across the UK and worldwide through secure online and in-person services."
+  }
+]

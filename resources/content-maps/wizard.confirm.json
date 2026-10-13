@@ -1,0 +1,380 @@
+[
+  {
+    "key": "hero_title",
+    "type": "arg",
+    "uk": "'Book an Appointment'",
+    "bn": "'Book an Appointment'"
+  },
+  {
+    "key": "summary_title",
+    "type": "text",
+    "uk": "Your Appointment",
+    "bn": "Your Appointment"
+  },
+  {
+    "key": "summary_service_label",
+    "type": "text",
+    "uk": "Service",
+    "bn": "Service"
+  },
+  {
+    "key": "summary_category_label",
+    "type": "text",
+    "uk": "Category",
+    "bn": "Category"
+  },
+  {
+    "key": "summary_practitioner_label",
+    "type": "text",
+    "uk": "Practitioner",
+    "bn": "Practitioner"
+  },
+  {
+    "key": "summary_date_label",
+    "type": "text",
+    "uk": "Date",
+    "bn": "Date"
+  },
+  {
+    "key": "summary_time_label",
+    "type": "text",
+    "uk": "Time",
+    "bn": "Time"
+  },
+  {
+    "key": "summary_gift_label",
+    "type": "text",
+    "uk": "Gift of Ruqyah",
+    "bn": "Gift of Ruqyah"
+  },
+  {
+    "key": "summary_total_label",
+    "type": "text",
+    "uk": "Total",
+    "bn": "Total"
+  },
+  {
+    "key": "summary_assessment_required",
+    "type": "text",
+    "uk": "Assessment Required",
+    "bn": "Assessment Required"
+  },
+  {
+    "key": "summary_free",
+    "type": "text",
+    "uk": "Free",
+    "bn": "Free"
+  },
+  {
+    "key": "section_1_title",
+    "type": "arg",
+    "uk": "'Appointment Type'",
+    "bn": "'Appointment Type'"
+  },
+  {
+    "key": "online_only_title",
+    "type": "text",
+    "uk": "Online Consultation",
+    "bn": "Online Consultation"
+  },
+  {
+    "key": "online_only_text",
+    "type": "text",
+    "uk": "This service is delivered online only.",
+    "bn": "This service is delivered online only."
+  },
+  {
+    "key": "in_person_only_title",
+    "type": "text",
+    "uk": "In-Person Consultation",
+    "bn": "In-Person Consultation"
+  },
+  {
+    "key": "in_person_only_text",
+    "type": "text",
+    "uk": "This service is delivered in person at DK Healing Centre.",
+    "bn": "This service is delivered in person at DK Healing Centre."
+  },
+  {
+    "key": "format_choice_text",
+    "type": "text",
+    "uk": "Choose how you would like to attend your consultation.",
+    "bn": "Choose how you would like to attend your consultation."
+  },
+  {
+    "key": "format_online_title",
+    "type": "text",
+    "uk": "Online Consultation",
+    "bn": "Online Consultation"
+  },
+  {
+    "key": "format_online_text",
+    "type": "text",
+    "uk": "Attend by video call from anywhere.",
+    "bn": "Attend by video call from anywhere."
+  },
+  {
+    "key": "format_in_person_title",
+    "type": "text",
+    "uk": "In-Person Consultation",
+    "bn": "In-Person Consultation"
+  },
+  {
+    "key": "format_in_person_text",
+    "type": "text",
+    "uk": "Attend at DK Healing Centre.",
+    "bn": "Attend at DK Healing Centre."
+  },
+  {
+    "key": "section_2_title",
+    "type": "arg",
+    "uk": "'Your Information'",
+    "bn": "'Your Information'"
+  },
+  {
+    "key": "first_name_label",
+    "type": "text",
+    "uk": "First Name",
+    "bn": "First Name"
+  },
+  {
+    "key": "first_name_placeholder",
+    "type": "text",
+    "uk": "First name",
+    "bn": "First name"
+  },
+  {
+    "key": "last_name_label",
+    "type": "text",
+    "uk": "Last Name",
+    "bn": "Last Name"
+  },
+  {
+    "key": "last_name_placeholder",
+    "type": "text",
+    "uk": "Last name",
+    "bn": "Last name"
+  },
+  {
+    "key": "phone_label",
+    "type": "text",
+    "uk": "Phone",
+    "bn": "Phone"
+  },
+  {
+    "key": "phone_placeholder",
+    "type": "text",
+    "uk": "Phone number",
+    "bn": "Phone number"
+  },
+  {
+    "key": "email_label",
+    "type": "text",
+    "uk": "Email",
+    "bn": "Email"
+  },
+  {
+    "key": "email_placeholder",
+    "type": "text",
+    "uk": "your@email.com",
+    "bn": "your@email.com"
+  },
+  {
+    "key": "section_3_title",
+    "type": "arg",
+    "uk": "'More About You'",
+    "bn": "'More About You'"
+  },
+  {
+    "key": "gender_label",
+    "type": "text",
+    "uk": "Gender",
+    "bn": "Gender"
+  },
+  {
+    "key": "language_label",
+    "type": "text",
+    "uk": "Language",
+    "bn": "Language"
+  },
+  {
+    "key": "ethnic_origin_label",
+    "type": "text",
+    "uk": "Ethnic Origin",
+    "bn": "Ethnic Origin"
+  },
+  {
+    "key": "ethnic_origin_placeholder",
+    "type": "text",
+    "uk": "e.g. Arab, South Asian, Black African...",
+    "bn": "e.g. Arab, South Asian, Black African..."
+  },
+  {
+    "key": "age_range_label",
+    "type": "text",
+    "uk": "Age Range",
+    "bn": "Age Range"
+  },
+  {
+    "key": "guardian_policy_badge",
+    "type": "text",
+    "uk": "Required policy",
+    "bn": "Required policy"
+  },
+  {
+    "key": "section_4_title",
+    "type": "arg",
+    "uk": "'Who Will Accompany You?'",
+    "bn": "'Who Will Accompany You?'"
+  },
+  {
+    "key": "section_4_hint",
+    "type": "arg",
+    "uk": "'We do NOT see clients alone — you must bring a Mahram/Guardian with you, or your appointment will not go ahead.'",
+    "bn": "'We do NOT see clients alone — you must bring a Mahram/Guardian with you, or your appointment will not go ahead.'"
+  },
+  {
+    "key": "guardian_gender_label",
+    "type": "text",
+    "uk": "Gender",
+    "bn": "Gender"
+  },
+  {
+    "key": "guardian_name_label",
+    "type": "text",
+    "uk": "Name",
+    "bn": "Name"
+  },
+  {
+    "key": "guardian_name_placeholder",
+    "type": "text",
+    "uk": "Full name",
+    "bn": "Full name"
+  },
+  {
+    "key": "guardian_relationship_label",
+    "type": "text",
+    "uk": "Relationship",
+    "bn": "Relationship"
+  },
+  {
+    "key": "guardian_relationship_placeholder",
+    "type": "text",
+    "uk": "e.g. Father, Brother, Husband...",
+    "bn": "e.g. Father, Brother, Husband..."
+  },
+  {
+    "key": "guardian_phone_label",
+    "type": "text",
+    "uk": "Contact Number",
+    "bn": "Contact Number"
+  },
+  {
+    "key": "guardian_phone_placeholder",
+    "type": "text",
+    "uk": "Different from above",
+    "bn": "Different from above"
+  },
+  {
+    "key": "section_5_title",
+    "type": "arg",
+    "uk": "'Symptoms'",
+    "bn": "'Symptoms'"
+  },
+  {
+    "key": "section_5_hint",
+    "type": "arg",
+    "uk": "'Tap all that apply.'",
+    "bn": "'Tap all that apply.'"
+  },
+  {
+    "key": "symptoms_other_placeholder",
+    "type": "text",
+    "uk": "Any other symptoms or details...",
+    "bn": "Any other symptoms or details..."
+  },
+  {
+    "key": "section_6_title",
+    "type": "arg",
+    "uk": "'How Did You Find Us?'",
+    "bn": "'How Did You Find Us?'"
+  },
+  {
+    "key": "section_6_hint",
+    "type": "arg",
+    "uk": "'Select at least one.'",
+    "bn": "'Select at least one.'"
+  },
+  {
+    "key": "section_7_title",
+    "type": "arg",
+    "uk": "'Your Visit'",
+    "bn": "'Your Visit'"
+  },
+  {
+    "key": "section_7_hint",
+    "type": "arg",
+    "uk": "'If this is your first appointment we may move you to another practitioner if we feel it will be more appropriate.'",
+    "bn": "'If this is your first appointment we may move you to another practitioner if we feel it will be more appropriate.'"
+  },
+  {
+    "key": "section_8_title",
+    "type": "arg",
+    "uk": "'Tell Us More'",
+    "bn": "'Tell Us More'"
+  },
+  {
+    "key": "inquiry_label",
+    "type": "text",
+    "uk": "Describe Your Inquiry",
+    "bn": "Describe Your Inquiry"
+  },
+  {
+    "key": "inquiry_placeholder",
+    "type": "text",
+    "uk": "Please share any additional information you'd like us to know...",
+    "bn": "Please share any additional information you'd like us to know..."
+  },
+  {
+    "key": "consent_updates_text",
+    "type": "text",
+    "uk": "I consent to receive DK Healing Centre updates and promotions by email, SMS, phone, and WhatsApp.",
+    "bn": "I consent to receive DK Healing Centre updates and promotions by email, SMS, phone, and WhatsApp."
+  },
+  {
+    "key": "consent_terms_text",
+    "type": "text",
+    "uk": "I agree to the DKhealing centre",
+    "bn": "I agree to the DKhealing centre"
+  },
+  {
+    "key": "consent_terms_link_text",
+    "type": "text",
+    "uk": "Terms and Conditions",
+    "bn": "Terms and Conditions"
+  },
+  {
+    "key": "submit_payment_button",
+    "type": "text",
+    "uk": "Continue to Payment →",
+    "bn": "Continue to Payment →"
+  },
+  {
+    "key": "submit_assessment_button",
+    "type": "text",
+    "uk": "Request Assessment & Book",
+    "bn": "Request Assessment & Book"
+  },
+  {
+    "key": "submit_free_button",
+    "type": "text",
+    "uk": "Book Free Consultation",
+    "bn": "Book Free Consultation"
+  },
+  {
+    "key": "hero_subtitle",
+    "type": "arg",
+    "uk": "'Just a few details and you\\'re booked.'",
+    "bn": "'Just a few details and you\\'re booked.'"
+  }
+]

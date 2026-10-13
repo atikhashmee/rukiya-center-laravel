@@ -7,10 +7,10 @@
     <section class="relative py-20 bg-brand-teal">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
             <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">
-                About DK Healing Centre
+                {{ content('about', 'hero_title', 'About DK Healing Centre') }}
             </h1>
             <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-                Qur’an and Sunnah-based Ruqyah, Istikhara guidance and Islamic spiritual support for individuals and families in the UK and worldwide..
+                {{ content('about', 'hero_text', 'Qur’an and Sunnah-based Ruqyah, Istikhara guidance and Islamic spiritual support for individuals and families in the UK and worldwide..') }}
             </p>
         </div>
     </section>
@@ -23,15 +23,15 @@
             <section class="bg-brand-cream/50 border border-brand-gold/20 p-8 md:p-12 rounded-3xl">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
                     <div class="lg:col-span-6 space-y-6">
-                        <h2 class="text-3xl font-serif font-bold text-brand-teal">Authentic Islamic Healing & Spiritual Support</h2>
+                        <h2 class="text-3xl font-serif font-bold text-brand-teal">{{ content('about', 'intro_title', 'Authentic Islamic Healing & Spiritual Support') }}</h2>
                         <p class="text-sm text-slate-600 leading-relaxed">
-                           DK Healing Centre is a trusted UK-based Islamic spiritual support service providing authentic Ruqyah, Istikhara guidance and Islamic spiritual support in accordance with the Qur'an and Sunnah. Led by an experienced Imam, Ruqyah Practitioner and Islamic Spiritual Guide with over 30 years of serving the Muslim community and more than 9 years of Ruqyah practice in the UK, we are dedicated to supporting individuals and families with compassion, respect and confidentiality. Our aim is to help people strengthen their relationship with Allah, find spiritual clarity and receive authentic Islamic guidance, while recognising that healing, guidance and success come from Allah alone.
+                           {{ content('about', 'intro_text', 'DK Healing Centre is a trusted UK-based Islamic spiritual support service providing authentic Ruqyah, Istikhara guidance and Islamic spiritual support in accordance with the Qur\'an and Sunnah. Led by an experienced Imam, Ruqyah Practitioner and Islamic Spiritual Guide with over 30 years of serving the Muslim community and more than 9 years of Ruqyah practice in the UK, we are dedicated to supporting individuals and families with compassion, respect and confidentiality. Our aim is to help people strengthen their relationship with Allah, find spiritual clarity and receive authentic Islamic guidance, while recognising that healing, guidance and success come from Allah alone.') }}
                         </p>
                         <blockquote class="border-l-8 border-brand-gold pl-6 py-2 text-sm text-slate-600 italic">
-                            "Healing comes from Allah alone. Our role is to provide authentic Qur'an and Sunnah based Ruqyah, sincere guidance and compassionate support."
+                            {{ content('about', 'quote', '"Healing comes from Allah alone. Our role is to provide authentic Qur\'an and Sunnah based Ruqyah, sincere guidance and compassionate support."') }}
                         </blockquote>
                         <p class="text-sm text-slate-600 leading-relaxed">
-                            Every individual is welcomed with dignity, compassion and complete confidentiality. We listen carefully, explain every step clearly and provide authentic Islamic spiritual guidance rooted in the Qur'an and Sunnah, helping people seek healing, peace and hope through Allah's mercy.
+                            {{ content('about', 'welcome_text', 'Every individual is welcomed with dignity, compassion and complete confidentiality. We listen carefully, explain every step clearly and provide authentic Islamic spiritual guidance rooted in the Qur\'an and Sunnah, helping people seek healing, peace and hope through Allah\'s mercy.') }}
                         </p>
                     </div>
                     <div class="lg:col-span-6 flex justify-center">
@@ -55,10 +55,10 @@
 </div>
             <h3 class="text-4xl font-bold text-brand-gold">30+</h3>
             <p class="mt-3 font-serif text-lg font-semibold text-brand-teal">
-                Years of Community Service
+                {{ content('about', 'stat_1_label', 'Years of Community Service') }}
             </p>
             <p class="text-sm text-slate-600 mt-2">
-                Serving the Muslim community with trusted Islamic guidance.
+                {{ content('about', 'stat_1_text', 'Serving the Muslim community with trusted Islamic guidance.') }}
             </p>
         </div>
 
@@ -70,10 +70,10 @@
 </div>
             <h3 class="text-4xl font-bold text-brand-gold">9+</h3>
             <p class="mt-3 font-serif text-lg font-semibold text-brand-teal">
-                UK Ruqyah Experience
+                {{ content('about', 'stat_2_label', 'UK Ruqyah Experience') }}
             </p>
             <p class="text-sm text-slate-600 mt-2">
-                Providing authentic Ruqyah and spiritual support across the UK.
+                {{ content('about', 'stat_2_text', 'Providing authentic Ruqyah and spiritual support across the UK.') }}
             </p>
         </div>
 
@@ -85,10 +85,10 @@
 </div>
             <h3 class="text-5xl font-bold text-brand-gold">100%</h3>
             <p class="mt-3 font-serif text-lg font-semibold text-brand-teal">
-                Qur'an & Sunnah Based
+                {{ content('about', 'stat_3_label', 'Qur\'an & Sunnah Based') }}
             </p>
             <p class="text-sm text-slate-600 mt-2">
-                Every service is rooted in authentic Islamic teachings.
+                {{ content('about', 'stat_3_text', 'Every service is rooted in authentic Islamic teachings.') }}
             </p>
         </div>
 
@@ -97,8 +97,8 @@
             <!-- SECTION 2: Core Values -->
             <section>
                 <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
-                    <h2 class="text-3xl font-serif font-bold text-brand-teal">Our Guiding Principles</h2>
-                    <p class="text-sm text-slate-500">Guided by authentic Islamic teachings, compassion and a commitment to serving every individual with respect and confidentiality.</p>
+                    <h2 class="text-3xl font-serif font-bold text-brand-teal">{{ content('about', 'principles_title', 'Our Guiding Principles') }}</h2>
+                    <p class="text-sm text-slate-500">{{ content('about', 'principles_text', 'Guided by authentic Islamic teachings, compassion and a commitment to serving every individual with respect and confidentiality.') }}</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -109,7 +109,7 @@
                         </div>
                         <h3 class="font-serif font-bold text-brand-teal text-lg"> Qur'an & Sunnah Based</h3>
                         <p class="text-xs text-slate-500 leading-relaxed">
-                            Every service we provide is guided by authentic Islamic teachings from the Qur'an and the Sunnah.
+                            {{ content('about', 'principle_1_text', 'Every service we provide is guided by authentic Islamic teachings from the Qur\'an and the Sunnah.') }}
                         </p>
                     </div>
 
@@ -118,9 +118,9 @@
                         <div class="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center mx-auto">
                             <svg class="w-6 h-6 text-brand-teal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                         </div>
-                        <h3 class="font-serif font-bold text-brand-teal text-lg"> Compassion & Confidentiality</h3>
+                        <h3 class="font-serif font-bold text-brand-teal text-lg"> {{ content('about', 'principle_2_title', 'Compassion & Confidentiality') }}</h3>
                         <p class="text-xs text-slate-500 leading-relaxed">
-                            Every individual is welcomed with respect, compassion and complete confidentiality.
+                            {{ content('about', 'principle_2_text', 'Every individual is welcomed with respect, compassion and complete confidentiality.') }}
                         </p>
                     </div>
 
@@ -129,9 +129,9 @@
                         <div class="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center mx-auto">
                             <svg class="w-6 h-6 text-brand-teal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .6-2 1-3 1-2 2-3 3-3"/><path d="M10 14c-.2-1-.6-2-1-3-1-2-2-3-3-3"/><path d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2Z"/><path d="M10 17H7.76l-.34.34a1 1 0 0 0 0 1.41l1.41 1.41a1 1 0 0 0 1.41 0l1.41-1.41a1 1 0 0 0 0-1.41L12 17h-2Z"/></svg>
                         </div>
-                        <h3 class="font-serif font-bold text-brand-teal text-lg"> Supporting Individuals & Families Worldwide</h3>
+                        <h3 class="font-serif font-bold text-brand-teal text-lg"> {{ content('about', 'principle_3_title', 'Supporting Individuals & Families Worldwide') }}</h3>
                         <p class="text-xs text-slate-500 leading-relaxed">
-                            We provide trusted Islamic spiritual support to individuals and families across the UK and worldwide through secure online and in-person services.
+                            {{ content('about', 'principle_3_text', 'We provide trusted Islamic spiritual support to individuals and families across the UK and worldwide through secure online and in-person services.') }}
                         </p>
                     </div>
                 </div>

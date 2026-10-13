@@ -10,6 +10,7 @@ use App\Http\Controllers\Customer\ServiceController as CustomerController;
 use App\Http\Controllers\CustomerController as AdminCustomerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\PageContentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceCategoryController;
@@ -188,6 +189,18 @@ Route::prefix('admin')->middleware(['auth:web', 'verified:web', 'admin.region'])
     // Roles & permissions
     Route::resource('roles', RoleController::class)->except(['index', 'show'])->middleware('can:roles.manage')->names('roles');
     Route::resource('roles', RoleController::class)->only(['index'])->middleware('can:roles.view')->names('roles');
+
+    // Page content: the client-friendly editor (labelled fields, no code)
+    Route::middleware('can:content.view')->group(function () {
+        Route::get('content', [PageContentController::class, 'index'])->name('content.index');
+        Route::get('content/{page}', [PageContentController::class, 'edit'])->name('content.edit');
+        Route::get('content/{page}/visual', [PageContentController::class, 'visual'])->name('content.visual');
+    });
+    Route::middleware('can:content.manage')->group(function () {
+        Route::put('content/{page}', [PageContentController::class, 'update'])->name('content.update');
+        Route::post('content/{page}/image/{key}', [PageContentController::class, 'uploadImage'])->name('content.image');
+        Route::delete('content/{page}/reset', [PageContentController::class, 'reset'])->name('content.reset');
+    });
 
     // Theme management
     Route::middleware('can:themes.manage')->group(function () {

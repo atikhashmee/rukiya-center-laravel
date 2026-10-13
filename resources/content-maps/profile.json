@@ -1,0 +1,56 @@
+[
+  {
+    "key": "welcome_title",
+    "type": "text",
+    "uk": "Welcome Back,",
+    "bn": "Welcome Back,"
+  },
+  {
+    "key": "profile_info_title",
+    "type": "text",
+    "uk": "Your Profile Information",
+    "bn": "Your Profile Information"
+  },
+  {
+    "key": "name_label",
+    "type": "text",
+    "uk": "Name",
+    "bn": "Name"
+  },
+  {
+    "key": "email_label",
+    "type": "text",
+    "uk": "Email",
+    "bn": "Email"
+  },
+  {
+    "key": "phone_label",
+    "type": "text",
+    "uk": "Phone",
+    "bn": "Phone"
+  },
+  {
+    "key": "registered_on_label",
+    "type": "text",
+    "uk": "Registered On",
+    "bn": "Registered On"
+  },
+  {
+    "key": "interests_label",
+    "type": "text",
+    "uk": "Interests",
+    "bn": "Interests"
+  },
+  {
+    "key": "about_label",
+    "type": "text",
+    "uk": "About Myself",
+    "bn": "About Myself"
+  },
+  {
+    "key": "edit_profile_button",
+    "type": "text",
+    "uk": "Edit Profile",
+    "bn": "Edit Profile"
+  }
+]

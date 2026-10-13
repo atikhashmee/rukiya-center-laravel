@@ -1,0 +1,20 @@
+[
+  {
+    "key": "failed_title",
+    "type": "text",
+    "uk": "Booking Failed",
+    "bn": "Booking Failed"
+  },
+  {
+    "key": "failed_text",
+    "type": "text",
+    "uk": "Unfortunately, your booking could not be completed. Please try again or contact support.",
+    "bn": "Unfortunately, your booking could not be completed. Please try again or contact support."
+  },
+  {
+    "key": "try_again_button",
+    "type": "text",
+    "uk": "Try Again",
+    "bn": "Try Again"
+  }
+]

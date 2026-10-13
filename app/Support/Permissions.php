@@ -20,6 +20,7 @@ class Permissions
         'blog' => 'Blog',
         'users' => 'Admin users',
         'roles' => 'Roles & permissions',
+        'content' => 'Page content',
         'themes' => 'Themes',
         'settings' => 'Site settings',
     ];

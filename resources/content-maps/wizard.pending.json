@@ -1,0 +1,56 @@
+[
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Booking Requested",
+    "bn": "Booking Requested"
+  },
+  {
+    "key": "status_title",
+    "type": "text",
+    "uk": "Assessment Required",
+    "bn": "Assessment Required"
+  },
+  {
+    "key": "status_text",
+    "type": "text",
+    "uk": "Your booking request has been received. This service requires an assessment before confirmation.",
+    "bn": "Your booking request has been received. This service requires an assessment before confirmation."
+  },
+  {
+    "key": "reference_label",
+    "type": "text",
+    "uk": "Booking Reference:",
+    "bn": "Booking Reference:"
+  },
+  {
+    "key": "next_steps_title",
+    "type": "text",
+    "uk": "What Happens Next?",
+    "bn": "What Happens Next?"
+  },
+  {
+    "key": "next_step_1",
+    "type": "text",
+    "uk": "Our team will review your booking request within 48 hours.",
+    "bn": "Our team will review your booking request within 48 hours."
+  },
+  {
+    "key": "next_step_2",
+    "type": "text",
+    "uk": "We will contact you via email or phone to discuss your needs.",
+    "bn": "We will contact you via email or phone to discuss your needs."
+  },
+  {
+    "key": "next_step_3",
+    "type": "text",
+    "uk": "Once approved, you will receive your appointment confirmation.",
+    "bn": "Once approved, you will receive your appointment confirmation."
+  },
+  {
+    "key": "book_again_button",
+    "type": "text",
+    "uk": "Book Another Appointment",
+    "bn": "Book Another Appointment"
+  }
+]

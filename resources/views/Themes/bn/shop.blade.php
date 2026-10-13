@@ -7,10 +7,10 @@
     <section class="relative py-20 bg-brand-teal">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
             <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">
-                Our Shop
+                {{ content('shop', 'hero_title', 'Our Shop') }}
             </h1>
             <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-                Prophetic remedies and wellness products crafted with care, following the Sunnah.
+                {{ content('shop', 'hero_subtitle', 'Prophetic remedies and wellness products crafted with care, following the Sunnah.') }}
             </p>
         </div>
     </section>
@@ -29,9 +29,9 @@
             <form method="GET" action="{{ route('shop') }}" class="mb-12 bg-brand-cream/50 border border-brand-gold/20 p-6 rounded-2xl">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
                     <div>
-                        <label class="block text-sm font-semibold text-brand-teal mb-2">Category</label>
+                        <label class="block text-sm font-semibold text-brand-teal mb-2">{{ content('shop', 'filter_category_label', 'Category') }}</label>
                         <select name="category" class="w-full border border-brand-gold/30 rounded-lg px-4 py-2.5 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold/50">
-                            <option value="">All Categories</option>
+                            <option value="">{{ content('shop', 'filter_all_categories_option', 'All Categories') }}</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
@@ -40,18 +40,18 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-brand-teal mb-2">Min Price (£)</label>
-                        <input type="number" name="min_price" value="{{ request('min_price') }}" min="0" step="0.01" placeholder="0.00"
+                        <label class="block text-sm font-semibold text-brand-teal mb-2">{{ content('shop', 'filter_min_price_label', 'Min Price (£)') }}</label>
+                        <input type="number" name="min_price" value="{{ request('min_price') }}" min="0" step="0.01" placeholder="{{ content('shop', 'filter_min_price_placeholder', '0.00') }}"
                             class="w-full border border-brand-gold/30 rounded-lg px-4 py-2.5 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold/50">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-brand-teal mb-2">Max Price (£)</label>
-                        <input type="number" name="max_price" value="{{ request('max_price') }}" min="0" step="0.01" placeholder="100.00"
+                        <label class="block text-sm font-semibold text-brand-teal mb-2">{{ content('shop', 'filter_max_price_label', 'Max Price (£)') }}</label>
+                        <input type="number" name="max_price" value="{{ request('max_price') }}" min="0" step="0.01" placeholder="{{ content('shop', 'filter_max_price_placeholder', '100.00') }}"
                             class="w-full border border-brand-gold/30 rounded-lg px-4 py-2.5 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-gold/50">
                     </div>
                     <div class="flex gap-3">
-                        <button type="submit" class="flex-1 bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-2.5 rounded-full text-sm font-semibold transition shadow">Filter</button>
-                        <a href="{{ route('shop') }}" class="px-6 py-2.5 border border-brand-gold/30 rounded-full text-sm font-semibold text-brand-teal hover:bg-brand-cream transition">Clear</a>
+                        <button type="submit" class="flex-1 bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-2.5 rounded-full text-sm font-semibold transition shadow">{{ content('shop', 'filter_button', 'Filter') }}</button>
+                        <a href="{{ route('shop') }}" class="px-6 py-2.5 border border-brand-gold/30 rounded-full text-sm font-semibold text-brand-teal hover:bg-brand-cream transition">{{ content('shop', 'filter_clear_button', 'Clear') }}</a>
                     </div>
                 </div>
             </form>
@@ -59,7 +59,7 @@
             <!-- Active Filters -->
             @if(request()->hasAny(['category', 'min_price', 'max_price']))
                 <div class="mb-8 flex flex-wrap items-center gap-2 text-sm">
-                    <span class="text-slate-500">Active filters:</span>
+                    <span class="text-slate-500">{{ content('shop', 'active_filters_label', 'Active filters:') }}</span>
                     @if(request('category'))
                         @php $cat = $categories->firstWhere('id', request('category')); @endphp
                         @if($cat)
@@ -71,13 +71,13 @@
                     @endif
                     @if(request('min_price'))
                         <span class="inline-flex items-center gap-1 bg-brand-teal/10 text-brand-teal px-3 py-1 rounded-full">
-                            Min: £{{ number_format(request('min_price'), 2) }}
+                            {{ content('shop', 'active_filter_min_label', 'Min:') }} £{{ number_format(request('min_price'), 2) }}
                             <a href="{{ route('shop', request()->except('min_price')) }}" class="ml-1 hover:text-brand-crimson">&times;</a>
                         </span>
                     @endif
                     @if(request('max_price'))
                         <span class="inline-flex items-center gap-1 bg-brand-teal/10 text-brand-teal px-3 py-1 rounded-full">
-                            Max: £{{ number_format(request('max_price'), 2) }}
+                            {{ content('shop', 'active_filter_max_label', 'Max:') }} £{{ number_format(request('max_price'), 2) }}
                             <a href="{{ route('shop', request()->except('max_price')) }}" class="ml-1 hover:text-brand-crimson">&times;</a>
                         </span>
                     @endif
@@ -111,13 +111,13 @@
                                     <!-- Quick View Button -->
                                     <button onclick="openQuickView({{ $product->id }})"
                                         class="bg-white text-brand-teal w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-brand-cream transition"
-                                        title="Quick View">
+                                        title="{{ content('shop', 'quick_view_label', 'Quick View') }}">
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </button>
                                     <!-- View Detail Button -->
                                     <a href="{{ route('shop.show', $product->slug ?? $product->id) }}"
                                         class="bg-white text-brand-teal w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-brand-cream transition"
-                                        title="View Details">
+                                        title="{{ content('shop', 'product_view_details_title', 'View Details') }}">
                                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
                                     </a>
                                 </div>
@@ -132,9 +132,9 @@
                                 <div class="flex items-center justify-between">
                                     <span class="text-xl font-bold text-brand-goldDark">£{{ number_format($product->price, 2) }}</span>
                                     @if($product->stock_quantity > 0)
-                                        <span class="text-[10px] font-semibold text-green-700 bg-green-100 px-2.5 py-1 rounded-full">In Stock</span>
+                                        <span class="text-[10px] font-semibold text-green-700 bg-green-100 px-2.5 py-1 rounded-full">{{ content('shop', 'product_in_stock_badge', 'In Stock') }}</span>
                                     @else
-                                        <span class="text-[10px] font-semibold text-red-700 bg-red-100 px-2.5 py-1 rounded-full">Out of Stock</span>
+                                        <span class="text-[10px] font-semibold text-red-700 bg-red-100 px-2.5 py-1 rounded-full">{{ content('shop', 'product_out_of_stock_badge', 'Out of Stock') }}</span>
                                     @endif
                                 </div>
                                 <!-- Add to Cart -->
@@ -144,8 +144,7 @@
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                                         <input type="hidden" name="quantity" value="1">
                                         <button type="submit" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white py-2.5 rounded-full text-sm font-semibold transition shadow">
-                                            Add to Cart
-                                        </button>
+                                            {{ content('shop', 'product_add_to_cart_button', 'Add to Cart') }}                                        </button>
                                     </form>
                                 @endif
                             </div>
@@ -157,9 +156,9 @@
                     <svg class="w-16 h-16 text-brand-gold/30 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
                     </svg>
-                    <h3 class="text-xl font-serif font-bold text-brand-teal mb-2">No products found</h3>
-                    <p class="text-sm text-slate-500">Try adjusting your filters or check back later.</p>
-                    <a href="{{ route('shop') }}" class="inline-block mt-4 bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-2.5 rounded-full text-sm font-semibold transition">View All Products</a>
+                    <h3 class="text-xl font-serif font-bold text-brand-teal mb-2">{{ content('shop', 'empty_title', 'No products found') }}</h3>
+                    <p class="text-sm text-slate-500">{{ content('shop', 'empty_text', 'Try adjusting your filters or check back later.') }}</p>
+                    <a href="{{ route('shop') }}" class="inline-block mt-4 bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-2.5 rounded-full text-sm font-semibold transition">{{ content('shop', 'empty_button', 'View All Products') }}</a>
                 </div>
             @endif
         </div>

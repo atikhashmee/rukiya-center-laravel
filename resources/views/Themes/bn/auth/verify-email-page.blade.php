@@ -70,19 +70,19 @@
                     <i data-lucide="mail-check" class="w-8 h-8 text-brand-gold"></i>
                 </div>
 
-                <h1 class="text-2xl font-serif font-bold text-brand-teal">Verify Your Email Address</h1>
+                <h1 class="text-2xl font-serif font-bold text-brand-teal">{{ content('auth.verify-email-page', 'page_title', 'Verify Your Email Address') }}</h1>
 
                 <p class="text-sm text-slate-600">
-                    We've sent a verification link to <strong id="user-email-display" class="text-brand-teal">{{ $email }}</strong>.
-                    Please check your inbox and click the link to activate your account.
+                    {{ content('auth.verify-email-page', 'sent_link_text', 'We\'ve sent a verification link to') }} <strong id="user-email-display" class="text-brand-teal">{{ $email }}</strong>.
+                    {{ content('auth.verify-email-page', 'check_inbox_text', 'Please check your inbox and click the link to activate your account.') }}
                 </p>
 
                 <div class="text-left bg-white border border-brand-gold/20 p-6 rounded-2xl space-y-2">
-                    <p class="font-semibold text-brand-teal text-sm">What to do next:</p>
+                    <p class="font-semibold text-brand-teal text-sm">{{ content('auth.verify-email-page', 'next_steps_title', 'What to do next:') }}</p>
                     <ul class="text-xs text-slate-600 space-y-1 ml-4">
-                        <li class="flex items-center gap-2"><span class="text-brand-gold">✓</span> Check your inbox for an email from DK Healing Centre.</li>
-                        <li class="flex items-center gap-2"><span class="text-brand-gold">✓</span> If you don't see it, please check your spam or junk folder.</li>
-                        <li class="flex items-center gap-2"><span class="text-brand-gold">✓</span> The verification link is valid for 24 hours.</li>
+                        <li class="flex items-center gap-2"><span class="text-brand-gold">✓</span> {{ content('auth.verify-email-page', 'next_step_one', 'Check your inbox for an email from DK Healing Centre.') }}</li>
+                        <li class="flex items-center gap-2"><span class="text-brand-gold">✓</span> {{ content('auth.verify-email-page', 'next_step_two', 'If you don\'t see it, please check your spam or junk folder.') }}</li>
+                        <li class="flex items-center gap-2"><span class="text-brand-gold">✓</span> {{ content('auth.verify-email-page', 'next_step_three', 'The verification link is valid for 24 hours.') }}</li>
                     </ul>
                 </div>
 
@@ -91,18 +91,18 @@
                         @csrf
                     </form>
                     <button id="resend-button" onclick="document.querySelector('#resend-form').submit()" class="w-full bg-brand-teal hover:bg-brand-navy text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow disabled:opacity-50 disabled:cursor-not-allowed">
-                        Resend Verification Email
+                        {{ content('auth.verify-email-page', 'resend_button', 'Resend Verification Email') }}
                     </button>
                     <button onclick="window.location.href='{{ route('customer.profile') }}';" class="w-full border border-slate-200 text-slate-600 px-6 py-3 rounded-xl font-semibold text-sm hover:bg-slate-50 transition">
-                        Continue to Dashboard (After Verification)
+                        {{ content('auth.verify-email-page', 'continue_button', 'Continue to Dashboard (After Verification)') }}
                     </button>
                 </div>
 
                 <p id="resend-message" class="text-xs text-green-600 font-medium hidden">
-                    Verification email successfully resent! Check your inbox.
+                    {{ content('auth.verify-email-page', 'resend_success_message', 'Verification email successfully resent! Check your inbox.') }}
                 </p>
                 <p id="countdown-message" class="text-xs text-slate-400 hidden">
-                    You can resend the email again in <span id="countdown">60</span> seconds.
+                    {{ content('auth.verify-email-page', 'countdown_text_before', 'You can resend the email again in') }} <span id="countdown">60</span> {{ content('auth.verify-email-page', 'countdown_text_after', 'seconds.') }}
                 </p>
             </div>
         </div>

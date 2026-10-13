@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\PageContentStore;
 use App\Support\Region;
 use Closure;
 use Illuminate\Http\Request;
@@ -17,6 +18,9 @@ class ResolveRegion
     {
         // Region::current() resolves from the request itself, so nothing is set here;
         // this only applies the matching locale and timezone.
+        // Edited page content is cached per request; a save must show on the next load.
+        app(PageContentStore::class)->flush();
+
         $config = Region::config(Region::current() ?? Region::UK);
         config(['app.timezone_display' => $config['timezone']]);
         app()->setLocale($config['locale']);

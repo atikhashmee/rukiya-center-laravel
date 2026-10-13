@@ -7,46 +7,46 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <header class="mb-8 text-center space-y-2">
-                <h1 class="text-3xl font-serif font-bold text-brand-teal">Secure Checkout</h1>
-                <p class="text-sm text-slate-500">You are one step away from confirming your order.</p>
+                <h1 class="text-3xl font-serif font-bold text-brand-teal">{{ content('checkout', 'hero_title', 'Secure Checkout') }}</h1>
+                <p class="text-sm text-slate-500">{{ content('checkout', 'hero_text', 'You are one step away from confirming your order.') }}</p>
             </header>
 
             <div class="flex flex-col lg:flex-row gap-8">
 
                 {{-- Payment Form --}}
                 <div class="lg:w-3/5 bg-brand-cream/50 border border-brand-gold/20 p-6 md:p-8 rounded-2xl h-fit">
-                    <h2 class="text-lg font-serif font-bold text-brand-teal mb-6 border-b border-brand-gold/20 pb-3">Payment Details</h2>
+                    <h2 class="text-lg font-serif font-bold text-brand-teal mb-6 border-b border-brand-gold/20 pb-3">{{ content('checkout', 'payment_title', 'Payment Details') }}</h2>
 
                     <div class="mb-6 flex space-x-2 border-b border-brand-gold/20">
-                        <button id="card-tab" class="px-4 py-2 text-sm font-semibold text-white bg-brand-teal rounded-t-lg">Credit/Debit Card</button>
-                        <button id="paypal-tab" class="px-4 py-2 text-sm font-semibold text-slate-400" disabled>PayPal (Later)</button>
-                        <button id="transfer-tab" class="px-4 py-2 text-sm font-semibold text-slate-400" disabled>Bank Transfer (Later)</button>
+                        <button id="card-tab" class="px-4 py-2 text-sm font-semibold text-white bg-brand-teal rounded-t-lg">{{ content('checkout', 'tab_card', 'Credit/Debit Card') }}</button>
+                        <button id="paypal-tab" class="px-4 py-2 text-sm font-semibold text-slate-400" disabled>{{ content('checkout', 'tab_paypal', 'PayPal (Later)') }}</button>
+                        <button id="transfer-tab" class="px-4 py-2 text-sm font-semibold text-slate-400" disabled>{{ content('checkout', 'tab_transfer', 'Bank Transfer (Later)') }}</button>
                     </div>
 
                     <form id="payment-form" class="space-y-6">
                         <div>
-                            <label for="email" class="block text-xs font-bold text-brand-teal mb-1">Email Address</label>
-                            <input type="email" id="email" value="{{ $type === 'booking' ? $item->email : $item->email }}" required placeholder="Enter your email" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold">
+                            <label for="email" class="block text-xs font-bold text-brand-teal mb-1">{{ content('checkout', 'form_email_label', 'Email Address') }}</label>
+                            <input type="email" id="email" value="{{ $type === 'booking' ? $item->email : $item->email }}" required placeholder="{{ content('checkout', 'form_email_placeholder', 'Enter your email') }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold">
                         </div>
 
                         <div>
-                            <label for="card-element" class="block text-xs font-bold text-brand-teal mb-1">Card Information</label>
+                            <label for="card-element" class="block text-xs font-bold text-brand-teal mb-1">{{ content('checkout', 'form_card_label', 'Card Information') }}</label>
                             <div id="card-element" class="p-3 border border-slate-200 rounded-xl"></div>
                             <div id="card-errors" role="alert" class="mt-2 text-brand-crimson text-xs font-medium"></div>
                         </div>
 
                         <div>
-                            <label for="country" class="block text-xs font-bold text-brand-teal mb-1">Country</label>
+                            <label for="country" class="block text-xs font-bold text-brand-teal mb-1">{{ content('checkout', 'form_country_label', 'Country') }}</label>
                             <select id="country" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-gold bg-white">
-                                <option value="">Select Country...</option>
-                                <option value="GB">United Kingdom</option>
-                                <option value="US">United States</option>
+                                <option value="">{{ content('checkout', 'form_country_placeholder', 'Select Country...') }}</option>
+                                <option value="GB">{{ content('checkout', 'form_country_gb', 'United Kingdom') }}</option>
+                                <option value="US">{{ content('checkout', 'form_country_us', 'United States') }}</option>
                             </select>
                         </div>
 
                         <div class="flex items-center">
                             <input id="save-card" name="save-card" type="checkbox" class="h-4 w-4 text-brand-teal border-slate-300 rounded focus:ring-brand-gold">
-                            <label for="save-card" class="ml-2 block text-sm text-slate-600">Securely save my card for future payments</label>
+                            <label for="save-card" class="ml-2 block text-sm text-slate-600">{{ content('checkout', 'form_save_card_label', 'Securely save my card for future payments') }}</label>
                         </div>
 
                         <div id="status-message" class="text-center font-semibold p-3 rounded-xl hidden"></div>
@@ -55,11 +55,11 @@
                             Pay £{{ $type === 'booking' ? $item->service_price : $item->total }} Now
                         </button>
 
-                        <p class="text-xs text-center text-slate-400">Payments secured by Stripe. PCI Compliant.</p>
+                        <p class="text-xs text-center text-slate-400">{{ content('checkout', 'form_small_print', 'Payments secured by Stripe. PCI Compliant.') }}</p>
                     </form>
                 </div>
 
-                {{-- Order Summary --}}
+                {{-- {{ content('checkout', 'summary_title', 'Order Summary') }} --}}
                 <div class="lg:w-2/5 bg-brand-cream/50 border border-brand-gold/20 p-6 md:p-8 rounded-2xl h-fit">
                     <h2 class="text-lg font-serif font-bold text-brand-teal mb-6 border-b border-brand-gold/20 pb-3">Order Summary</h2>
 
@@ -68,32 +68,32 @@
                             <div class="flex justify-between items-start pb-4 border-b border-brand-gold/20">
                                 <div>
                                     <p class="font-bold text-sm text-brand-teal">{{ $item->service->title }}</p>
-                                    <p class="text-xs text-slate-400">Booking ID: <span class="font-medium text-brand-teal">#{{ $item->booking_id }}</span></p>
+                                    <p class="text-xs text-slate-400">{{ content('checkout', 'summary_booking_id_label', 'Booking ID:') }} <span class="font-medium text-brand-teal">#{{ $item->booking_id }}</span></p>
                                 </div>
                                 <span class="font-semibold text-sm text-brand-teal">£{{ $item->service_price }}</span>
                             </div>
                             <div class="space-y-2 text-sm text-slate-600">
                                 <div class="flex justify-between">
-                                    <span>Subtotal</span>
+                                    <span>{{ content('checkout', 'summary_subtotal_label', 'Subtotal') }}</span>
                                     <span>£{{ $item->service_price }}</span>
                                 </div>
                                 <div class="flex justify-between text-slate-400 italic">
-                                    <span>Service Fee</span>
+                                    <span>{{ content('checkout', 'summary_service_fee_label', 'Service Fee') }}</span>
                                     <span>£0.00</span>
                                 </div>
                             </div>
                             <div class="flex justify-between items-center pt-4 border-t-2 border-dashed border-brand-gold/20">
-                                <span class="text-lg font-bold text-brand-teal">Order Total</span>
+                                <span class="text-lg font-bold text-brand-teal">{{ content('checkout', 'summary_total_label', 'Order Total') }}</span>
                                 <span class="text-xl font-bold text-brand-teal">£{{ $item->service_price }}</span>
                             </div>
                             <div class="p-3 bg-brand-gold/10 border border-brand-gold/20 rounded-xl text-xs text-slate-600">
-                                Your session will be confirmed instantly upon successful payment.
+                                {{ content('checkout', 'summary_booking_note', 'Your session will be confirmed instantly upon successful payment.') }}
                             </div>
                         </div>
                     @else
                         <div class="space-y-4">
                             <div class="pb-4 border-b border-brand-gold/20">
-                                <p class="text-xs text-slate-400">Order #{{ $item->order_number }}</p>
+                                <p class="text-xs text-slate-400">{{ content('checkout', 'order_number_label', 'Order #') }}{{ $item->order_number }}</p>
                                 <p class="text-xs text-slate-400">{{ $item->full_name }}</p>
                             </div>
                             <div class="space-y-3">
@@ -109,20 +109,20 @@
                             </div>
                             <div class="space-y-2 text-sm text-slate-600 pt-4 border-t border-brand-gold/20">
                                 <div class="flex justify-between">
-                                    <span>Subtotal</span>
+                                    <span>{{ content('checkout', 'order_subtotal_label', 'Subtotal') }}</span>
                                     <span>£{{ number_format($item->subtotal, 2) }}</span>
                                 </div>
                                 <div class="flex justify-between text-slate-400 italic">
-                                    <span>Shipping</span>
+                                    <span>{{ content('checkout', 'order_shipping_label', 'Shipping') }}</span>
                                     <span>£0.00</span>
                                 </div>
                             </div>
                             <div class="flex justify-between items-center pt-4 border-t-2 border-dashed border-brand-gold/20">
-                                <span class="text-lg font-bold text-brand-teal">Order Total</span>
+                                <span class="text-lg font-bold text-brand-teal">{{ content('checkout', 'order_total_label', 'Order Total') }}</span>
                                 <span class="text-xl font-bold text-brand-teal">£{{ number_format($item->total, 2) }}</span>
                             </div>
                             <div class="p-3 bg-brand-gold/10 border border-brand-gold/20 rounded-xl text-xs text-slate-600">
-                                Your order will be processed upon successful payment.
+                                {{ content('checkout', 'order_note', 'Your order will be processed upon successful payment.') }}
                             </div>
                         </div>
                     @endif

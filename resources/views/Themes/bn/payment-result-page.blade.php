@@ -11,27 +11,27 @@
                     ✓
                 </div>
 
-                <h1 class="text-2xl font-serif font-bold text-brand-teal">Payment Successful!</h1>
-                <p class="text-sm text-slate-600">Your booking is Confirmed.</p>
+                <h1 class="text-2xl font-serif font-bold text-brand-teal">{{ content('payment-result-page', 'success_title', 'Payment Successful!') }}</h1>
+                <p class="text-sm text-slate-600">{{ content('payment-result-page', 'success_text', 'Your booking is Confirmed.') }}</p>
 
                 <div class="bg-white border border-brand-gold/20 p-4 rounded-2xl space-y-3 text-left">
                     <div class="flex justify-between font-medium text-sm text-slate-600">
-                        <span>Service Paid:</span>
+                        <span>{{ content('payment-result-page', 'success_service_label', 'Service Paid:') }}</span>
                         <span class="text-brand-teal">Personalized Rukiya Package</span>
                     </div>
                     <div class="flex justify-between font-medium text-sm text-slate-600">
-                        <span>Total Amount:</span>
+                        <span>{{ content('payment-result-page', 'success_amount_label', 'Total Amount:') }}</span>
                         <span class="text-brand-teal font-bold">£150.00</span>
                     </div>
                     <div class="flex justify-between text-xs text-slate-400 border-t border-brand-gold/20 pt-2">
-                        <span>Transaction ID:</span>
+                        <span>{{ content('payment-result-page', 'success_transaction_label', 'Transaction ID:') }}</span>
                         <span>TXN-5901-ABCDE12345</span>
                     </div>
                 </div>
 
                 <div class="flex flex-col space-y-3">
                     <a href="{{ route('home') }}" class="w-full bg-brand-teal hover:bg-brand-navy text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow">
-                        Back to Home
+                        {{ content('payment-result-page', 'success_home_button', 'Back to Home') }}
                     </a>
                 </div>
             </div>
@@ -42,24 +42,24 @@
                     ✗
                 </div>
 
-                <h1 class="text-2xl font-serif font-bold text-brand-teal">Payment Failed</h1>
-                <p class="text-sm text-brand-crimson font-semibold">We couldn't process your transaction.</p>
+                <h1 class="text-2xl font-serif font-bold text-brand-teal">{{ content('payment-result-page', 'failure_title', 'Payment Failed') }}</h1>
+                <p class="text-sm text-brand-crimson font-semibold">{{ content('payment-result-page', 'failure_text', 'We couldn\'t process your transaction.') }}</p>
 
                 <div class="bg-white border border-brand-gold/20 p-4 rounded-2xl text-left space-y-2">
-                    <p class="font-bold text-sm text-brand-teal">Reason:</p>
+                    <p class="font-bold text-sm text-brand-teal">{{ content('payment-result-page', 'failure_reason_label', 'Reason:') }}</p>
                     <ul class="text-xs text-slate-600 space-y-1">
-                        <li class="flex items-center gap-2"><span class="text-brand-crimson">✗</span> Card declined by the bank.</li>
-                        <li class="flex items-center gap-2"><span class="text-brand-crimson">✗</span> Incorrect CVC or expiry date.</li>
-                        <li class="flex items-center gap-2"><span class="text-brand-crimson">✗</span> Insufficient funds.</li>
+                        <li class="flex items-center gap-2"><span class="text-brand-crimson">✗</span> {{ content('payment-result-page', 'failure_reason_declined', 'Card declined by the bank.') }}</li>
+                        <li class="flex items-center gap-2"><span class="text-brand-crimson">✗</span> {{ content('payment-result-page', 'failure_reason_cvc', 'Incorrect CVC or expiry date.') }}</li>
+                        <li class="flex items-center gap-2"><span class="text-brand-crimson">✗</span> {{ content('payment-result-page', 'failure_reason_funds', 'Insufficient funds.') }}</li>
                     </ul>
                 </div>
 
                 <div class="flex flex-col space-y-3">
                     <a href="{{ route('wizard.index') }}" class="w-full bg-brand-gold hover:bg-brand-goldDark text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow">
-                        Try Payment Again
+                        {{ content('payment-result-page', 'failure_retry_button', 'Try Payment Again') }}
                     </a>
                     <a href="{{ route('contact') }}" class="w-full border border-slate-200 text-slate-600 px-6 py-3 rounded-xl font-medium text-sm hover:bg-slate-50 transition">
-                        Contact Support
+                        {{ content('payment-result-page', 'failure_support_button', 'Contact Support') }}
                     </a>
                 </div>
             </div>

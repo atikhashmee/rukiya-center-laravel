@@ -1,0 +1,56 @@
+[
+  {
+    "key": "breadcrumb_home",
+    "type": "text",
+    "uk": "Home",
+    "bn": "Home"
+  },
+  {
+    "key": "breadcrumb_shop",
+    "type": "text",
+    "uk": "Shop",
+    "bn": "Shop"
+  },
+  {
+    "key": "in_stock_badge",
+    "type": "text",
+    "uk": "In Stock",
+    "bn": "In Stock"
+  },
+  {
+    "key": "out_of_stock_badge",
+    "type": "text",
+    "uk": "Out of Stock",
+    "bn": "Out of Stock"
+  },
+  {
+    "key": "add_to_cart_button",
+    "type": "text",
+    "uk": "Add to Cart\n",
+    "bn": "Add to Cart\n"
+  },
+  {
+    "key": "feature_1_text",
+    "type": "text",
+    "uk": "Authentic Prophetic Remedy",
+    "bn": "Authentic Prophetic Remedy"
+  },
+  {
+    "key": "feature_2_text",
+    "type": "text",
+    "uk": "100% Secure & Halal",
+    "bn": "100% Secure & Halal"
+  },
+  {
+    "key": "feature_3_text",
+    "type": "text",
+    "uk": "UK Based Dispatch",
+    "bn": "UK Based Dispatch"
+  },
+  {
+    "key": "related_title",
+    "type": "text",
+    "uk": "You May Also Like",
+    "bn": "You May Also Like"
+  }
+]

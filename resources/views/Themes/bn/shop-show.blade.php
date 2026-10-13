@@ -7,9 +7,9 @@
     <section class="bg-brand-cream/50 border-b border-brand-gold/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <nav class="flex items-center gap-2 text-xs text-slate-500">
-                <a href="{{ route('home') }}" class="hover:text-brand-teal transition">Home</a>
+                <a href="{{ route('home') }}" class="hover:text-brand-teal transition">{{ content('shop-show', 'breadcrumb_home', 'Home') }}</a>
                 <span>/</span>
-                <a href="{{ route('shop') }}" class="hover:text-brand-teal transition">Shop</a>
+                <a href="{{ route('shop') }}" class="hover:text-brand-teal transition">{{ content('shop-show', 'breadcrumb_shop', 'Shop') }}</a>
                 <span>/</span>
                 <span class="text-brand-teal font-medium">{{ $product->name }}</span>
             </nav>
@@ -65,9 +65,9 @@
                     <div class="flex items-center gap-4">
                         <span class="text-3xl font-bold text-brand-goldDark">£{{ number_format($product->price, 2) }}</span>
                         @if($product->stock_quantity > 0)
-                            <span class="text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">In Stock ({{ $product->stock_quantity }})</span>
+                            <span class="text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">{{ content('shop-show', 'in_stock_badge', 'In Stock') }} ({{ $product->stock_quantity }})</span>
                         @else
-                            <span class="text-xs font-semibold text-red-700 bg-red-100 px-3 py-1 rounded-full">Out of Stock</span>
+                            <span class="text-xs font-semibold text-red-700 bg-red-100 px-3 py-1 rounded-full">{{ content('shop-show', 'out_of_stock_badge', 'Out of Stock') }}</span>
                         @endif
                     </div>
 
@@ -89,8 +89,7 @@
                                 <button type="button" onclick="this.parentNode.querySelector('input').stepUp()" class="px-4 py-3 text-brand-teal hover:bg-brand-cream transition">&plus;</button>
                             </div>
                             <button type="submit" class="flex-1 bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3 rounded-full font-semibold text-sm transition shadow">
-                                Add to Cart
-                            </button>
+                                {{ content('shop-show', 'add_to_cart_button', 'Add to Cart') }}                            </button>
                         </form>
                     @endif
 
@@ -98,15 +97,15 @@
                     <div class="border-t border-brand-gold/15 pt-6 space-y-3">
                         <div class="flex items-center gap-3 text-sm text-slate-600">
                             <svg class="w-5 h-5 text-brand-teal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                            Authentic Prophetic Remedy
+                            {{ content('shop-show', 'feature_1_text', 'Authentic Prophetic Remedy') }}
                         </div>
                         <div class="flex items-center gap-3 text-sm text-slate-600">
                             <svg class="w-5 h-5 text-brand-teal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
-                            100% Secure & Halal
+                            {{ content('shop-show', 'feature_2_text', '100% Secure & Halal') }}
                         </div>
                         <div class="flex items-center gap-3 text-sm text-slate-600">
                             <svg class="w-5 h-5 text-brand-teal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M7 15h0M2 9.5h20"/></svg>
-                            UK Based Dispatch
+                            {{ content('shop-show', 'feature_3_text', 'UK Based Dispatch') }}
                         </div>
                     </div>
                 </div>
@@ -115,7 +114,7 @@
             <!-- Related Products -->
             @if($related->count() > 0)
                 <section class="mt-20">
-                    <h2 class="text-2xl font-serif font-bold text-brand-teal mb-8">You May Also Like</h2>
+                    <h2 class="text-2xl font-serif font-bold text-brand-teal mb-8">{{ content('shop-show', 'related_title', 'You May Also Like') }}</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         @foreach($related as $item)
                             <a href="{{ route('shop.show', $item->slug ?? $item->id) }}" class="group bg-brand-cream/30 border border-brand-gold/15 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300">

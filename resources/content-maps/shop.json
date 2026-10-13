@@ -1,0 +1,128 @@
+[
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Our Shop",
+    "bn": "Our Shop"
+  },
+  {
+    "key": "hero_subtitle",
+    "type": "text",
+    "uk": "Prophetic remedies and wellness products crafted with care, following the Sunnah.",
+    "bn": "Prophetic remedies and wellness products crafted with care, following the Sunnah."
+  },
+  {
+    "key": "filter_category_label",
+    "type": "text",
+    "uk": "Category",
+    "bn": "Category"
+  },
+  {
+    "key": "filter_all_categories_option",
+    "type": "text",
+    "uk": "All Categories",
+    "bn": "All Categories"
+  },
+  {
+    "key": "filter_min_price_label",
+    "type": "text",
+    "uk": "Min Price (£)",
+    "bn": "Min Price (£)"
+  },
+  {
+    "key": "filter_min_price_placeholder",
+    "type": "text",
+    "uk": "0.00",
+    "bn": "0.00"
+  },
+  {
+    "key": "filter_max_price_label",
+    "type": "text",
+    "uk": "Max Price (£)",
+    "bn": "Max Price (£)"
+  },
+  {
+    "key": "filter_max_price_placeholder",
+    "type": "text",
+    "uk": "100.00",
+    "bn": "100.00"
+  },
+  {
+    "key": "filter_clear_button",
+    "type": "text",
+    "uk": "Clear",
+    "bn": "Clear"
+  },
+  {
+    "key": "active_filters_label",
+    "type": "text",
+    "uk": "Active filters:",
+    "bn": "Active filters:"
+  },
+  {
+    "key": "active_filter_min_label",
+    "type": "text",
+    "uk": "Min:",
+    "bn": "Min:"
+  },
+  {
+    "key": "active_filter_max_label",
+    "type": "text",
+    "uk": "Max:",
+    "bn": "Max:"
+  },
+  {
+    "key": "product_view_details_title",
+    "type": "text",
+    "uk": "View Details",
+    "bn": "View Details"
+  },
+  {
+    "key": "product_in_stock_badge",
+    "type": "text",
+    "uk": "In Stock",
+    "bn": "In Stock"
+  },
+  {
+    "key": "product_out_of_stock_badge",
+    "type": "text",
+    "uk": "Out of Stock",
+    "bn": "Out of Stock"
+  },
+  {
+    "key": "product_add_to_cart_button",
+    "type": "text",
+    "uk": "Add to Cart\n",
+    "bn": "Add to Cart\n"
+  },
+  {
+    "key": "empty_title",
+    "type": "text",
+    "uk": "No products found",
+    "bn": "No products found"
+  },
+  {
+    "key": "empty_text",
+    "type": "text",
+    "uk": "Try adjusting your filters or check back later.",
+    "bn": "Try adjusting your filters or check back later."
+  },
+  {
+    "key": "empty_button",
+    "type": "text",
+    "uk": "View All Products",
+    "bn": "View All Products"
+  },
+  {
+    "key": "filter_button",
+    "type": "text",
+    "uk": "Filter",
+    "bn": "Filter"
+  },
+  {
+    "key": "quick_view_label",
+    "type": "text",
+    "uk": "Quick View",
+    "bn": "Quick View"
+  }
+]

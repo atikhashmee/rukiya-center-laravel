@@ -14,7 +14,7 @@ import { usePermissions } from '@/lib/permissions';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Rss, PackageSearch, Kanban, User, Book, MailSearchIcon, Palette, FolderTree, GraduationCap, ShoppingCart, ShieldCheck } from 'lucide-react';
+import { LayoutGrid, Rss, PackageSearch, Kanban, User, Book, MailSearchIcon, Palette, FolderTree, GraduationCap, ShoppingCart, ShieldCheck, FileText } from 'lucide-react';
 import AppLogo from './app-logo';
 import {index} from '@/actions/App/Http/Controllers/BlogController';
 import productIndex from '@/actions/App/Http/Controllers/ProductController';
@@ -26,6 +26,7 @@ import themeIndex from '@/actions/App/Http/Controllers/ThemeController';
 import productCategoryIndex from '@/actions/App/Http/Controllers/ProductCategoryController';
 import serviceCategoryIndex from '@/actions/App/Http/Controllers/ServiceCategoryController';
 import roleIndex from '@/actions/App/Http/Controllers/RoleController';
+import pageContentIndex from '@/actions/App/Http/Controllers/PageContentController';
 
 /** Nav item plus the permission it needs. Groups are dropped when no child survives. */
 type GuardedNavItem = NavItem & { permission: string; items?: GuardedNavItem[] };
@@ -98,6 +99,12 @@ const mainNavItems: GuardedNavItem[] = [
         href: roleIndex.index(),
         icon: ShieldCheck,
         permission: 'roles.view',
+    },
+    {
+        title: 'Page Content',
+        href: pageContentIndex.index(),
+        icon: FileText,
+        permission: 'content.view',
     },
     {
         title: 'Themes',

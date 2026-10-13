@@ -1,0 +1,50 @@
+[
+  {
+    "key": "welcome_title",
+    "type": "text",
+    "uk": "Welcome Back,",
+    "bn": "Welcome Back,"
+  },
+  {
+    "key": "table_service_header",
+    "type": "text",
+    "uk": "Service / Item",
+    "bn": "Service / Item"
+  },
+  {
+    "key": "table_amount_header",
+    "type": "text",
+    "uk": "Amount",
+    "bn": "Amount"
+  },
+  {
+    "key": "table_date_header",
+    "type": "text",
+    "uk": "Date",
+    "bn": "Date"
+  },
+  {
+    "key": "table_status_header",
+    "type": "text",
+    "uk": "Status",
+    "bn": "Status"
+  },
+  {
+    "key": "table_transaction_id_header",
+    "type": "text",
+    "uk": "Transaction ID",
+    "bn": "Transaction ID"
+  },
+  {
+    "key": "no_transactions_title",
+    "type": "text",
+    "uk": "No Transactions Found",
+    "bn": "No Transactions Found"
+  },
+  {
+    "key": "no_transactions_text",
+    "type": "text",
+    "uk": "It looks like you haven't made any payments yet.",
+    "bn": "It looks like you haven't made any payments yet."
+  }
+]

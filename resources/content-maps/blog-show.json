@@ -1,0 +1,74 @@
+[
+  {
+    "key": "breadcrumb_home",
+    "type": "text",
+    "uk": "Home",
+    "bn": "Home"
+  },
+  {
+    "key": "breadcrumb_blog",
+    "type": "text",
+    "uk": "Blog",
+    "bn": "Blog"
+  },
+  {
+    "key": "comment_form_title",
+    "type": "text",
+    "uk": "Leave a Comment",
+    "bn": "Leave a Comment"
+  },
+  {
+    "key": "form_name_label",
+    "type": "html",
+    "uk": "Name <span class=\"text-brand-crimson\">*</span>",
+    "bn": "Name <span class=\"text-brand-crimson\">*</span>"
+  },
+  {
+    "key": "form_name_placeholder",
+    "type": "text",
+    "uk": "Your name",
+    "bn": "Your name"
+  },
+  {
+    "key": "form_email_label",
+    "type": "text",
+    "uk": "Email",
+    "bn": "Email"
+  },
+  {
+    "key": "form_email_placeholder",
+    "type": "text",
+    "uk": "your@email.com (optional)",
+    "bn": "your@email.com (optional)"
+  },
+  {
+    "key": "form_comment_label",
+    "type": "html",
+    "uk": "Comment <span class=\"text-brand-crimson\">*</span>",
+    "bn": "Comment <span class=\"text-brand-crimson\">*</span>"
+  },
+  {
+    "key": "form_comment_placeholder",
+    "type": "text",
+    "uk": "Share your thoughts...",
+    "bn": "Share your thoughts..."
+  },
+  {
+    "key": "form_note",
+    "type": "text",
+    "uk": "Comments are reviewed before they appear publicly.",
+    "bn": "Comments are reviewed before they appear publicly."
+  },
+  {
+    "key": "form_submit_button",
+    "type": "text",
+    "uk": "Submit Comment",
+    "bn": "Submit Comment"
+  },
+  {
+    "key": "recent_posts_title",
+    "type": "text",
+    "uk": "More Articles",
+    "bn": "More Articles"
+  }
+]

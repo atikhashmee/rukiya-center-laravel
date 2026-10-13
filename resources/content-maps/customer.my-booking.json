@@ -1,0 +1,98 @@
+[
+  {
+    "key": "welcome_title",
+    "type": "text",
+    "uk": "Welcome Back,",
+    "bn": "Welcome Back,"
+  },
+  {
+    "key": "recent_bookings_title",
+    "type": "text",
+    "uk": "Recent Bookings",
+    "bn": "Recent Bookings"
+  },
+  {
+    "key": "no_bookings_title",
+    "type": "text",
+    "uk": "No Bookings Found",
+    "bn": "No Bookings Found"
+  },
+  {
+    "key": "no_bookings_text",
+    "type": "text",
+    "uk": "It looks like you haven't booked any services yet. Start your healing journey now!",
+    "bn": "It looks like you haven't booked any services yet. Start your healing journey now!"
+  },
+  {
+    "key": "book_service_button",
+    "type": "text",
+    "uk": "Book a Service",
+    "bn": "Book a Service"
+  },
+  {
+    "key": "table_service_header",
+    "type": "text",
+    "uk": "Service",
+    "bn": "Service"
+  },
+  {
+    "key": "table_date_header",
+    "type": "text",
+    "uk": "Date",
+    "bn": "Date"
+  },
+  {
+    "key": "table_amount_header",
+    "type": "text",
+    "uk": "Amount",
+    "bn": "Amount"
+  },
+  {
+    "key": "table_payment_header",
+    "type": "text",
+    "uk": "Payment",
+    "bn": "Payment"
+  },
+  {
+    "key": "table_status_header",
+    "type": "text",
+    "uk": "Status",
+    "bn": "Status"
+  },
+  {
+    "key": "card_booking_id_label",
+    "type": "text",
+    "uk": "Booking ID:",
+    "bn": "Booking ID:"
+  },
+  {
+    "key": "card_date_label",
+    "type": "text",
+    "uk": "Date:",
+    "bn": "Date:"
+  },
+  {
+    "key": "card_amount_label",
+    "type": "text",
+    "uk": "Amount:",
+    "bn": "Amount:"
+  },
+  {
+    "key": "card_payment_label",
+    "type": "text",
+    "uk": "Payment:",
+    "bn": "Payment:"
+  },
+  {
+    "key": "card_status_label",
+    "type": "text",
+    "uk": "Status:",
+    "bn": "Status:"
+  },
+  {
+    "key": "load_more_button",
+    "type": "text",
+    "uk": "Load More Bookings",
+    "bn": "Load More Bookings"
+  }
+]

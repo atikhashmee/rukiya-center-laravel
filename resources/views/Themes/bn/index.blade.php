@@ -9,33 +9,33 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
                     <div class="inline-block px-3 py-1 bg-brand-gold/15 text-brand-goldDark text-xs font-semibold tracking-wider rounded-md uppercase">
-                        কুরআন ও সুন্নাহভিত্তিক নির্ভরযোগ্য সহায়তা
+                        {{ content('index', 'hero_eyebrow', 'কুরআন ও সুন্নাহভিত্তিক নির্ভরযোগ্য সহায়তা') }}
                     </div>
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-brand-teal leading-tight">
-                        বিশুদ্ধ রুকইয়াহ ও <span class="italic text-brand-gold">ইসলামিক আধ্যাত্মিক দিকনির্দেশনা</span>
+                        {!! content_html('index', 'hero_title', 'বিশুদ্ধ রুকইয়াহ ও <span class="italic text-brand-gold">ইসলামিক আধ্যাত্মিক দিকনির্দেশনা</span>') !!}
                     </h1>
                     <p class="text-slate-600 max-w-xl mx-auto lg:mx-0 text-sm sm:text-base">
-                       কুরআন ও সুন্নাহর আলোকে রুকইয়াহ, ইস্তিখারা পরামর্শ এবং ইসলামিক আধ্যাত্মিক সহায়তা — বাংলাদেশের ব্যক্তি ও পরিবারের জন্য, অনলাইনে দেশের বাইরেও।
+                       {{ content('index', 'hero_text', 'কুরআন ও সুন্নাহর আলোকে রুকইয়াহ, ইস্তিখারা পরামর্শ এবং ইসলামিক আধ্যাত্মিক সহায়তা — বাংলাদেশের ব্যক্তি ও পরিবারের জন্য, অনলাইনে দেশের বাইরেও।') }}
                      <div class="border-l-4 border-brand-gold pl-4 my-6">
     <p class="text-2xl text-brand-teal font-arabic leading-loose">
         وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ لِّلْمُؤْمِنِينَ
     </p>
 
     <p class="mt-2 text-sm italic text-slate-600">
-        “আর আমি কুরআনে এমন বিষয় অবতীর্ণ করি যা মুমিনদের জন্য আরোগ্য ও রহমত।”
+        {{ content('index', 'hero_ayah_translation', '“আর আমি কুরআনে এমন বিষয় অবতীর্ণ করি যা মুমিনদের জন্য আরোগ্য ও রহমত।”') }}
     </p>
 
     <p class="text-xs text-brand-gold font-semibold mt-1">
-        সূরা আল-ইসরা (১৭:৮২)
+        {{ content('index', 'hero_ayah_reference', 'সূরা আল-ইসরা (১৭:৮২)') }}
     </p>
 </div>  
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                         <a href="{{ route('wizard.index') }}" class="w-full sm:w-auto text-center bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3.5 rounded-full font-semibold transition shadow">
-                            রুকইয়াহ সেশন বুক করুন
+                            {{ content('index', 'hero_button_primary', 'রুকইয়াহ সেশন বুক করুন') }}
                         </a>
                         <a href="{{ route('wizard.index') }}" class="w-full sm:w-auto text-center border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-8 py-3 rounded-full font-semibold transition">
-                            আমাদের সেবাসমূহ দেখুন
+                            {{ content('index', 'hero_button_secondary', 'আমাদের সেবাসমূহ দেখুন') }}
                         </a>
                     </div>
                 </div>
@@ -45,10 +45,10 @@
     alt="কুরআন ও সুন্নাহভিত্তিক রুকইয়াহ সেবা"
     class="w-full h-80 object-cover rounded-2xl shadow-xl border border-brand-gold/20">
     <div class="bg-brand-cream border border-brand-gold/20 rounded-2xl p-6 text-center space-y-8">
-                    <span class="text-xs font-bold text-brand-crimson tracking-widest uppercase block">⚠️ সম্মানজনক পরামর্শ নীতিমালা</span>
-                    <h3 class="text-lg font-serif font-bold text-brand-teal">নিরাপদ, সম্মানজনক ও গোপনীয় সেবা</h3>
+                    <span class="text-xs font-bold text-brand-crimson tracking-widest uppercase block">{{ content('index', 'standards_eyebrow', '⚠️ সম্মানজনক পরামর্শ নীতিমালা') }}</span>
+                    <h3 class="text-lg font-serif font-bold text-brand-teal">{{ content('index', 'standards_title', 'নিরাপদ, সম্মানজনক ও গোপনীয় সেবা') }}</h3>
                     <p class="text-xs text-slate-500 leading-relaxed">
-                        প্রতিটি পরামর্শ পেশাদারিত্ব, গোপনীয়তা এবং বিশুদ্ধ ইসলামি নীতিমালা মেনে পরিচালিত হয়।
+                        {{ content('index', 'standards_text', 'প্রতিটি পরামর্শ পেশাদারিত্ব, গোপনীয়তা এবং বিশুদ্ধ ইসলামি নীতিমালা মেনে পরিচালিত হয়।') }}
                         <div class="flex flex-wrap justify-center lg:justify-start gap-4 text-sm font-medium text-brand-teal">
     <span>✓ কুরআন ও সুন্নাহভিত্তিক</span>
     <span>✓ বাংলাদেশে সেবা</span>
@@ -65,9 +65,9 @@
     <section id="services" class="py-20 bg-brand-cream/50 border-y border-brand-gold/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div class="text-center max-w-2xl mx-auto space-y-2">
-                <span class="text-brand-crimson text-xs font-bold tracking-widest uppercase">আমাদের সেবাসমূহ</span>
-                <h2 class="text-3xl font-serif font-bold text-brand-teal">আমাদের ইসলামিক সেবাসমূহ</h2>
-                <p class="text-sm text-slate-500">কুরআন ও বিশুদ্ধ সুন্নাহর ভিত্তিতে সহানুভূতিশীল ইসলামিক সহায়তা। প্রতিটি সেবা গোপনীয়তা ও পেশাদারিত্বের সঙ্গে প্রদান করা হয়।</p>
+                <span class="text-brand-crimson text-xs font-bold tracking-widest uppercase">{{ content('index', 'services_eyebrow', 'আমাদের সেবাসমূহ') }}</span>
+                <h2 class="text-3xl font-serif font-bold text-brand-teal">{{ content('index', 'services_title', 'আমাদের ইসলামিক সেবাসমূহ') }}</h2>
+                <p class="text-sm text-slate-500">{{ content('index', 'services_text', 'কুরআন ও বিশুদ্ধ সুন্নাহর ভিত্তিতে সহানুভূতিশীল ইসলামিক সহায়তা। প্রতিটি সেবা গোপনীয়তা ও পেশাদারিত্বের সঙ্গে প্রদান করা হয়।') }}</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -76,9 +76,9 @@
                     <div class="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center">
                         <svg class="w-6 h-6 text-brand-teal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20.3c-.9 1.1-2.2 1.7-3.6 1.7H4c-1.1 0-2-.9-2-2v-4c0-.9.6-1.7 1.4-1.9L22 4"/><path d="M12 12V3h10v9"/></svg>
                     </div>
-                    <h3 class="font-serif font-bold text-brand-teal text-lg">ইসলামিক কাউন্সেলিং</h3>
+                    <h3 class="font-serif font-bold text-brand-teal text-lg">{{ content('index', 'service_1_title', 'ইসলামিক কাউন্সেলিং') }}</h3>
                     <p class="text-xs text-slate-500 leading-relaxed flex-grow">
-                        আবেগজনিত, আধ্যাত্মিক ও ব্যক্তিগত সমস্যায় প্রজ্ঞা ও সহানুভূতির সঙ্গে পথ দেখাতে গোপনীয় একান্ত ইসলামিক কাউন্সেলিং।
+                        {{ content('index', 'service_1_text', 'আবেগজনিত, আধ্যাত্মিক ও ব্যক্তিগত সমস্যায় প্রজ্ঞা ও সহানুভূতির সঙ্গে পথ দেখাতে গোপনীয় একান্ত ইসলামিক কাউন্সেলিং।') }}
                     </p>
                     <a href="{{ route('service', ['name' => 'counseling']) }}" class="inline-block text-brand-gold text-sm font-semibold hover:text-brand-goldDark transition">বিস্তারিত দেখুন →</a>
                 </div>
@@ -90,7 +90,7 @@
                     </div>
                     <h3 class="font-serif font-bold text-brand-teal text-lg">বিশুদ্ধ রুকইয়াহ</h3>
                     <p class="text-xs text-slate-500 leading-relaxed flex-grow">
-                        আধ্যাত্মিক আরোগ্য, সুরক্ষা ও প্রশান্তির জন্য কুরআন ও সুন্নাহভিত্তিক বিশুদ্ধ রুকইয়াহ, আন্তরিকতা ও পেশাদারিত্বের সঙ্গে পরিচালিত।
+                        {{ content('index', 'service_2_text', 'আধ্যাত্মিক আরোগ্য, সুরক্ষা ও প্রশান্তির জন্য কুরআন ও সুন্নাহভিত্তিক বিশুদ্ধ রুকইয়াহ, আন্তরিকতা ও পেশাদারিত্বের সঙ্গে পরিচালিত।') }}
                     </p>
                     <a href="{{ route('service', ['name' => 'rukiya']) }}" class="inline-block text-brand-gold text-sm font-semibold hover:text-brand-goldDark transition">বিস্তারিত দেখুন →</a>
                 </div>
@@ -100,9 +100,9 @@
                     <div class="w-12 h-12 bg-brand-teal/10 rounded-xl flex items-center justify-center">
                         <svg class="w-6 h-6 text-brand-teal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-9 9Z"/><path d="M12 3v18"/><path d="M3 12h18"/><path d="m14 10-2 4-2-4 4-2Z"/></svg>
                     </div>
-                    <h3 class="font-serif font-bold text-brand-teal text-lg">ইস্তিখারা দিকনির্দেশনা</h3>
+                    <h3 class="font-serif font-bold text-brand-teal text-lg">{{ content('index', 'service_3_title', 'ইস্তিখারা দিকনির্দেশনা') }}</h3>
                     <p class="text-xs text-slate-500 leading-relaxed flex-grow">
-                        জীবনের গুরুত্বপূর্ণ সিদ্ধান্তের আগে বিশুদ্ধ ইস্তিখারা ও বাস্তবভিত্তিক ইসলামিক পরামর্শের মাধ্যমে আল্লাহর নির্দেশনা প্রার্থনা করুন।
+                        {{ content('index', 'service_3_text', 'জীবনের গুরুত্বপূর্ণ সিদ্ধান্তের আগে বিশুদ্ধ ইস্তিখারা ও বাস্তবভিত্তিক ইসলামিক পরামর্শের মাধ্যমে আল্লাহর নির্দেশনা প্রার্থনা করুন।') }}
                     </p>
                     <a href="{{ route('service', ['name' => 'istekhara']) }}" class="inline-block text-brand-gold text-sm font-semibold hover:text-brand-goldDark transition">বিস্তারিত দেখুন →</a>
                 </div>
@@ -115,7 +115,7 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
                 <h2 class="text-3xl font-serif font-bold text-brand-teal">পরামর্শ প্রক্রিয়া যেভাবে চলে </h2>
-                <p class="text-sm text-slate-500">প্রতিটি পরামর্শ সহানুভূতি, গোপনীয়তা এবং কুরআন ও বিশুদ্ধ সুন্নাহর কঠোর অনুসরণে পরিচালিত হয়।</p>
+                <p class="text-sm text-slate-500">{{ content('index', 'process_text', 'প্রতিটি পরামর্শ সহানুভূতি, গোপনীয়তা এবং কুরআন ও বিশুদ্ধ সুন্নাহর কঠোর অনুসরণে পরিচালিত হয়।') }}</p>
             </div>
 
             <div class="w-full max-w-7xl mx-auto px-4">
@@ -128,7 +128,7 @@
             </span>
 
             <h3 class="font-serif font-bold text-brand-teal text-lg">
-                📋 প্রাথমিক পরামর্শ
+                {{ content('index', 'step_1_title', '📋 প্রাথমিক পরামর্শ') }}
             </h3>
 
             <p class="text-sm text-slate-500 leading-relaxed">
@@ -144,7 +144,7 @@
             </span>
 
             <h3 class="font-serif font-bold text-brand-teal text-lg">
-                📖 বিশুদ্ধ রুকইয়াহ সেশন
+                {{ content('index', 'step_2_title', '📖 বিশুদ্ধ রুকইয়াহ সেশন') }}
             </h3>
 
             <p class="text-sm text-slate-500 leading-relaxed">
@@ -160,7 +160,7 @@
             </span>
 
             <h3 class="font-serif font-bold text-brand-teal text-lg">
-                🤝 পরবর্তী সহায়তা
+                {{ content('index', 'step_3_title', '🤝 পরবর্তী সহায়তা') }}
             </h3>
 
             <p class="text-sm text-slate-500 leading-relaxed">
@@ -178,9 +178,9 @@
     <section id="about" class="py-20 bg-brand-cream/50 border-t border-brand-gold/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div class="text-center max-w-2xl mx-auto space-y-2">
-                <h2 class="text-3xl font-serif font-bold text-brand-teal">ক্লায়েন্টদের অভিজ্ঞতা</h2>
+                <h2 class="text-3xl font-serif font-bold text-brand-teal">{{ content('index', 'testimonials_title', 'ক্লায়েন্টদের অভিজ্ঞতা') }}</h2>
                 <p class="text-xs text-slate-500 text-center mt-8 italic">
-মতামতগুলো ব্যক্তিগত অভিজ্ঞতার প্রতিফলন। ফলাফল ব্যক্তিভেদে ও আল্লাহর ইচ্ছা অনুযায়ী ভিন্ন হতে পারে।
+{{ content('index', 'testimonials_note', 'মতামতগুলো ব্যক্তিগত অভিজ্ঞতার প্রতিফলন। ফলাফল ব্যক্তিভেদে ও আল্লাহর ইচ্ছা অনুযায়ী ভিন্ন হতে পারে।') }}
 </p>
             </div>
 
@@ -247,7 +247,7 @@
 </p>
 
         <h2 class="text-4xl font-serif font-bold text-brand-teal mb-4">
-           আত্মবিশ্বাসের সঙ্গে আপনার যাত্রা শুরু করুন
+           {{ content('index', 'cta_title', 'আত্মবিশ্বাসের সঙ্গে আপনার যাত্রা শুরু করুন') }}
         </h2>
 
         <p class="text-slate-600 max-w-2xl mx-auto mb-10">
@@ -256,7 +256,7 @@
 
         <a href="{{ route('wizard.index') }}"
            class="inline-block bg-brand-gold hover:bg-brand-goldDark text-white px-10 py-4 rounded-full font-semibold transition">
-            পরামর্শের জন্য বুক করুন
+            {{ content('index', 'cta_button', 'পরামর্শের জন্য বুক করুন') }}
         </a>
 
     </div>
@@ -300,7 +300,7 @@
                 class="w-full sm:w-auto px-8 py-3 bg-brand-gold
                        hover:bg-brand-goldDark text-white rounded-xl
                        text-sm font-semibold transition">
-                সাবস্ক্রাইব
+                {{ content('index', 'newsletter_button', 'সাবস্ক্রাইব') }}
             </button>
 
         </form>

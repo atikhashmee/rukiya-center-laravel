@@ -19,7 +19,7 @@
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                         <a href="{{ route('wizard.index') }}" class="w-full sm:w-auto text-center bg-brand-gold hover:bg-brand-goldDark text-white px-8 py-3.5 rounded-full font-semibold transition shadow">
-                            Book a Ruqyah Session
+                            {{ content('index', 'hero_button_primary', 'Book a Ruqyah Session') }}
                         </a>
                         <a href="{{ route('wizard.index') }}" class="w-full sm:w-auto text-center border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-8 py-3 rounded-full font-semibold transition">
                             Browse Our Services
@@ -41,7 +41,7 @@
     <section id="services" class="py-20 bg-brand-cream/50 border-y border-brand-gold/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             <div class="text-center max-w-2xl mx-auto space-y-2">
-                <span class="text-brand-crimson text-xs font-bold tracking-widest uppercase">Our Healing Offerings</span>
+                <span class="text-brand-crimson text-xs font-bold tracking-widest uppercase">{{ content('index', 'services_eyebrow', 'Our Healing Offerings') }}</span>
                 <h2 class="text-3xl font-serif font-bold text-brand-teal">Prophetic Remedies & Spiritual Guidance</h2>
                 <p class="text-sm text-slate-500">Authentic services based on Qur'an and Sunnah for spiritual restoration and healing.</p>
             </div>
@@ -151,7 +151,7 @@
     <section class="py-16 bg-brand-teal">
         <div class="max-w-3xl mx-auto text-center px-4 sm:px-6 lg:px-8 space-y-6">
             <h3 class="text-2xl font-serif font-bold text-white">Stay Aligned: Get Our Spiritual Updates</h3>
-            <p class="text-sm text-slate-300">Subscribe to our newsletter for exclusive insights into new healing services and special promotions.</p>
+            <p class="text-sm text-slate-300">{{ content('index', 'newsletter_button', 'Subscribe') }} to our newsletter for exclusive insights into new healing services and special promotions.</p>
             <form action="#" method="POST" class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
                 @csrf
                 <input 

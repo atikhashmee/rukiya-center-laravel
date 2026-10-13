@@ -1,0 +1,56 @@
+[
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Your Cart",
+    "bn": "Your Cart"
+  },
+  {
+    "key": "clear_cart_button",
+    "type": "text",
+    "uk": "Clear Cart",
+    "bn": "Clear Cart"
+  },
+  {
+    "key": "continue_shopping_link",
+    "type": "text",
+    "uk": "Continue Shopping",
+    "bn": "Continue Shopping"
+  },
+  {
+    "key": "total_label",
+    "type": "text",
+    "uk": "Total:",
+    "bn": "Total:"
+  },
+  {
+    "key": "checkout_button",
+    "type": "text",
+    "uk": "Proceed to Checkout",
+    "bn": "Proceed to Checkout"
+  },
+  {
+    "key": "empty_title",
+    "type": "text",
+    "uk": "Your cart is empty",
+    "bn": "Your cart is empty"
+  },
+  {
+    "key": "empty_text",
+    "type": "text",
+    "uk": "Looks like you haven't added any products yet.",
+    "bn": "Looks like you haven't added any products yet."
+  },
+  {
+    "key": "empty_button",
+    "type": "text",
+    "uk": "Browse Shop",
+    "bn": "Browse Shop"
+  },
+  {
+    "key": "remove_label",
+    "type": "text",
+    "uk": "Remove",
+    "bn": "Remove"
+  }
+]

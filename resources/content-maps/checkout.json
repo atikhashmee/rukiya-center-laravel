@@ -1,0 +1,158 @@
+[
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Secure Checkout",
+    "bn": "Secure Checkout"
+  },
+  {
+    "key": "hero_text",
+    "type": "text",
+    "uk": "You are one step away from confirming your order.",
+    "bn": "You are one step away from confirming your order."
+  },
+  {
+    "key": "payment_title",
+    "type": "text",
+    "uk": "Payment Details",
+    "bn": "Payment Details"
+  },
+  {
+    "key": "tab_card",
+    "type": "text",
+    "uk": "Credit/Debit Card",
+    "bn": "Credit/Debit Card"
+  },
+  {
+    "key": "tab_paypal",
+    "type": "text",
+    "uk": "PayPal (Later)",
+    "bn": "PayPal (Later)"
+  },
+  {
+    "key": "tab_transfer",
+    "type": "text",
+    "uk": "Bank Transfer (Later)",
+    "bn": "Bank Transfer (Later)"
+  },
+  {
+    "key": "form_email_label",
+    "type": "text",
+    "uk": "Email Address",
+    "bn": "Email Address"
+  },
+  {
+    "key": "form_email_placeholder",
+    "type": "text",
+    "uk": "Enter your email",
+    "bn": "Enter your email"
+  },
+  {
+    "key": "form_card_label",
+    "type": "text",
+    "uk": "Card Information",
+    "bn": "Card Information"
+  },
+  {
+    "key": "form_country_label",
+    "type": "text",
+    "uk": "Country",
+    "bn": "Country"
+  },
+  {
+    "key": "form_country_placeholder",
+    "type": "text",
+    "uk": "Select Country...",
+    "bn": "Select Country..."
+  },
+  {
+    "key": "form_country_gb",
+    "type": "text",
+    "uk": "United Kingdom",
+    "bn": "United Kingdom"
+  },
+  {
+    "key": "form_country_us",
+    "type": "text",
+    "uk": "United States",
+    "bn": "United States"
+  },
+  {
+    "key": "form_save_card_label",
+    "type": "text",
+    "uk": "Securely save my card for future payments",
+    "bn": "Securely save my card for future payments"
+  },
+  {
+    "key": "form_small_print",
+    "type": "text",
+    "uk": "Payments secured by Stripe. PCI Compliant.",
+    "bn": "Payments secured by Stripe. PCI Compliant."
+  },
+  {
+    "key": "summary_title",
+    "type": "text",
+    "uk": "Order Summary",
+    "bn": "Order Summary"
+  },
+  {
+    "key": "summary_booking_id_label",
+    "type": "text",
+    "uk": "Booking ID:",
+    "bn": "Booking ID:"
+  },
+  {
+    "key": "summary_subtotal_label",
+    "type": "text",
+    "uk": "Subtotal",
+    "bn": "Subtotal"
+  },
+  {
+    "key": "summary_service_fee_label",
+    "type": "text",
+    "uk": "Service Fee",
+    "bn": "Service Fee"
+  },
+  {
+    "key": "summary_total_label",
+    "type": "text",
+    "uk": "Order Total",
+    "bn": "Order Total"
+  },
+  {
+    "key": "summary_booking_note",
+    "type": "text",
+    "uk": "Your session will be confirmed instantly upon successful payment.",
+    "bn": "Your session will be confirmed instantly upon successful payment."
+  },
+  {
+    "key": "order_number_label",
+    "type": "text",
+    "uk": "Order #",
+    "bn": "Order #"
+  },
+  {
+    "key": "order_subtotal_label",
+    "type": "text",
+    "uk": "Subtotal",
+    "bn": "Subtotal"
+  },
+  {
+    "key": "order_shipping_label",
+    "type": "text",
+    "uk": "Shipping",
+    "bn": "Shipping"
+  },
+  {
+    "key": "order_total_label",
+    "type": "text",
+    "uk": "Order Total",
+    "bn": "Order Total"
+  },
+  {
+    "key": "order_note",
+    "type": "text",
+    "uk": "Your order will be processed upon successful payment.",
+    "bn": "Your order will be processed upon successful payment."
+  }
+]

@@ -10,40 +10,40 @@
                     ⏳
                 </div>
 
-                <h1 class="text-3xl font-serif font-bold text-brand-teal">Booking Received, Review Required</h1>
+                <h1 class="text-3xl font-serif font-bold text-brand-teal">{{ content('booking-pending', 'pending_title', 'Booking Received, Review Required') }}</h1>
 
                 <p class="text-sm text-slate-600">
-                    Your request has been successfully submitted! It is now under specialist review.
+                    {{ content('booking-pending', 'pending_text', 'Your request has been successfully submitted! It is now under specialist review.') }}
                 </p>
 
                 <div class="bg-white border border-brand-gold/20 p-6 rounded-2xl text-left space-y-4">
-                    <h2 class="text-lg font-serif font-bold text-brand-teal">Important Next Steps</h2>
+                    <h2 class="text-lg font-serif font-bold text-brand-teal">{{ content('booking-pending', 'next_steps_title', 'Important Next Steps') }}</h2>
                     <ul class="space-y-3 text-sm text-slate-600">
                         <li class="flex items-start gap-2">
                             <span class="text-brand-gold mt-0.5">✓</span>
-                            A spiritual guru will personally assess your request and the information you provided to determine the complexity and precise requirements for Deep Healing.
+                            {{ content('booking-pending', 'next_step_assessment', 'A spiritual guru will personally assess your request and the information you provided to determine the complexity and precise requirements for Deep Healing.') }}
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-brand-gold mt-0.5">✓</span>
-                            We will contact you via email within 48 hours with a personalized follow-up and the finalized price/assessment for your session.
+                            {{ content('booking-pending', 'next_step_followup', 'We will contact you via email within 48 hours with a personalized follow-up and the finalized price/assessment for your session.') }}
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-brand-gold mt-0.5">✓</span>
-                            No payment is due yet. You will receive a secure payment link in the follow-up email.
+                            {{ content('booking-pending', 'next_step_payment', 'No payment is due yet. You will receive a secure payment link in the follow-up email.') }}
                         </li>
                     </ul>
                 </div>
 
                 <p class="text-sm text-slate-500">
-                    Thank you for your patience as we prepare your personalized healing path.
+                    {{ content('booking-pending', 'patience_text', 'Thank you for your patience as we prepare your personalized healing path.') }}
                 </p>
 
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
                     <a href="{{ route('customer.mybooking') }}" class="w-full sm:w-auto bg-brand-teal hover:bg-brand-navy text-white px-6 py-3 rounded-full text-sm font-semibold transition shadow">
-                        View Pending Booking
+                        {{ content('booking-pending', 'view_booking_button', 'View Pending Booking') }}
                     </a>
                     <a href="{{ route('home') }}" class="w-full sm:w-auto border-2 border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white px-6 py-3 rounded-full text-sm font-semibold transition">
-                        Return to Homepage
+                        {{ content('booking-pending', 'home_button', 'Return to Homepage') }}
                     </a>
                 </div>
             </div>

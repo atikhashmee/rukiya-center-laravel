@@ -1,0 +1,128 @@
+[
+  {
+    "key": "hero_title",
+    "type": "html",
+    "uk": "Secure Your Path to <span class=\"italic text-brand-gold\">Inner Harmony</span>",
+    "bn": "Secure Your Path to <span class=\"italic text-brand-gold\">Inner Harmony</span>"
+  },
+  {
+    "key": "summary_title",
+    "type": "text",
+    "uk": "Your Chosen Service",
+    "bn": "Your Chosen Service"
+  },
+  {
+    "key": "summary_category_label",
+    "type": "text",
+    "uk": "Category:",
+    "bn": "Category:"
+  },
+  {
+    "key": "summary_value_label",
+    "type": "text",
+    "uk": "Service Value:",
+    "bn": "Service Value:"
+  },
+  {
+    "key": "summary_change_button",
+    "type": "text",
+    "uk": "Change Service Option",
+    "bn": "Change Service Option"
+  },
+  {
+    "key": "form_title",
+    "type": "text",
+    "uk": "Your Booking Details",
+    "bn": "Your Booking Details"
+  },
+  {
+    "key": "form_full_name_label",
+    "type": "text",
+    "uk": "Full Name",
+    "bn": "Full Name"
+  },
+  {
+    "key": "form_email_label",
+    "type": "text",
+    "uk": "Email Address",
+    "bn": "Email Address"
+  },
+  {
+    "key": "form_mother_name_label",
+    "type": "text",
+    "uk": "Mother's Name",
+    "bn": "Mother's Name"
+  },
+  {
+    "key": "form_phone_label",
+    "type": "text",
+    "uk": "Phone Number (Required for Assessment)",
+    "bn": "Phone Number (Required for Assessment)"
+  },
+  {
+    "key": "form_inquiry_label",
+    "type": "text",
+    "uk": "Describe Your Inquiry (Briefly)",
+    "bn": "Describe Your Inquiry (Briefly)"
+  },
+  {
+    "key": "form_small_print",
+    "type": "text",
+    "uk": "Exact session timing and further instructions will be confirmed via email after successful payment.",
+    "bn": "Exact session timing and further instructions will be confirmed via email after successful payment."
+  },
+  {
+    "key": "payment_title",
+    "type": "text",
+    "uk": "Finalize Payment",
+    "bn": "Finalize Payment"
+  },
+  {
+    "key": "payment_total_label",
+    "type": "text",
+    "uk": "Total Amount Due:",
+    "bn": "Total Amount Due:"
+  },
+  {
+    "key": "payment_min_donation_label",
+    "type": "text",
+    "uk": "Min. Donation:",
+    "bn": "Min. Donation:"
+  },
+  {
+    "key": "payment_assessment_required",
+    "type": "text",
+    "uk": "Assessment Required",
+    "bn": "Assessment Required"
+  },
+  {
+    "key": "payment_free",
+    "type": "text",
+    "uk": "Free",
+    "bn": "Free"
+  },
+  {
+    "key": "paypal_button",
+    "type": "text",
+    "uk": "Pay Securely with PayPal",
+    "bn": "Pay Securely with PayPal"
+  },
+  {
+    "key": "stripe_button",
+    "type": "text",
+    "uk": "Pay with Card (via Stripe)",
+    "bn": "Pay with Card (via Stripe)"
+  },
+  {
+    "key": "assessment_button",
+    "type": "text",
+    "uk": "Request Assessment & Book",
+    "bn": "Request Assessment & Book"
+  },
+  {
+    "key": "free_button",
+    "type": "text",
+    "uk": "Book Free Consultation",
+    "bn": "Book Free Consultation"
+  }
+]

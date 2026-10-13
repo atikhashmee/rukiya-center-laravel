@@ -4,6 +4,7 @@ use App\Http\Middleware\AuthenticateCustomer;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\AdminRegionContext;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\InjectContentEditor;
 use App\Http\Middleware\ResolveRegion;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ResolveRegion::class,
             HandleAppearance::class,
             HandleInertiaRequests::class,
+            InjectContentEditor::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 

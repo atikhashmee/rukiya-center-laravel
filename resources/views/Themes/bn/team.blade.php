@@ -6,15 +6,15 @@
     <section class="py-16 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto space-y-3 mb-14">
-                <span class="text-brand-crimson text-xs font-bold tracking-widest uppercase">আমাদের টিম</span>
-                <h1 class="text-3xl sm:text-4xl font-serif font-bold text-brand-teal">আমাদের বিশেষজ্ঞদের সঙ্গে পরিচিত হোন</h1>
+                <span class="text-brand-crimson text-xs font-bold tracking-widest uppercase">{{ content('team', 'hero_eyebrow', 'আমাদের টিম') }}</span>
+                <h1 class="text-3xl sm:text-4xl font-serif font-bold text-brand-teal">{{ content('team', 'hero_title', 'আমাদের বিশেষজ্ঞদের সঙ্গে পরিচিত হোন') }}</h1>
                 <p class="text-sm text-slate-500 leading-relaxed">
-                    অভিজ্ঞ বিশেষজ্ঞদের মাধ্যমে রুকইয়াহ, ইস্তিখারা দিকনির্দেশনা ও ইসলামিক কাউন্সেলিং — যত্ন ও গোপনীয়তার সঙ্গে।
+                    {{ content('team', 'hero_text', 'অভিজ্ঞ বিশেষজ্ঞদের মাধ্যমে রুকইয়াহ, ইস্তিখারা দিকনির্দেশনা ও ইসলামিক কাউন্সেলিং — যত্ন ও গোপনীয়তার সঙ্গে।') }}
                 </p>
             </div>
 
             @if($instructors->isEmpty())
-                <p class="text-center text-sm text-slate-500 py-12">আমাদের টিমের তথ্য শীঘ্রই এখানে প্রকাশ করা হবে।</p>
+                <p class="text-center text-sm text-slate-500 py-12">{{ content('team', 'empty_state_text', 'আমাদের টিমের তথ্য শীঘ্রই এখানে প্রকাশ করা হবে।') }}</p>
             @else
                 {{-- Flex-wrap keeps the cards centred whatever the count, unlike a fixed grid --}}
                 <div class="flex flex-wrap justify-center gap-8">
@@ -59,14 +59,14 @@
 
                             @if($instructor->services->isNotEmpty())
                                 <div class="w-full border-t border-brand-gold/15 pt-4 space-y-1">
-                                    <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">সেবাসমূহ</p>
+                                    <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">{{ content('team', 'services_label', 'সেবাসমূহ') }}</p>
                                     <p class="text-xs text-slate-600 leading-relaxed">{{ $instructor->services->pluck('title')->join(' • ') }}</p>
                                 </div>
                             @endif
 
                             <a href="{{ route('wizard.index') }}"
                                class="mt-auto w-full inline-block text-center bg-brand-teal hover:bg-brand-navy text-white px-6 py-3 rounded-full text-sm font-semibold transition">
-                                অ্যাপয়েন্টমেন্ট নিন
+                                {{ content('team', 'cta_button', 'অ্যাপয়েন্টমেন্ট নিন') }}
                             </a>
                         </div>
                     @endforeach

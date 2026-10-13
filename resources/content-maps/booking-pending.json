@@ -1,0 +1,56 @@
+[
+  {
+    "key": "pending_title",
+    "type": "text",
+    "uk": "Booking Received, Review Required",
+    "bn": "Booking Received, Review Required"
+  },
+  {
+    "key": "pending_text",
+    "type": "text",
+    "uk": "Your request has been successfully submitted! It is now under specialist review.",
+    "bn": "Your request has been successfully submitted! It is now under specialist review."
+  },
+  {
+    "key": "next_steps_title",
+    "type": "text",
+    "uk": "Important Next Steps",
+    "bn": "Important Next Steps"
+  },
+  {
+    "key": "next_step_assessment",
+    "type": "text",
+    "uk": "A spiritual guru will personally assess your request and the information you provided to determine the complexity and precise requirements for Deep Healing.",
+    "bn": "A spiritual guru will personally assess your request and the information you provided to determine the complexity and precise requirements for Deep Healing."
+  },
+  {
+    "key": "next_step_followup",
+    "type": "text",
+    "uk": "We will contact you via email within 48 hours with a personalized follow-up and the finalized price/assessment for your session.",
+    "bn": "We will contact you via email within 48 hours with a personalized follow-up and the finalized price/assessment for your session."
+  },
+  {
+    "key": "next_step_payment",
+    "type": "text",
+    "uk": "No payment is due yet. You will receive a secure payment link in the follow-up email.",
+    "bn": "No payment is due yet. You will receive a secure payment link in the follow-up email."
+  },
+  {
+    "key": "patience_text",
+    "type": "text",
+    "uk": "Thank you for your patience as we prepare your personalized healing path.",
+    "bn": "Thank you for your patience as we prepare your personalized healing path."
+  },
+  {
+    "key": "view_booking_button",
+    "type": "text",
+    "uk": "View Pending Booking",
+    "bn": "View Pending Booking"
+  },
+  {
+    "key": "home_button",
+    "type": "text",
+    "uk": "Return to Homepage",
+    "bn": "Return to Homepage"
+  }
+]

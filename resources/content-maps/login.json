@@ -1,0 +1,56 @@
+[
+  {
+    "key": "signin_title",
+    "type": "text",
+    "uk": "Sign in to your account",
+    "bn": "Sign in to your account"
+  },
+  {
+    "key": "register_prompt_text",
+    "type": "text",
+    "uk": "Or",
+    "bn": "Or"
+  },
+  {
+    "key": "register_link_text",
+    "type": "text",
+    "uk": "register for a new account",
+    "bn": "register for a new account"
+  },
+  {
+    "key": "email_label",
+    "type": "text",
+    "uk": "Email Address",
+    "bn": "Email Address"
+  },
+  {
+    "key": "email_placeholder",
+    "type": "text",
+    "uk": "Email address",
+    "bn": "Email address"
+  },
+  {
+    "key": "password_label",
+    "type": "text",
+    "uk": "Password",
+    "bn": "Password"
+  },
+  {
+    "key": "password_placeholder",
+    "type": "text",
+    "uk": "Password",
+    "bn": "Password"
+  },
+  {
+    "key": "forgot_password_link",
+    "type": "text",
+    "uk": "Forgot your password?",
+    "bn": "Forgot your password?"
+  },
+  {
+    "key": "submit_button",
+    "type": "text",
+    "uk": "Sign in",
+    "bn": "Sign in"
+  }
+]

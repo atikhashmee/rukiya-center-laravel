@@ -1,0 +1,50 @@
+[
+  {
+    "key": "confirmed_title",
+    "type": "text",
+    "uk": "Booking Confirmed!",
+    "bn": "Booking Confirmed!"
+  },
+  {
+    "key": "confirmed_text",
+    "type": "text",
+    "uk": "Thank you for choosing DK Healing Centre. Your journey to spiritual well-being has begun.",
+    "bn": "Thank you for choosing DK Healing Centre. Your journey to spiritual well-being has begun."
+  },
+  {
+    "key": "next_steps_title",
+    "type": "text",
+    "uk": "What Happens Next?",
+    "bn": "What Happens Next?"
+  },
+  {
+    "key": "next_step_email",
+    "type": "text",
+    "uk": "You will receive an immediate email confirmation with your booking details, including the service summary and any pre-session requirements.",
+    "bn": "You will receive an immediate email confirmation with your booking details, including the service summary and any pre-session requirements."
+  },
+  {
+    "key": "next_step_counseling",
+    "type": "text",
+    "uk": "For Counseling sessions, a member of our team will contact you within 24 hours to schedule your 30-minute free consultation.",
+    "bn": "For Counseling sessions, a member of our team will contact you within 24 hours to schedule your 30-minute free consultation."
+  },
+  {
+    "key": "next_step_dashboard",
+    "type": "text",
+    "uk": "You can view and manage this booking anytime on your Profile Dashboard.",
+    "bn": "You can view and manage this booking anytime on your Profile Dashboard."
+  },
+  {
+    "key": "my_bookings_button",
+    "type": "text",
+    "uk": "Go to My Bookings",
+    "bn": "Go to My Bookings"
+  },
+  {
+    "key": "book_again_button",
+    "type": "text",
+    "uk": "Book Another Appointment",
+    "bn": "Book Another Appointment"
+  }
+]

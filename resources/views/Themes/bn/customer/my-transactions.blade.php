@@ -7,7 +7,7 @@
     <section class="relative py-20 bg-brand-teal">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
             <h1 class="text-4xl sm:text-5xl font-serif font-bold text-white leading-tight">
-                Welcome Back, <span class="italic text-brand-gold">{{ auth()->user()->name }}</span>!
+                {{ content('customer.my-transactions', 'welcome_title', 'Welcome Back,') }} <span class="italic text-brand-gold">{{ auth()->user()->name }}</span>!
             </h1>
         </div>
     </section>
@@ -22,11 +22,11 @@
                 <div class="lg:w-3/4 bg-brand-cream/50 border border-brand-gold/20 rounded-2xl overflow-hidden">
                     <!-- Table Header (Desktop) -->
                     <div class="hidden md:grid grid-cols-6 lg:grid-cols-7 gap-4 p-4 text-xs font-bold text-brand-teal border-b border-brand-gold/20 bg-white">
-                        <div class="col-span-2">Service / Item</div>
-                        <div class="col-span-1 text-center">Amount</div>
-                        <div class="col-span-1 text-center">Date</div>
-                        <div class="col-span-1 text-center">Status</div>
-                        <div class="col-span-1 lg:col-span-2 text-right">Transaction ID</div>
+                        <div class="col-span-2">{{ content('customer.my-transactions', 'table_service_header', 'Service / Item') }}</div>
+                        <div class="col-span-1 text-center">{{ content('customer.my-transactions', 'table_amount_header', 'Amount') }}</div>
+                        <div class="col-span-1 text-center">{{ content('customer.my-transactions', 'table_date_header', 'Date') }}</div>
+                        <div class="col-span-1 text-center">{{ content('customer.my-transactions', 'table_status_header', 'Status') }}</div>
+                        <div class="col-span-1 lg:col-span-2 text-right">{{ content('customer.my-transactions', 'table_transaction_id_header', 'Transaction ID') }}</div>
                     </div>
 
                     <!-- Transaction List Body -->
@@ -68,8 +68,8 @@
                     <!-- Empty State -->
                     @if ($transactions->isEmpty())
                         <div class="text-center p-12 text-slate-400">
-                            <p class="text-lg font-semibold text-slate-500">No Transactions Found</p>
-                            <p class="text-sm text-slate-400">It looks like you haven't made any payments yet.</p>
+                            <p class="text-lg font-semibold text-slate-500">{{ content('customer.my-transactions', 'no_transactions_title', 'No Transactions Found') }}</p>
+                            <p class="text-sm text-slate-400">{{ content('customer.my-transactions', 'no_transactions_text', 'It looks like you haven\'t made any payments yet.') }}</p>
                         </div>
                     @endif
                 </div>

@@ -1,0 +1,158 @@
+[
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Get in Touch",
+    "bn": "Get in Touch"
+  },
+  {
+    "key": "hero_text",
+    "type": "text",
+    "uk": "We are here to help you start your journey toward spiritual clarity and peace.",
+    "bn": "We are here to help you start your journey toward spiritual clarity and peace."
+  },
+  {
+    "key": "form_title",
+    "type": "text",
+    "uk": "Send Us a Message",
+    "bn": "Send Us a Message"
+  },
+  {
+    "key": "form_email_label",
+    "type": "text",
+    "uk": "Email Address",
+    "bn": "Email Address"
+  },
+  {
+    "key": "form_email_placeholder",
+    "type": "text",
+    "uk": "your.name@example.com",
+    "bn": "your.name@example.com"
+  },
+  {
+    "key": "form_subject_placeholder",
+    "type": "text",
+    "uk": "Inquiry about Rukiya session",
+    "bn": "Inquiry about Rukiya session"
+  },
+  {
+    "key": "form_message_label",
+    "type": "text",
+    "uk": "How can we help you?",
+    "bn": "How can we help you?"
+  },
+  {
+    "key": "form_message_placeholder",
+    "type": "text",
+    "uk": "I would like to know more about the personalized guidance process...",
+    "bn": "I would like to know more about the personalized guidance process..."
+  },
+  {
+    "key": "form_submit_button",
+    "type": "text",
+    "uk": "Send Inquiry",
+    "bn": "Send Inquiry"
+  },
+  {
+    "key": "locations_title",
+    "type": "text",
+    "uk": "Our Locations",
+    "bn": "Our Locations"
+  },
+  {
+    "key": "location_1_title",
+    "type": "text",
+    "uk": "Headquarters (Asia)",
+    "bn": "Headquarters (Asia)"
+  },
+  {
+    "key": "location_1_line_1",
+    "type": "text",
+    "uk": "123 Tranquility Lane, Gulshan-2,",
+    "bn": "123 Tranquility Lane, Gulshan-2,"
+  },
+  {
+    "key": "location_1_line_2",
+    "type": "text",
+    "uk": "Dhaka, Bangladesh 1212",
+    "bn": "Dhaka, Bangladesh 1212"
+  },
+  {
+    "key": "location_1_email",
+    "type": "text",
+    "uk": "asia@dkhealing.com",
+    "bn": "asia@dkhealing.com"
+  },
+  {
+    "key": "location_1_phone",
+    "type": "text",
+    "uk": "+880 1700 123 456",
+    "bn": "+880 1700 123 456"
+  },
+  {
+    "key": "location_2_line_1",
+    "type": "text",
+    "uk": "Unit 5, Wellness Center,",
+    "bn": "Unit 5, Wellness Center,"
+  },
+  {
+    "key": "location_2_line_2",
+    "type": "text",
+    "uk": "London, SW1A 0AA, UK",
+    "bn": "London, SW1A 0AA, UK"
+  },
+  {
+    "key": "location_2_email",
+    "type": "text",
+    "uk": "europe@dkhealing.com",
+    "bn": "europe@dkhealing.com"
+  },
+  {
+    "key": "location_2_phone",
+    "type": "text",
+    "uk": "+44 20 7946 0888",
+    "bn": "+44 20 7946 0888"
+  },
+  {
+    "key": "location_3_line_1",
+    "type": "text",
+    "uk": "45 Spirituality Rd, Suite 100,",
+    "bn": "45 Spirituality Rd, Suite 100,"
+  },
+  {
+    "key": "location_3_line_2",
+    "type": "text",
+    "uk": "New York, NY 10001, USA",
+    "bn": "New York, NY 10001, USA"
+  },
+  {
+    "key": "location_3_email",
+    "type": "text",
+    "uk": "usa@dkhealing.com",
+    "bn": "usa@dkhealing.com"
+  },
+  {
+    "key": "location_3_phone",
+    "type": "text",
+    "uk": "+1 212 555 1212",
+    "bn": "+1 212 555 1212"
+  },
+  {
+    "key": "form_subject_label",
+    "type": "text",
+    "uk": "Subject",
+    "bn": "Subject"
+  },
+  {
+    "key": "location_2_title",
+    "type": "text",
+    "uk": "European Office",
+    "bn": "European Office"
+  },
+  {
+    "key": "location_3_title",
+    "type": "text",
+    "uk": "North American Hub",
+    "bn": "North American Hub"
+  }
+]

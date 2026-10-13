@@ -1,0 +1,74 @@
+[
+  {
+    "key": "page_title",
+    "type": "text",
+    "uk": "Verify Your Email Address",
+    "bn": "Verify Your Email Address"
+  },
+  {
+    "key": "sent_link_text",
+    "type": "text",
+    "uk": "We've sent a verification link to",
+    "bn": "We've sent a verification link to"
+  },
+  {
+    "key": "check_inbox_text",
+    "type": "text",
+    "uk": "Please check your inbox and click the link to activate your account.",
+    "bn": "Please check your inbox and click the link to activate your account."
+  },
+  {
+    "key": "next_steps_title",
+    "type": "text",
+    "uk": "What to do next:",
+    "bn": "What to do next:"
+  },
+  {
+    "key": "next_step_one",
+    "type": "text",
+    "uk": "Check your inbox for an email from DK Healing Centre.",
+    "bn": "Check your inbox for an email from DK Healing Centre."
+  },
+  {
+    "key": "next_step_two",
+    "type": "text",
+    "uk": "If you don't see it, please check your spam or junk folder.",
+    "bn": "If you don't see it, please check your spam or junk folder."
+  },
+  {
+    "key": "next_step_three",
+    "type": "text",
+    "uk": "The verification link is valid for 24 hours.",
+    "bn": "The verification link is valid for 24 hours."
+  },
+  {
+    "key": "resend_button",
+    "type": "text",
+    "uk": "Resend Verification Email",
+    "bn": "Resend Verification Email"
+  },
+  {
+    "key": "continue_button",
+    "type": "text",
+    "uk": "Continue to Dashboard (After Verification)",
+    "bn": "Continue to Dashboard (After Verification)"
+  },
+  {
+    "key": "resend_success_message",
+    "type": "text",
+    "uk": "Verification email successfully resent! Check your inbox.",
+    "bn": "Verification email successfully resent! Check your inbox."
+  },
+  {
+    "key": "countdown_text_before",
+    "type": "text",
+    "uk": "You can resend the email again in",
+    "bn": "You can resend the email again in"
+  },
+  {
+    "key": "countdown_text_after",
+    "type": "text",
+    "uk": "seconds.",
+    "bn": "seconds."
+  }
+]

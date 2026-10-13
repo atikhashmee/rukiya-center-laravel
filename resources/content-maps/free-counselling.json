@@ -1,0 +1,80 @@
+[
+  {
+    "key": "hero_eyebrow",
+    "type": "text",
+    "uk": "WELCOME TO DK HEALING CENTRE",
+    "bn": "WELCOME TO DK HEALING CENTRE"
+  },
+  {
+    "key": "hero_title",
+    "type": "text",
+    "uk": "Free Initial Enquiry",
+    "bn": "Free Initial Enquiry"
+  },
+  {
+    "key": "hero_text",
+    "type": "html",
+    "uk": "Speak with an experienced Imam and Ruqyah Practitioner.<br>\n    Discuss your concerns and learn which service may be most suitable for your needs.",
+    "bn": "Speak with an experienced Imam and Ruqyah Practitioner.<br>\n    Discuss your concerns and learn which service may be most suitable for your needs."
+  },
+  {
+    "key": "expect_title",
+    "type": "text",
+    "uk": "What to Expect During Your Free Initial Enquiry",
+    "bn": "What to Expect During Your Free Initial Enquiry"
+  },
+  {
+    "key": "expect_text",
+    "type": "text",
+    "uk": "This free introductory enquiry gives you the opportunity to discuss your concerns, ask questions and learn about our Ruqyah and Islamic spiritual guidance services.\n\nThere is no obligation to book any further appointments.",
+    "bn": "This free introductory enquiry gives you the opportunity to discuss your concerns, ask questions and learn about our Ruqyah and Islamic spiritual guidance services.\n\nThere is no obligation to book any further appointments."
+  },
+  {
+    "key": "benefit_1_title",
+    "type": "text",
+    "uk": "Discuss Your Situation",
+    "bn": "Discuss Your Situation"
+  },
+  {
+    "key": "benefit_1_text",
+    "type": "text",
+    "uk": "Share your concerns with an experienced Imam and Ruqyah practitioner in a respectful and confidential conversation..",
+    "bn": "Share your concerns with an experienced Imam and Ruqyah practitioner in a respectful and confidential conversation.."
+  },
+  {
+    "key": "benefit_2_title",
+    "type": "text",
+    "uk": "Learn About Our Services",
+    "bn": "Learn About Our Services"
+  },
+  {
+    "key": "benefit_2_text",
+    "type": "text",
+    "uk": "We'll explain our Ruqyah, Istikhara and Islamic spiritual guidance services so you can choose the option that best suits your needs..",
+    "bn": "We'll explain our Ruqyah, Istikhara and Islamic spiritual guidance services so you can choose the option that best suits your needs.."
+  },
+  {
+    "key": "benefit_3_title",
+    "type": "text",
+    "uk": "No Obligation",
+    "bn": "No Obligation"
+  },
+  {
+    "key": "benefit_3_text",
+    "type": "text",
+    "uk": "This is a free introductory enquiry. You are under no obligation to book any additional services..",
+    "bn": "This is a free introductory enquiry. You are under no obligation to book any additional services.."
+  },
+  {
+    "key": "cta_title",
+    "type": "text",
+    "uk": "Ready to Speak ?",
+    "bn": "Ready to Speak ?"
+  },
+  {
+    "key": "cta_button",
+    "type": "text",
+    "uk": "Book Your FREE 30-Minute Session",
+    "bn": "Book Your FREE 30-Minute Session"
+  }
+]
